@@ -5,8 +5,11 @@ import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sgela_sponsor_app/services/firestore_service.dart';
 import 'package:sgela_sponsor_app/ui/city_list.dart';
 import 'package:sgela_sponsor_app/ui/country_list.dart';
+import 'package:sgela_sponsor_app/ui/widgets/color_gallery.dart';
 import 'package:sgela_sponsor_app/ui/widgets/row_content_view.dart';
 import 'package:sgela_sponsor_app/util/dark_light_control.dart';
+import 'package:sgela_sponsor_app/util/navigation_util.dart';
+import 'package:sgela_sponsor_app/util/prefs.dart';
 
 import '../data/city.dart';
 import '../data/country.dart';
@@ -120,6 +123,7 @@ class CountryCitySelectorState extends State<CountryCitySelector>
       pp('$mm ... cities found for country id: $countryId : ${_cities.length}');
       if (_cities.isNotEmpty) {
         _showCityList = true;
+        _textEditingController = TextEditingController();
       } else {
         _showCityList = false;
       }
@@ -141,11 +145,15 @@ class CountryCitySelectorState extends State<CountryCitySelector>
     super.dispose();
   }
 
-  final TextEditingController _textEditingController = TextEditingController();
+  TextEditingController _textEditingController = TextEditingController();
+  final Prefs prefs = GetIt.instance<Prefs>();
+  final ColorWatcher colorWatcher = GetIt.instance<ColorWatcher>();
 
   @override
   Widget build(BuildContext context) {
     var b = MediaQuery.of(context).platformBrightness;
+    var isDark =
+    isDarkMode(prefs, MediaQuery.of(context).platformBrightness);
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
@@ -181,7 +189,17 @@ class CountryCitySelectorState extends State<CountryCitySelector>
               },
               icon: b == Brightness.light
                   ? const Icon(Icons.dark_mode)
-                  : const Icon(Icons.light_mode))
+                  : const Icon(Icons.light_mode)),
+          IconButton(
+            onPressed: () {
+              NavigationUtils.navigateToPage(context: context,
+                  widget: ColorGallery(prefs: prefs, colorWatcher: colorWatcher));
+            },
+            icon: const Icon(
+              Icons.color_lens_outlined,
+              // color: isDark ? Theme.of(context).primaryColor : Colors.black,
+            ),
+          ),
         ],
         bottom: const PreferredSize(
           preferredSize: Size.fromHeight(24),
@@ -229,6 +247,7 @@ class CountryCitySelectorState extends State<CountryCitySelector>
                               badgeContent: Text('${_filteredCities.length}'),
                               child: CityList(
                                 cities: _filteredCities,
+                                country: _selectedCountry!,
                                 onCityTapped: (c) {
                                   pp('$mm .... city tapped: ${c.name}');
                                   setState(() {
@@ -250,6 +269,7 @@ class CountryCitySelectorState extends State<CountryCitySelector>
                                 countries: _filteredCountries,
                                 onCountryTapped: (c) {
                                   pp('$mm .... country tapped: ${c.name}');
+                                  _selectedCountry = c;
                                   _getCities(c.id!);
                                 },
                                 showAsGrid: true,
@@ -280,6 +300,7 @@ class CountryCitySelectorState extends State<CountryCitySelector>
                                           FontWeight.w900),
                                     ),
                                   ),
+                                  gapH8,
                                 ],
                               ),
                             ),
@@ -302,11 +323,13 @@ class CountryCitySelectorState extends State<CountryCitySelector>
                     countries: _countries,
                     onCountryTapped: (country) {
                       pp('$mm country tapped: ${country.name}');
+                      _selectedCountry = country;
                       _getCities(country.id!);
                     },
                   ),
                   rightWidget: CityList(
                       cities: _cities,
+                      country: _selectedCountry!,
                       onCityTapped: (city) {
                         pp('$mm( city tapped: ${city.name})');
                       }))
@@ -316,4 +339,5 @@ class CountryCitySelectorState extends State<CountryCitySelector>
       ),
     ));
   }
+  Country? _selectedCountry;
 }
