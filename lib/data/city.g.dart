@@ -9,17 +9,17 @@ part of 'city.dart';
 City _$CityFromJson(Map<String, dynamic> json) => City(
       json['id'] as int?,
       json['name'] as String?,
-      json['state'] == null
-          ? null
-          : State.fromJson(json['state'] as Map<String, dynamic>),
-      json['country'] == null
-          ? null
-          : Country.fromJson(json['country'] as Map<String, dynamic>),
+      json['stateId'] as int?,
+      json['countryId'] as int?,
+      (json['latitude'] as num).toDouble(),
+      (json['longitude'] as num).toDouble(),
     );
 
 Map<String, dynamic> _$CityToJson(City instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'state': instance.state,
-      'country': instance.country,
+      'stateId': instance.stateId,
+      'countryId': instance.countryId,
+      'latitude': instance.latitude,
+      'longitude': instance.longitude,
     };

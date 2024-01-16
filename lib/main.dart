@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sgela_sponsor_app/ui/country_city_selector.dart';
+import 'package:sgela_sponsor_app/ui/registration_form.dart';
 import 'package:sgela_sponsor_app/util/dark_light_control.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
 import 'package:sgela_sponsor_app/util/register_services.dart';
@@ -63,7 +64,7 @@ class MyApp extends StatelessWidget {
             title: 'SgelaSponsor',
             debugShowCheckedModeBanner: false,
             theme: _getTheme(context),
-            home: const CountryCitySelector(),
+            home: const RegistrationForm(),
           ),
         );
       },

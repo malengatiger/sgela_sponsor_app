@@ -1,8 +1,9 @@
 import 'package:sgela_sponsor_app/data/country.dart';
-import 'package:sgela_sponsor_app/data/organization.dart';
 import 'package:sgela_sponsor_app/data/pricing.dart';
 import 'package:sgela_sponsor_app/data/user.dart';
 import 'package:json_annotation/json_annotation.dart';
+
+import 'organization.dart';
 part 'subscription.g.dart';
 @JsonSerializable()
 

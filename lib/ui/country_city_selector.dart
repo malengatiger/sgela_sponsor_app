@@ -5,9 +5,11 @@ import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sgela_sponsor_app/services/firestore_service.dart';
 import 'package:sgela_sponsor_app/ui/city_list.dart';
 import 'package:sgela_sponsor_app/ui/country_list.dart';
+import 'package:sgela_sponsor_app/ui/registration_form2.dart';
 import 'package:sgela_sponsor_app/ui/widgets/color_gallery.dart';
 import 'package:sgela_sponsor_app/ui/widgets/row_content_view.dart';
 import 'package:sgela_sponsor_app/util/dark_light_control.dart';
+import 'package:sgela_sponsor_app/util/location_util.dart';
 import 'package:sgela_sponsor_app/util/navigation_util.dart';
 import 'package:sgela_sponsor_app/util/prefs.dart';
 
@@ -16,8 +18,10 @@ import '../data/country.dart';
 import '../util/functions.dart';
 
 class CountryCitySelector extends StatefulWidget {
-  const CountryCitySelector({super.key});
+  const CountryCitySelector({super.key, required this.onCountrySelected, required this.onCitySelected});
 
+  final Function(Country) onCountrySelected;
+  final Function(City) onCitySelected;
   @override
   CountryCitySelectorState createState() => CountryCitySelectorState();
 }
@@ -28,9 +32,9 @@ class CountryCitySelectorState extends State<CountryCitySelector>
   final FirestoreService firestoreService = GetIt.instance<FirestoreService>();
   bool busy = false;
   List<Country> _countries = [];
-  List<Country> _filteredCountries = [];
+  final List<Country> _filteredCountries = [];
   List<City> _cities = [];
-  List<City> _filteredCities = [];
+  final List<City> _filteredCities = [];
 
   DarkLightControl dlc = GetIt.instance<DarkLightControl>();
   static const String mm = '🥦🥦🥦 CountryCitySelector:  🥦';
@@ -41,7 +45,6 @@ class CountryCitySelectorState extends State<CountryCitySelector>
       FocusManager.instance.primaryFocus?.unfocus();
     }
   }
-
 
   @override
   void initState() {
@@ -59,6 +62,11 @@ class CountryCitySelectorState extends State<CountryCitySelector>
       _countries = await firestoreService.getCountries();
       _filteredCountries.addAll(_countries);
       pp('$mm ... gotten countries : ${_countries.length}');
+      var countryName = await LocationUtil.getCountryName();
+      if (countryName != null) {
+        String prefix = countryName.substring(0,3);
+        _filterCountries(prefix);
+      }
     } catch (e) {
       pp(e);
       if (mounted) {
@@ -141,7 +149,7 @@ class CountryCitySelectorState extends State<CountryCitySelector>
   @override
   void dispose() {
     _controller.dispose();
-    _dismissKeyboard(context);
+    //_dismissKeyboard(context);
     super.dispose();
   }
 
@@ -152,8 +160,7 @@ class CountryCitySelectorState extends State<CountryCitySelector>
   @override
   Widget build(BuildContext context) {
     var b = MediaQuery.of(context).platformBrightness;
-    var isDark =
-    isDarkMode(prefs, MediaQuery.of(context).platformBrightness);
+    var isDark = isDarkMode(prefs, MediaQuery.of(context).platformBrightness);
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
@@ -161,7 +168,8 @@ class CountryCitySelectorState extends State<CountryCitySelector>
           children: [
             Text(
               'Country City Selector',
-              style: myTextStyleMediumLarge(context, 20),
+              style: myTextStyle(
+                  context, Theme.of(context).primaryColor, 14, FontWeight.w900),
             ),
             gapW16,
             busy
@@ -180,24 +188,33 @@ class CountryCitySelectorState extends State<CountryCitySelector>
           IconButton(
               onPressed: () {
                 pp('$mm ... dark/light pressed, Brightness: ${b.name}');
-                if (b == Brightness.light) {
-                  dlc.setDarkMode();
-                } else {
+                var mode = prefs.getMode();
+                if (mode == DARK) {
                   dlc.setLightMode();
+                } else {
+                  dlc.setDarkMode();
                 }
                 setState(() {});
               },
               icon: b == Brightness.light
-                  ? const Icon(Icons.dark_mode)
-                  : const Icon(Icons.light_mode)),
+                  ? Icon(
+                      Icons.dark_mode,
+                      color: Theme.of(context).primaryColor,
+                    )
+                  : Icon(
+                      Icons.light_mode,
+                      color: Theme.of(context).primaryColor,
+                    )),
           IconButton(
             onPressed: () {
-              NavigationUtils.navigateToPage(context: context,
-                  widget: ColorGallery(prefs: prefs, colorWatcher: colorWatcher));
+              NavigationUtils.navigateToPage(
+                  context: context,
+                  widget:
+                      ColorGallery(prefs: prefs, colorWatcher: colorWatcher));
             },
-            icon: const Icon(
+            icon: Icon(
               Icons.color_lens_outlined,
-              // color: isDark ? Theme.of(context).primaryColor : Colors.black,
+              color: Theme.of(context).primaryColor,
             ),
           ),
         ],
@@ -219,7 +236,9 @@ class CountryCitySelectorState extends State<CountryCitySelector>
                     padding: const EdgeInsets.only(left: 28.0, right: 28),
                     child: SearchBar(
                       controller: _textEditingController,
-                      hintText: _showCityList?'Search Cities/Towns' : 'Search countries',
+                      hintText: _showCityList
+                          ? 'Search Cities/Towns'
+                          : 'Search countries',
                       onChanged: (c) {
                         pp('$mm onChanged, will filter: ${_textEditingController.text}');
                         if (_textEditingController.text.length > 2) {
@@ -249,9 +268,14 @@ class CountryCitySelectorState extends State<CountryCitySelector>
                                 cities: _filteredCities,
                                 country: _selectedCountry!,
                                 onCityTapped: (c) {
-                                  pp('$mm .... city tapped: ${c.name}');
+                                  pp('$mm .... city tapped, will pop! ...: ${c.name}');
                                   setState(() {
                                     _selectedCity = c;
+                                  });
+                                  widget.onCitySelected(c);
+                                  Future.delayed(
+                                      const Duration(milliseconds: 1000), () {
+                                    Navigator.of(context).pop(c);
                                   });
                                 },
                               ),
@@ -268,8 +292,9 @@ class CountryCitySelectorState extends State<CountryCitySelector>
                               child: CountryList(
                                 countries: _filteredCountries,
                                 onCountryTapped: (c) {
-                                  pp('$mm .... country tapped: ${c.name}');
+                                  pp('$mm .... country tapped, get cities ...: ${c.name}');
                                   _selectedCountry = c;
+                                  widget.onCountrySelected(c);
                                   _getCities(c.id!);
                                 },
                                 showAsGrid: true,
@@ -280,32 +305,43 @@ class CountryCitySelectorState extends State<CountryCitySelector>
                   _selectedCity == null
                       ? gapW16
                       : Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: SizedBox(width: 420,
-                          child: Card(
-                              elevation: 16,
-                              child: Column(
-                                children: [
-                                  gapH8,
-                                  const Text('City/Town Selected'),
-                                  gapH8,
-                                  Padding(
-                                    padding: const EdgeInsets.only(left:16.0,right: 16.0, top: 8, bottom: 8),
-                                    child: Text(
-                                      '${_selectedCity!.name}',
-                                      style: myTextStyle(
-                                          context,
-                                          Theme.of(context).primaryColor,
-                                          16,
-                                          FontWeight.w900),
+                          padding: const EdgeInsets.all(12.0),
+                          child: SizedBox(
+                            width: 420,
+                            child: GestureDetector(
+                              onTap: () {
+                                pp('$mm .... Das vi da nia!');
+                                Navigator.of(context).pop();
+                              },
+                              child: Card(
+                                elevation: 16,
+                                child: Column(
+                                  children: [
+                                    gapH8,
+                                    const Text('City/Town Selected'),
+                                    gapH8,
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 16.0,
+                                          right: 16.0,
+                                          top: 8,
+                                          bottom: 8),
+                                      child: Text(
+                                        '${_selectedCity!.name}',
+                                        style: myTextStyle(
+                                            context,
+                                            Theme.of(context).primaryColor,
+                                            16,
+                                            FontWeight.w900),
+                                      ),
                                     ),
-                                  ),
-                                  gapH8,
-                                ],
+                                    gapH8,
+                                  ],
+                                ),
                               ),
                             ),
-                        ),
-                      )
+                          ),
+                        )
                 ],
               )
             ],
@@ -339,5 +375,6 @@ class CountryCitySelectorState extends State<CountryCitySelector>
       ),
     ));
   }
+
   Country? _selectedCountry;
 }

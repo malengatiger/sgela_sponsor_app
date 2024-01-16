@@ -8,21 +8,32 @@ import '../util/dio_util.dart';
 import '../util/environment.dart';
 import '../util/functions.dart';
 
-class Repository {
+class RepositoryService {
   final DioUtil dioUtil;
 
-  final Dio dio;
   // final LocalDataService localDataService;
 
-  static const mm = '💦💦💦💦 Repository 💦';
+  static const mm = '💦💦💦💦 RepositoryService 💦';
 
-  Repository(this.dioUtil, this.dio);
+  RepositoryService(this.dioUtil);
 
   Future<Organization?> getSgelaOrganization() async {
 
     String prefix = ChatbotEnvironment.getSkunkUrl();
     String url = '${prefix}organizations/getSgelaOrganization';
     var result = await dioUtil.sendGetRequest(url, {});
+    pp('$mm ... response from call: $result');
+    Organization org = Organization.fromJson(result);
+    return org;
+
+  }
+  Future<Organization?> registerOrganization(Organization organization) async {
+
+    String prefix = ChatbotEnvironment.getSkunkUrl();
+    String url = '${prefix}organizations/addOrganization';
+    pp('$mm ... calling: $url');
+
+    var result = await dioUtil.sendPostRequest(url, organization.toJson());
     pp('$mm ... response from call: $result');
     Organization org = Organization.fromJson(result);
     return org;

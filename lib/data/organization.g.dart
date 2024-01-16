@@ -7,18 +7,25 @@ part of 'organization.dart';
 // **************************************************************************
 
 Organization _$OrganizationFromJson(Map<String, dynamic> json) => Organization(
-      json['name'] as String?,
-      json['email'] as String?,
-      json['cellphone'] as String?,
-      json['id'] as int?,
-      json['country'] == null
+      name: json['name'] as String?,
+      email: json['email'] as String?,
+      cellphone: json['cellphone'] as String?,
+      id: json['id'] as int?,
+      country: json['country'] == null
           ? null
           : Country.fromJson(json['country'] as Map<String, dynamic>),
-      json['city'] == null
+      city: json['city'] == null
           ? null
           : City.fromJson(json['city'] as Map<String, dynamic>),
-      json['logoUrl'] as String?,
-      json['splashUrl'] as String?,
+      logoUrl: json['logoUrl'] as String?,
+      splashUrl: json['splashUrl'] as String?,
+      adminUser: json['adminUser'] == null
+          ? null
+          : User.fromJson(json['adminUser'] as Map<String, dynamic>),
+      coverageRadiusInKM: json['coverageRadiusInKM'] as int?,
+      date: json['date'] as String?,
+      exclusiveCoverage: json['exclusiveCoverage'] as bool?,
+      tagLine: json['tagLine'] as String?,
     );
 
 Map<String, dynamic> _$OrganizationToJson(Organization instance) =>
@@ -29,6 +36,11 @@ Map<String, dynamic> _$OrganizationToJson(Organization instance) =>
       'id': instance.id,
       'country': instance.country,
       'city': instance.city,
+      'coverageRadiusInKM': instance.coverageRadiusInKM,
+      'date': instance.date,
+      'exclusiveCoverage': instance.exclusiveCoverage,
       'logoUrl': instance.logoUrl,
       'splashUrl': instance.splashUrl,
+      'tagLine': instance.tagLine,
+      'adminUser': instance.adminUser,
     };

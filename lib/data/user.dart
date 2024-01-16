@@ -4,9 +4,17 @@ part 'user.g.dart';
 @JsonSerializable()
 class User {
   String? firstName, lastName, email, cellphone;
-  String? date;
+  String? date, password;
+  String? firebaseUserId;
 
-  User(this.firstName, this.lastName, this.email, this.cellphone, this.date);
+  String? profileUrl;
+  bool? activeFlag;
+  int? organizationId;
+  int? subscriptionId;
+  String? subscriptionDate;
+
+
+  User(this.firstName, this.lastName, this.email, this.cellphone, this.date, this.password);
 
   factory User.fromJson(Map<String, dynamic> json) =>
       _$UserFromJson(json);
