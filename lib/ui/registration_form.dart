@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:sgela_sponsor_app/data/organization.dart';
 import 'package:sgela_sponsor_app/ui/registration_form2.dart';
+import 'package:sgela_sponsor_app/ui/widgets/org_logo_widget.dart';
 import 'package:sgela_sponsor_app/util/navigation_util.dart';
 
 import '../util/functions.dart';
 
 class RegistrationForm extends StatefulWidget {
-  const RegistrationForm({super.key});
-
+  const RegistrationForm({super.key, required this.onRegistered});
+  final Function(Organization) onRegistered;
   @override
   RegistrationFormState createState() => RegistrationFormState();
 }
@@ -33,19 +35,8 @@ class RegistrationFormState extends State<RegistrationForm>
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Row(
-            children: [
-              Text(
-                'SgelaAI',
-                style: myTextStyle(context, Theme.of(context).primaryColor, 24,
-                    FontWeight.w900),
-              ),
-              gapW16,
-              Text(
-                'Registration: 1 of 2',
-                style: myTextStyleMedium(context),
-              ),
-            ],
+          title: const OrgLogoWidget(
+            name: "Registration 1 of 2",
           ),
         ),
         body: ScreenTypeLayout.builder(
@@ -56,7 +47,7 @@ class RegistrationFormState extends State<RegistrationForm>
                   child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: MyForm(
-                  onNext: (map) {
+                  onNext: (map) async {
                     pp('$mm Next pressed ... check that all fields are filled in: $map');
                     bool filledIn = false;
                     int cnt = 0;
@@ -76,9 +67,15 @@ class RegistrationFormState extends State<RegistrationForm>
                       filledIn = true;
                     }
                     if (filledIn) {
-                      NavigationUtils.navigateToPage(
+                       NavigationUtils.navigateToPage(
                           context: context,
-                          widget: RegistrationForm2(variables: map));
+                          widget: RegistrationFormFinal(variables: map,
+                            onRegistered: (org ) {
+                            pp('$mm .....................'
+                                ' onRegistered! ${org.name}');
+                            widget.onRegistered(org);
+                            Navigator.of(context).pop(org);
+                            },));
                     }
                   },
                 ),
@@ -113,16 +110,16 @@ class MyForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: ReactiveFormBuilder(
-          form: buildForm,
-          builder: (context, form, child) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
+    return ReactiveFormBuilder(
+        form: buildForm,
+        builder: (context, form, child) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  gapH32,
+                  gapH8,
                   ReactiveTextField<String>(
                     formControlName: 'orgName',
                     validationMessages: {
@@ -130,16 +127,18 @@ class MyForm extends StatelessWidget {
                           'The Organization must not be empty',
                     },
                     textInputAction: TextInputAction.next,
+                    style: myTextStyleSmall(context),
                     decoration: const InputDecoration(
                       labelText: 'Organization Name',
                       helperText: '',
-                      helperStyle: TextStyle(height: 0.7),
-                      errorStyle: TextStyle(height: 0.7),
+                      helperStyle: TextStyle(height: 0.6),
+                      errorStyle: TextStyle(height: 0.6),
                     ),
                   ),
                   gapH16,
                   ReactiveTextField<String>(
                     formControlName: 'adminFirstName',
+                    style: myTextStyleSmall(context),
                     validationMessages: {
                       ValidationMessage.required: (_) =>
                           'The Administrator first name must not be empty',
@@ -148,8 +147,8 @@ class MyForm extends StatelessWidget {
                     decoration: const InputDecoration(
                       labelText: 'Administrator First Name',
                       helperText: '',
-                      helperStyle: TextStyle(height: 0.7),
-                      errorStyle: TextStyle(height: 0.7),
+                      helperStyle: TextStyle(height: 0.6),
+                      errorStyle: TextStyle(height: 0.6),
                     ),
                   ),
                   gapH16,
@@ -163,8 +162,8 @@ class MyForm extends StatelessWidget {
                     decoration: const InputDecoration(
                       labelText: 'Administrator Surname',
                       helperText: '',
-                      helperStyle: TextStyle(height: 0.7),
-                      errorStyle: TextStyle(height: 0.7),
+                      helperStyle: TextStyle(height: 0.6),
+                      errorStyle: TextStyle(height: 0.6),
                     ),
                   ),
                   gapH16,
@@ -181,8 +180,8 @@ class MyForm extends StatelessWidget {
                     decoration: const InputDecoration(
                       labelText: 'Email',
                       helperText: '',
-                      helperStyle: TextStyle(height: 0.7),
-                      errorStyle: TextStyle(height: 0.7),
+                      helperStyle: TextStyle(height: 0.6),
+                      errorStyle: TextStyle(height: 0.6),
                     ),
                   ),
                   gapH32,
@@ -210,9 +209,9 @@ class MyForm extends StatelessWidget {
                   gapH32,
                 ],
               ),
-            );
-          }),
-    );
+            ),
+          );
+        });
   }
 
   _onNext(FormGroup formGroup, BuildContext context) {

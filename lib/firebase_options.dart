@@ -24,8 +24,7 @@ class DefaultFirebaseOptions {
         return android;
       case TargetPlatform.iOS:
         return ios;
-      case TargetPlatform.macOS:
-        return macos;
+
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -72,14 +71,4 @@ class DefaultFirebaseOptions {
     iosBundleId: 'com.boha.sgelaSponsorApp',
   );
 
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCZx8B3sOgilvxvOwtjfi3Zy0HiU3SikvM',
-    appId: '1:413705168066:ios:e1544c2daeb6578953075b',
-    messagingSenderId: '413705168066',
-    projectId: 'sgela-ai-33',
-    storageBucket: 'sgela-ai-33.appspot.com',
-    androidClientId: '413705168066-hjrnikl476fb9baei10k36c523p81vih.apps.googleusercontent.com',
-    iosClientId: '413705168066-cj2flr1tjuucdovn6bgnuvj01kitp5s6.apps.googleusercontent.com',
-    iosBundleId: 'com.boha.sgelaSponsorApp.RunnerTests',
-  );
 }

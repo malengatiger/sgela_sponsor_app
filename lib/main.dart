@@ -1,12 +1,13 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:sgela_sponsor_app/ui/country_city_selector.dart';
-import 'package:sgela_sponsor_app/ui/registration_form.dart';
+import 'package:sgela_sponsor_app/ui/landing_page.dart';
 import 'package:sgela_sponsor_app/util/dark_light_control.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
-import 'package:sgela_sponsor_app/util/register_services.dart';
+import 'package:sgela_sponsor_app/services/register_services.dart';
 
 import 'firebase_options.dart';
 
@@ -31,7 +32,7 @@ void main() async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
     pp('$mx Firebase has been initialized!! 🍀🍀name: ${Firebase.app().name}');
-    pp('$mx Firebase has been initialized!! 🍀🍀 options: ${Firebase.app().options.asMap}');
+    pp('$mx Firebase has been initialized!! 🍀🍀options: ${Firebase.app().options.asMap}');
 
     await registerServices(
         FirebaseFirestore.instance); // Pass the firestore instance
@@ -52,8 +53,6 @@ class MyApp extends StatelessWidget {
       stream: dlc.darkLightStream,
       builder: (context, snapshot){
         if (snapshot.hasData) {
-          // pp('main:dlc.darkLightStream: 🍎 mode could be changing, '
-          //     'mode: ${snapshot.data!.mode} colorIndex: ${snapshot.data!.colorIndex}');
           modeAndColor = snapshot.data!;
         }
         return GestureDetector(
@@ -64,7 +63,7 @@ class MyApp extends StatelessWidget {
             title: 'SgelaSponsor',
             debugShowCheckedModeBanner: false,
             theme: _getTheme(context),
-            home: const RegistrationForm(),
+            home: const LandingPage(),
           ),
         );
       },
@@ -91,15 +90,18 @@ class MyApp extends StatelessWidget {
         );
       }
     }
+    //
+    var rand = Random(DateTime.now().millisecondsSinceEpoch);
+    int index = rand.nextInt(getColors().length - 1);
     if (brightness == Brightness.dark) {
       return ThemeData.dark().copyWith(
         primaryColor: getColors()
-            .elementAt(modeAndColor!.colorIndex), // Set the primary color
+            .elementAt(index), // Set the primary color
       );
     } else {
       return ThemeData.light().copyWith(
         primaryColor: getColors()
-            .elementAt(modeAndColor!.colorIndex), // Set the primary color
+            .elementAt(index), // Set the primary color
       );
     }
   }

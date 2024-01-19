@@ -5,7 +5,7 @@ class NavigationUtils {
   static Future navigateToPage({
     required BuildContext context,
     required Widget widget,
-    PageTransitionType transitionType = PageTransitionType.scale,
+    PageTransitionType transitionType = PageTransitionType.leftToRightWithFade,
     Duration transitionDuration = const Duration(milliseconds: 1000)
   }) async {
     var result = await Navigator.push(

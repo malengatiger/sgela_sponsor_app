@@ -35,7 +35,7 @@ class CountryCitySelectorState extends State<CountryCitySelector>
   final List<Country> _filteredCountries = [];
   List<City> _cities = [];
   final List<City> _filteredCities = [];
-
+  Country? localCountry;
   DarkLightControl dlc = GetIt.instance<DarkLightControl>();
   static const String mm = '🥦🥦🥦 CountryCitySelector:  🥦';
 
@@ -61,10 +61,10 @@ class CountryCitySelectorState extends State<CountryCitySelector>
     try {
       _countries = await firestoreService.getCountries();
       _filteredCountries.addAll(_countries);
-      pp('$mm ... gotten countries : ${_countries.length}');
-      var countryName = await LocationUtil.getCountryName();
-      if (countryName != null) {
-        String prefix = countryName.substring(0,3);
+      pp('$mm ... gotten countries : ${_countries.length}, filter for sou');
+      localCountry = await firestoreService.getLocalCountry();
+      if (localCountry != null) {
+        String prefix = localCountry!.name!.substring(0,3);
         _filterCountries(prefix);
       }
     } catch (e) {
@@ -79,7 +79,8 @@ class CountryCitySelectorState extends State<CountryCitySelector>
   }
 
   _filterCountries(String name) {
-    pp('$mm ... filter countries with: $name for ${_countries.length} countries');
+    pp('$mm ... filter countries with: $name '
+        'for ${_countries.length} countries');
     if (name.isEmpty) {
       pp('$mm ... filter name is empty');
       _filteredCountries.clear();
@@ -94,6 +95,9 @@ class CountryCitySelectorState extends State<CountryCitySelector>
         }
       }
     }
+    pp('$mm ... filtered countries with: $name '
+        'found: ${_filteredCountries.length} countries');
+
     setState(() {});
     _dismissKeyboard(context);
   }

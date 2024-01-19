@@ -11,11 +11,10 @@ class Prefs {
 
   Prefs(this.sharedPreferences);
 
-  Future saveUser(User user) async {
+  void saveUser(User user) {
     Map mJson = user.toJson();
     var jx = json.encode(mJson);
     sharedPreferences.setString('user', jx);
-    return null;
   }
 
   User? getUser() {
@@ -71,7 +70,7 @@ class Prefs {
     return mode;
   }
 
-  void saveColorIndex(int index) async {
+  void saveColorIndex(int index)  {
     sharedPreferences.setInt('color', index);
     return null;
   }
@@ -82,5 +81,14 @@ class Prefs {
       return 0;
     }
     return color;
+  }
+
+  void saveLogoUrl(String logoUrl)  {
+    sharedPreferences.setString('logoUrl', logoUrl);
+  }
+
+  String? getLogoUrl() {
+    var url = sharedPreferences.getString('logoUrl');
+    return url;
   }
 }
