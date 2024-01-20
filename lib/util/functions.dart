@@ -41,6 +41,13 @@ pp(dynamic msg) {
   }
 }
 
+int generateUniqueKey() {
+  var random = Random();
+  var timestamp = DateTime.now().millisecondsSinceEpoch;
+  var uniqueKey = timestamp + random.nextInt(999999);
+  return uniqueKey;
+}
+
 final List<Color> _colors = [
   Colors.red[200]!,
   Colors.green[200]!,

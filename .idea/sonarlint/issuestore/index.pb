@@ -30,8 +30,6 @@ R
 "ios/Flutter/AppFrameworkInfo.plist,d/c/dcf6bab66022807af0d3467afc4bc1c2594538c4
 I
 lib/generated/assets.dart,5/b/5b815209f3ac1d4b94a4211dbfb903428d4ed1c2
-H
-android/app/build.gradle,5/9/594ba479000e0bb5513707b709ad1cd52da9063a
 D
 android/build.gradle,1/3/13f012f60e18f38225ce59137db2e07d5d70b29c
 O
@@ -78,8 +76,6 @@ H
 lib/data/exam_paper.dart,7/2/7282cd88a3aa2c941d69e974c17e9a77c8f89922
 M
 ios/firebase_app_id_file.json,a/0/a0799973e0bf1bad4e739e1320488659cd5da822
-G
-lib/util/functions.dart,8/c/8cf2d13d02c7074087b4988c8fa824f7e47b70a8
 T
 $lib/data/gemini/gemini_response.dart,6/d/6df4f1e7506d069c101963385fbb324626644c8d
 V
@@ -94,8 +90,6 @@ V
 +linux/flutter/generated_plugin_registrant.h,d/9/d95a1fc8fea41fc6cc122196d542db7f4130fb92
 U
 %linux/flutter/generated_plugins.cmake,e/a/ea61ff9ff38cb6431283c0e1c4f383234ad068aa
-P
- android/app/google-services.json,e/e/ee748fb75df5665a631a74614646f499f3cea78f
 S
 #ios/Runner/GoogleService-Info.plist,0/b/0b789df27cb2d2dad956de47ce5af443d6a6cb25
 I
@@ -218,10 +212,6 @@ D
 lib/data/city.g.dart,0/1/0183e2dfa51e18404632745d4c39fbb7eb682bbe
 J
 lib/data/subscription.dart,2/f/2f93db1cabcfd43e16aba3119e795c0864a4a2fd
-B
-lib/data/user.dart,d/4/d452b7b923f774ba9ed47823766929cf8f62a556
-D
-lib/data/user.g.dart,d/0/d0454bee60036ddfe220452ff7a81aff0bbe322b
 H
 lib/ui/country_list.dart,1/c/1c17d32ff2790310f61c6e1175bd08cd9eba6ce8
 P

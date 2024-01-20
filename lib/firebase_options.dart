@@ -24,7 +24,11 @@ class DefaultFirebaseOptions {
         return android;
       case TargetPlatform.iOS:
         return ios;
-
+      case TargetPlatform.macOS:
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -70,5 +74,4 @@ class DefaultFirebaseOptions {
     iosClientId: '413705168066-u92lr8lb14so9m38knq6lhno0i70a6dr.apps.googleusercontent.com',
     iosBundleId: 'com.boha.sgelaSponsorApp',
   );
-
 }

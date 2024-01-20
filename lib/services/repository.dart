@@ -41,11 +41,6 @@ class RepositoryService {
     return org;
   }
 
-  // import 'dart:convert';
-  // import 'dart:io';
-  //
-  //
-
   Future<Branding> uploadBranding(
       {required int organizationId,
       required String organizationName,

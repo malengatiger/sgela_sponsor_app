@@ -98,12 +98,8 @@ class LandingPageState extends State<LandingPage>
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: [
-            OrgLogoWidget(
-              branding: branding,
-            )
-          ],
+        title: OrgLogoWidget(
+          branding: branding,
         ),
       ),
       body: ScreenTypeLayout.builder(

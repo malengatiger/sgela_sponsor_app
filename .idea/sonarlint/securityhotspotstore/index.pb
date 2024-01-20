@@ -93,8 +93,6 @@ U
 +linux/flutter/generated_plugin_registrant.h,d/9/d95a1fc8fea41fc6cc122196d542db7f4130fb92
 M
 lib/data/exam_document.g.dart,8/c/8c1d164d4bc4fdcdbb342d6d51e845d75bfd7b58
-G
-lib/util/functions.dart,8/c/8cf2d13d02c7074087b4988c8fa824f7e47b70a8
 E
 lib/data/state.g.dart,6/4/64cb1a20f0187d969bce4b6115dccb9fe6d022d6
 J
@@ -190,10 +188,6 @@ S
 #ios/Runner/Runner-Bridging-Header.h,8/2/8220ac45b80647648436b79bfc43dab44e30fdde
 N
 ios/Runner/Runner.entitlements,b/f/bf182b2a60025b57d5dd941ef175656adb05ac6c
-H
-android/app/build.gradle,5/9/594ba479000e0bb5513707b709ad1cd52da9063a
-P
- android/app/google-services.json,e/e/ee748fb75df5665a631a74614646f499f3cea78f
 S
 #ios/Runner/GoogleService-Info.plist,0/b/0b789df27cb2d2dad956de47ce5af443d6a6cb25
 `
@@ -214,14 +208,10 @@ E
 lib/data/country.dart,3/e/3e3a98e13595816aa0ccf5e3582fc14fa8ba1819
 B
 lib/data/city.dart,0/a/0ab8303fdb81e122dbb7a276361ce7bcdd983ad5
-D
-lib/data/user.g.dart,d/0/d0454bee60036ddfe220452ff7a81aff0bbe322b
 J
 lib/data/subscription.dart,2/f/2f93db1cabcfd43e16aba3119e795c0864a4a2fd
 L
 lib/data/organization.g.dart,2/9/29073f17a5ea6c0f1d5724c87d5b05df6d30c536
-B
-lib/data/user.dart,d/4/d452b7b923f774ba9ed47823766929cf8f62a556
 P
  lib/util/dark_light_control.dart,9/4/94e57fcb7a2744effc92ee90f1a42910b92435d7
 D

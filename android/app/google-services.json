@@ -84,42 +84,6 @@
           ]
         }
       }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:413705168066:android:abed7736a2bb863f53075b",
-        "android_client_info": {
-          "package_name": "com.boha.sponsor_app"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "413705168066-52dr9s8la4qg92797bmqkkt10tb5f8ri.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBjVYccOuUD9ucbwbkYTRHDHymoVTNBQsw"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "413705168066-52dr9s8la4qg92797bmqkkt10tb5f8ri.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "413705168066-5g5gla5lj7bi40onrgiupka2qtlchb59.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.boha.chatbotSponsorApp.RunnerTests"
-              }
-            }
-          ]
-        }
-      }
     }
   ],
   "configuration_version": "1"

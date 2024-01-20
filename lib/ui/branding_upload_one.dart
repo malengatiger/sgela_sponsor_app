@@ -12,6 +12,7 @@ import 'package:sgela_sponsor_app/util/functions.dart';
 import 'package:sgela_sponsor_app/util/navigation_util.dart';
 
 import '../data/branding.dart';
+import '../util/prefs.dart';
 
 class BrandingUploadOne extends StatefulWidget {
   const BrandingUploadOne({super.key,
@@ -28,7 +29,10 @@ class BrandingUploadOneState extends State<BrandingUploadOne>
   late AnimationController _controller;
   List<Branding> brandings = [];
   FirestoreService firestoreService = GetIt.instance<FirestoreService>();
+  Prefs prefs = GetIt.instance<Prefs>();
+
   static const mm = '❤️🧡💛💚💙💜 BrandUpload';
+
 
   @override
   void initState() {
@@ -38,6 +42,7 @@ class BrandingUploadOneState extends State<BrandingUploadOne>
   }
 
   _getBranding() async {
+    logoUrl = prefs.getLogoUrl();
     brandings = await firestoreService.getBranding(widget.organization.id!);
     setState(() {});
   }
@@ -81,17 +86,10 @@ class BrandingUploadOneState extends State<BrandingUploadOne>
     _checkFiles();
   }
 
-  _navigateToBrandText() async {
-    pp('$mm ...... _navigateToBrandText ...');
+  _navigateToBrandingUploadTwo() async {
+    pp('$mm ...... _navigateToBrandingUploadTwo ...');
 
-    if (logoFile == null) {
-      showToast(message: 'Please pick a logo image file', context: context);
-      return;
-    }
-    if (logoFile == null) {
-      showToast(message: 'Please pick a splash image file', context: context);
-      return;
-    }
+
     NavigationUtils.navigateToPage(
         context: context,
         widget: BrandingUploadTwo(
@@ -100,7 +98,7 @@ class BrandingUploadOneState extends State<BrandingUploadOne>
             Navigator.of(context).pop(br);
           },
           organization: widget.organization,
-          logoFile: logoFile!,
+          logoFile: logoFile,
           splashFile: splashFile!,
         ));
   }
@@ -116,6 +114,7 @@ class BrandingUploadOneState extends State<BrandingUploadOne>
       appBar: AppBar(
         title: OrgLogoWidget(
           branding: branding,
+          logoUrl: logoUrl,
         ),
       ),
       body: ScreenTypeLayout.builder(
@@ -148,7 +147,7 @@ class BrandingUploadOneState extends State<BrandingUploadOne>
                             elevation: MaterialStatePropertyAll(8.0),
                           ),
                           onPressed: () {
-                            _navigateToBrandText();
+                            _navigateToBrandingUploadTwo();
                           },
                           child: const Text('Next'))
                       : gapW32,

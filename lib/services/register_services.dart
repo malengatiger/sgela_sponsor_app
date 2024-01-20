@@ -1,3 +1,4 @@
+import 'package:sgela_sponsor_app/services/auth_service.dart';
 import 'package:sgela_sponsor_app/util/prefs.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
@@ -28,6 +29,8 @@ Future<void> registerServices(FirebaseFirestore firebaseFirestore) async {
   GetIt.instance.registerLazySingleton<Gemini>(() => Gemini.instance);
   GetIt.instance.registerLazySingleton<FirestoreService>(() => firestoreService);
   GetIt.instance.registerLazySingleton<RepositoryService>(() => repository);
+  GetIt.instance.registerLazySingleton<AuthService>(() => AuthService());
+
 
   var org =prefs.getOrganization();
   if (org != null) {

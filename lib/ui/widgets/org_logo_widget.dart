@@ -1,41 +1,45 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:sgela_sponsor_app/data/organization.dart';
 
 import '../../data/branding.dart';
 import '../../util/environment.dart';
 import '../../util/functions.dart';
 
 class OrgLogoWidget extends StatelessWidget {
-  const OrgLogoWidget({super.key, this.branding, this.height, this.name, this.width});
+  const OrgLogoWidget({super.key, this.branding, this.height, this.name, this.width, this.logoUrl});
 
   final Branding? branding;
   final double? height, width;
   final String? name;
 
+  final String? logoUrl;
+
   @override
   Widget build(BuildContext context) {
-    var logoUrl = ChatbotEnvironment.sgelaLogoUrl;
+    var mLogoUrl = ChatbotEnvironment.sgelaLogoUrl;
     var splashUrl = ChatbotEnvironment.sgelaSplashUrl;
+    if (logoUrl != null) {
+      mLogoUrl = logoUrl!;
+    }
     if (branding != null) {
       if (branding!.logoUrl != null) {
-        logoUrl = branding!.logoUrl!;
+        mLogoUrl = branding!.logoUrl!;
       }
       if (branding!.splashUrl != null) {
         splashUrl = branding!.splashUrl!;
       }
     }
     return SizedBox(
-      height: height == null ? 36 : height!,
-      width: width == null? 260: width!,
+      height: height == null ? 64 : height!,
+      // width: width == null? 400: width!,
       child: Row(
         children: [
           CachedNetworkImage(
-            imageUrl: logoUrl,
-            height: height == null ? 32 : height!,
-            width: height == null ? 32*4 : (height! * 4),
+            imageUrl: mLogoUrl,
+            height: height == null ? 64 : height!,
+            // width: height == null ? 64*4 : (height! * 4),
           ),
-          gapW4,
+          gapW16,
           name == null
               ? Flexible(
                   child: Text(

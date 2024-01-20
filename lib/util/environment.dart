@@ -12,6 +12,10 @@ class ChatbotEnvironment {
   static const _devSkunkUrl = 'http://${isFibreDown? _ipFibreDown: _ipNormal}:8083/skunk-service/';
   static const _prodSkunkUrl = 'https://skunkworks-backend-service-knzs6eczwq-nw.a.run.app/';
 
+  static String getProductionSkunkUrl() {
+    return _prodSkunkUrl;
+  }
+
   //TODO - refresh url links after Skunk deployment
 
   //💙Chatbot Backend

@@ -11,6 +11,7 @@ import 'package:sgela_sponsor_app/util/functions.dart';
 
 import '../../data/branding.dart';
 import '../../services/firestore_service.dart';
+import '../../util/prefs.dart';
 
 class BrandingImagesPicker extends StatefulWidget {
   final Function(File) onLogoPicked;
@@ -33,6 +34,9 @@ class BrandingImagesPickerState extends State<BrandingImagesPicker> {
   File? _splashFile;
   List<Branding> brandings = [];
   FirestoreService firestoreService = GetIt.instance<FirestoreService>();
+  Prefs prefs = GetIt.instance<Prefs>();
+
+  String? logoUrl;
 
   @override
   void initState() {
@@ -41,6 +45,7 @@ class BrandingImagesPickerState extends State<BrandingImagesPicker> {
   }
 
   _getBranding() async {
+    logoUrl = prefs.getLogoUrl();
     brandings = await firestoreService.getBranding(widget.organization.id!);
     setState(() {});
   }
@@ -92,7 +97,13 @@ class BrandingImagesPickerState extends State<BrandingImagesPicker> {
 
   Widget _getExistingLogo() {
     if (_logoFile != null) {
-      return Image.file(_logoFile!);
+      return Image.file(_logoFile!, height: 48, width: 96,);
+    }
+    if (logoUrl != null) {
+      return CachedNetworkImage(
+        imageUrl: logoUrl!,
+        fit: BoxFit.fill,
+      );
     }
     Branding? branding;
     if (brandings.isNotEmpty) {
@@ -174,7 +185,7 @@ class BrandingImagesPickerState extends State<BrandingImagesPicker> {
                         children: [
                           gapH16,
                           SizedBox(
-                            height: 36,
+                            height: 64,
                             child: _getExistingLogo()
                           ),
                           SizedBox(

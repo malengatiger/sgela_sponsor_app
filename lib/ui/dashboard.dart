@@ -3,7 +3,9 @@ import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sgela_sponsor_app/data/organization.dart';
+import 'package:sgela_sponsor_app/data/user.dart';
 import 'package:sgela_sponsor_app/ui/branding_upload_one.dart';
+import 'package:sgela_sponsor_app/ui/organisation_user_add.dart';
 import 'package:sgela_sponsor_app/ui/widgets/color_gallery.dart';
 import 'package:sgela_sponsor_app/ui/widgets/org_logo_widget.dart';
 import 'package:sgela_sponsor_app/util/dark_light_control.dart';
@@ -33,12 +35,15 @@ class DashboardState extends State<Dashboard>
   FirestoreService firestoreService = GetIt.instance<FirestoreService>();
 
   List<Branding> brandings = [];
-  int users = 0;
+  List<User> users = [];
+
   int transactions = 0;
 
   double averageRating = 0.0;
   Organization? organization;
   bool _busy = false;
+  String? logoUrl;
+
 
   @override
   void initState() {
@@ -54,12 +59,16 @@ class DashboardState extends State<Dashboard>
   }
 
   _getData() async {
-    _busy = true;
-    setState(() {});
+    pp('$mm ..... get data; logoUrl & org');
+    setState(() {
+      _busy = true;
+    });
     try {
+      logoUrl = prefs.getLogoUrl();
       organization = prefs.getOrganization();
       if ((organization != null)) {
         brandings = await firestoreService.getBranding(organization!.id!);
+        users = await firestoreService.getUsers(organization!.id!);
       }
     } catch (e) {
       pp(e);
@@ -68,8 +77,10 @@ class DashboardState extends State<Dashboard>
       }
     }
 
-    _busy = false;
-    setState(() {});
+    setState(() {
+      _busy = false;
+
+    });
   }
 
   _navigateToColorPicker() {
@@ -77,7 +88,12 @@ class DashboardState extends State<Dashboard>
         context: context,
         widget: ColorGallery(prefs: prefs, colorWatcher: colorWatcher));
   }
-
+  _navigateToAddPerson() async {
+    pp('$mm ... navigation to user add ...');
+    await NavigationUtils.navigateToPage(context: context,
+        widget: const OrganisationUserAdd());
+    _getData();
+  }
   _navigateToBrandUpload() {
     NavigationUtils.navigateToPage(
         context: context,
@@ -85,13 +101,13 @@ class DashboardState extends State<Dashboard>
           organization: widget.organization,
           onBrandingUploaded: (br) {
             pp('$mm ... branding uploaded OK ....');
-            _getData();
             showToast(
                 message: 'Branding items uploaded OK',
                 backgroundColor: Colors.green,
-                padding: 20,
-                duration: const Duration(seconds: 5),
+                padding: 24,
+                duration: const Duration(seconds: 6),
                 context: context);
+            _getData();
           },
         ));
   }
@@ -116,6 +132,7 @@ class DashboardState extends State<Dashboard>
         leading: gapW4,
         title: OrgLogoWidget(
           branding: branding,
+          logoUrl: logoUrl,
         ),
         actions: [
           IconButton(
@@ -126,7 +143,14 @@ class DashboardState extends State<Dashboard>
                 Icons.color_lens_outlined,
                 color: Theme.of(context).primaryColor,
               )),
-
+          organization == null? gapW4: IconButton(
+              onPressed: () {
+                _navigateToAddPerson();
+              },
+              icon: Icon(
+                Icons.person_add,
+                color: Theme.of(context).primaryColor,
+              )),
         ],
         bottom: PreferredSize(
             preferredSize: const Size.fromHeight(24),
@@ -166,7 +190,7 @@ class DashboardState extends State<Dashboard>
                                       crossAxisCount: 2),
                               children: [
                                 TotalCard(
-                                    caption: 'Users', total: users.toDouble()),
+                                    caption: 'Users', total: users.length.toDouble()),
                                 TotalCard(
                                   caption: 'Branding',
                                   total: brandings.length.toDouble(),

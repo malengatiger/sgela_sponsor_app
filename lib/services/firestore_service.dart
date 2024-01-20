@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sgela_sponsor_app/data/branding.dart';
 import 'package:sgela_sponsor_app/data/organization.dart';
+import 'package:sgela_sponsor_app/data/user.dart';
 
 import '../data/city.dart';
 import '../data/country.dart';
@@ -18,6 +19,14 @@ class FirestoreService {
   }
   List<Country> countries = [];
   Country? localCountry;
+  
+  Future<User> addUser(User user) async {
+    var ref =
+    await firebaseFirestore.collection('User').add(user.toJson());
+    var m = ref.path;
+    pp('$mm user added to database: ${user.toJson()}');
+    return user;
+  }
   Future<List<GeminiResponseRating>> getRatings(int examLinkId) async {
     List<GeminiResponseRating> ratings = [];
     var querySnapshot =
@@ -100,11 +109,10 @@ class FirestoreService {
   }
   Future<List<Branding>> getBranding(int organizationId) async {
     pp('$mm ... get branding from Firestore ... organizationId: $organizationId');
-    if (brandings.isNotEmpty) {
-      return brandings;
-    }
+
     var qs = await firebaseFirestore
         .collection('Branding').where('organizationId', isEqualTo: organizationId).get();
+    brandings.clear();
     for (var snap in qs.docs) {
       brandings.add(Branding.fromJson(snap.data()));
     }
@@ -113,5 +121,21 @@ class FirestoreService {
     brandings.sort((a,b) => b.date!.compareTo(a.date!));
     return brandings;
   }
+  Future<List<User>> getUsers(int organizationId) async {
+    pp('$mm ... get users from Firestore ... organizationId: $organizationId');
+
+    var qs = await firebaseFirestore
+        .collection('User').where('organizationId', isEqualTo: organizationId).get();
+    users.clear();
+    for (var snap in qs.docs) {
+      users.add(User.fromJson(snap.data()));
+    }
+
+    pp('$mm ... users found: ${users.length}');
+    users.sort((a,b) => b.lastName!.compareTo(a.lastName!));
+    return users;
+  }
   final List<Branding> brandings = [];
+  List<User> users = [];
+
 }

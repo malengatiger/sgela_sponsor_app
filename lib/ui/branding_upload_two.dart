@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 import 'package:sgela_sponsor_app/data/organization.dart';
 import 'package:sgela_sponsor_app/services/repository.dart';
 import 'package:sgela_sponsor_app/ui/widgets/org_logo_widget.dart';
+import 'package:sgela_sponsor_app/util/prefs.dart';
 
 import '../data/branding.dart';
 import '../services/firestore_service.dart';
@@ -37,15 +38,26 @@ class _BrandingUploadTwoState extends State<BrandingUploadTwo> {
   FirestoreService firestoreService = GetIt.instance<FirestoreService>();
 
   RepositoryService repositoryService = GetIt.instance<RepositoryService>();
+  Prefs prefs = GetIt.instance<Prefs>();
+
   bool _busy = false;
   Branding? branding;
   List<Branding> brandings = [];
-
+  String? logoUrl;
   void _dismissKeyboard(BuildContext context) {
     final currentFocus = FocusScope.of(context);
     if (!currentFocus.hasPrimaryFocus && currentFocus.hasFocus) {
       FocusManager.instance.primaryFocus?.unfocus();
     }
+  }
+  @override
+  void initState() {
+    super.initState();
+    _getLogoUrl();
+
+  }
+  _getLogoUrl() {
+    logoUrl = prefs.getLogoUrl();
   }
 
   _onSubmitBranding() async {
@@ -112,6 +124,7 @@ class _BrandingUploadTwoState extends State<BrandingUploadTwo> {
       appBar: AppBar(
         title: OrgLogoWidget(
           branding: branding,
+          logoUrl: logoUrl,
         ),
       ),
       body: Stack(
@@ -126,21 +139,21 @@ class _BrandingUploadTwoState extends State<BrandingUploadTwo> {
                   Thumbnails(
                       logoFile: widget.logoFile, splashFile: widget.splashFile),
                   gapH32,
-                  gapH16,
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Card(
-                      elevation: 8,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'Use this form to enter your tagline and a link to wherever you want. '
-                          'This will show up in the sponsored student and teacher app. ',
-                          style: myTextStyleSmall(context),
-                        ),
-                      ),
-                    ),
-                  ),
+                  // gapH16,
+                  // Padding(
+                  //   padding: const EdgeInsets.all(8.0),
+                  //   child: Card(
+                  //     elevation: 8,
+                  //     child: Padding(
+                  //       padding: const EdgeInsets.all(8.0),
+                  //       child: Text(
+                  //         'Use this form to enter your tagline and a link to wherever you want. '
+                  //         'This will show up in the sponsored student and teacher app. ',
+                  //         style: myTextStyleSmall(context),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   gapH16,
                   Text(
                     'This data is optional',
@@ -222,12 +235,12 @@ class Thumbnails extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
-          height: logoHeight == null ? 36 : logoHeight!,
+          height: logoHeight == null ? 64 : logoHeight!,
           child: image ?? gapW32,
         ),
         gapH8,
         SizedBox(
-          height: splashHeight == null ? 100 : splashHeight!,
+          height: splashHeight == null ? 160 : splashHeight!,
           child: Image.file(splashFile),
         ),
       ],

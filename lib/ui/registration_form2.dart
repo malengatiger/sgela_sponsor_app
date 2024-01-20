@@ -34,6 +34,8 @@ class RegistrationFormFinalState extends State<RegistrationFormFinal>
 
   final RepositoryService repositoryService =
       GetIt.instance<RepositoryService>();
+  final AuthService authService =
+  GetIt.instance<AuthService>();
   static const mm = '🌀🌀🌀🌀🌀RegistrationFormFinal';
 
   @override
@@ -59,12 +61,14 @@ class RegistrationFormFinalState extends State<RegistrationFormFinal>
     }
 
     var user = User(
-        widget.variables['adminFirstName'],
-        widget.variables['adminLastName'],
-        widget.variables['email'],
-        map['cellPhone'],
-        DateTime.now().toIso8601String(),
-        map['password']);
+      firstName: widget.variables['adminFirstName'],
+      lastName:  widget.variables['adminLastName'],
+      cellphone: map['cellPhone'],
+      email: widget.variables['email'],
+      date: DateTime.now().toIso8601String(),
+      organizationName: widget.variables['orgName'],
+      activeFlag: true,
+      password:  map['password']);
 
     var org = Organization(
         name: widget.variables['orgName'],
@@ -88,7 +92,7 @@ class RegistrationFormFinalState extends State<RegistrationFormFinal>
         prefs.saveOrganization(orgResult);
         prefs.saveCountry(orgResult.country!);
         pp('$mm ..... data saved in prefs! 🌀🌀🌀🌀 sign in and pop!');
-        await AuthService.signIn(user.email!, user.password!);
+        await authService.signIn(user.email!, user.password!);
         widget.onRegistered(orgResult);
         if (mounted) {
           Navigator.of(context).pop(orgResult);
