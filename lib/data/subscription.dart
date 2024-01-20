@@ -1,26 +1,37 @@
-import 'package:sgela_sponsor_app/data/country.dart';
-import 'package:sgela_sponsor_app/data/pricing.dart';
-import 'package:sgela_sponsor_app/data/user.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:sgela_sponsor_app/data/pricing.dart';
 
-import 'organization.dart';
+
 part 'subscription.g.dart';
-@JsonSerializable()
 
+@JsonSerializable()
 class Subscription {
-  Country? country;
-  Organization? organization;
-  User? user;
-  String? date;
+  int? countryId, id;
+  int? organizationId;
+  int? userId;
+  String? date, organizationName;
   Pricing? pricing;
-  int? subscriptionType;
+  String? subscriptionType;
   bool? activeFlag;
 
-  Subscription(this.country, this.organization, this.user, this.date,
-      this.pricing, this.subscriptionType, this.activeFlag);
+  Subscription(this.id, this.countryId, this.organizationId, this.userId,
+      this.date, this.pricing, this.subscriptionType, this.activeFlag, this.organizationName);
 
   factory Subscription.fromJson(Map<String, dynamic> json) =>
       _$SubscriptionFromJson(json);
 
-  Map<String, dynamic> toJson() => _$SubscriptionToJson(this);
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = _$SubscriptionToJson(this);
+
+    if (pricing != null) {
+      data['pricing'] = pricing!.toJson();
+    }
+
+    return data;
+  }
 }
+
+const freeSubscription  = 'FREE' ;
+const monthlySubscription  = 'MONTHLY' ;
+const annualSubscription  = 'ANNUAL' ;

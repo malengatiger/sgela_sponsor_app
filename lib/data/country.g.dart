@@ -9,19 +9,19 @@ part of 'country.dart';
 Country _$CountryFromJson(Map<String, dynamic> json) => Country(
       json['id'] as int?,
       json['name'] as String?,
-    )
-      ..capital = json['capital'] as String?
-      ..currencyName = json['currencyName'] as String?
-      ..currencySymbol = json['currencySymbol'] as String?
-      ..emoji = json['emoji'] as String?
-      ..iso2 = json['iso2'] as String?
-      ..iso3 = json['iso3'] as String?
-      ..phoneCode = json['phoneCode'] as String?
-      ..region = json['region'] as String?
-      ..subregion = json['subregion'] as String?
-      ..numericCode = json['numericCode'] as String?
-      ..latitude = (json['latitude'] as num?)?.toDouble()
-      ..longitude = (json['longitude'] as num?)?.toDouble();
+      json['capital'] as String?,
+      json['currencyName'] as String?,
+      json['currencySymbol'] as String?,
+      json['emoji'] as String?,
+      json['iso2'] as String?,
+      json['iso3'] as String?,
+      json['phoneCode'] as String?,
+      json['region'] as String?,
+      json['subregion'] as String?,
+      json['numericCode'] as String?,
+      (json['latitude'] as num?)?.toDouble(),
+      (json['longitude'] as num?)?.toDouble(),
+    );
 
 Map<String, dynamic> _$CountryToJson(Country instance) => <String, dynamic>{
       'id': instance.id,

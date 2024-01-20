@@ -6,6 +6,7 @@ import 'package:sgela_sponsor_app/data/organization.dart';
 import 'package:sgela_sponsor_app/data/user.dart';
 import 'package:sgela_sponsor_app/ui/branding_upload_one.dart';
 import 'package:sgela_sponsor_app/ui/organisation_user_add.dart';
+import 'package:sgela_sponsor_app/ui/subscription_manager.dart';
 import 'package:sgela_sponsor_app/ui/widgets/color_gallery.dart';
 import 'package:sgela_sponsor_app/ui/widgets/org_logo_widget.dart';
 import 'package:sgela_sponsor_app/util/dark_light_control.dart';
@@ -44,7 +45,6 @@ class DashboardState extends State<Dashboard>
   bool _busy = false;
   String? logoUrl;
 
-
   @override
   void initState() {
     _controller = AnimationController(vsync: this);
@@ -79,7 +79,6 @@ class DashboardState extends State<Dashboard>
 
     setState(() {
       _busy = false;
-
     });
   }
 
@@ -88,12 +87,14 @@ class DashboardState extends State<Dashboard>
         context: context,
         widget: ColorGallery(prefs: prefs, colorWatcher: colorWatcher));
   }
+
   _navigateToAddPerson() async {
     pp('$mm ... navigation to user add ...');
-    await NavigationUtils.navigateToPage(context: context,
-        widget: const OrganisationUserAdd());
+    await NavigationUtils.navigateToPage(
+        context: context, widget: const OrganisationUserAdd());
     _getData();
   }
+
   _navigateToBrandUpload() {
     NavigationUtils.navigateToPage(
         context: context,
@@ -110,6 +111,12 @@ class DashboardState extends State<Dashboard>
             _getData();
           },
         ));
+  }
+
+  _navigateToSubscription() {
+    pp('$mm ... _navigateToSubscription ...');
+    NavigationUtils.navigateToPage(
+        context: context, widget: const SubscriptionManager());
   }
 
   @override
@@ -143,14 +150,16 @@ class DashboardState extends State<Dashboard>
                 Icons.color_lens_outlined,
                 color: Theme.of(context).primaryColor,
               )),
-          organization == null? gapW4: IconButton(
-              onPressed: () {
-                _navigateToAddPerson();
-              },
-              icon: Icon(
-                Icons.person_add,
-                color: Theme.of(context).primaryColor,
-              )),
+          organization == null
+              ? gapW4
+              : IconButton(
+                  onPressed: () {
+                    _navigateToAddPerson();
+                  },
+                  icon: Icon(
+                    Icons.person_add,
+                    color: Theme.of(context).primaryColor,
+                  )),
         ],
         bottom: PreferredSize(
             preferredSize: const Size.fromHeight(24),
@@ -176,10 +185,11 @@ class DashboardState extends State<Dashboard>
                         gapH32,
                         Text(
                           name,
-                          style:
-                          myTextStyle(context,
+                          style: myTextStyle(
+                              context,
                               Theme.of(context).primaryColorLight,
-                              28, FontWeight.normal),
+                              28,
+                              FontWeight.normal),
                         ),
                         Expanded(
                           child: Padding(
@@ -190,20 +200,24 @@ class DashboardState extends State<Dashboard>
                                       crossAxisCount: 2),
                               children: [
                                 TotalCard(
-                                    caption: 'Users', total: users.length.toDouble()),
+                                    caption: 'Users',
+                                    total: users.length.toDouble()),
                                 TotalCard(
                                   caption: 'Branding',
                                   total: brandings.length.toDouble(),
                                   fontSize: 48,
                                 ),
                                 TotalCard(
+                                    caption: 'Average Rating',
+                                    total: averageRating),
+                                TotalCard(
+                                    caption: 'Students Subscribed',
+                                    total: averageRating),
+                                TotalCard(
                                   caption: 'AI Requests',
                                   total: transactions.toDouble(),
                                   fontSize: 20,
                                 ),
-                                TotalCard(
-                                    caption: 'Average Rating',
-                                    total: averageRating),
                               ],
                             ),
                           ),
@@ -222,15 +236,17 @@ class DashboardState extends State<Dashboard>
                                   onPressed: () {
                                     _navigateToBrandUpload();
                                   },
-                                  icon: const Icon(Icons.upload),
+                                  icon: Icon(Icons.upload,
+                                      color: Theme.of(context).primaryColor),
                                   label: Padding(
                                     padding: const EdgeInsets.all(16.0),
                                     child: Text(
                                       'Upload Branding',
-                                      style:
-                                          myTextStyle(context,
-                                              Theme.of(context).primaryColorLight,
-                                              18, FontWeight.normal),
+                                      style: myTextStyle(
+                                          context,
+                                          Theme.of(context).primaryColorLight,
+                                          18,
+                                          FontWeight.normal),
                                     ),
                                   ),
                                 ),
@@ -240,20 +256,25 @@ class DashboardState extends State<Dashboard>
                                 width: 300,
                                 child: ElevatedButton.icon(
                                   style: const ButtonStyle(
-                                    elevation: MaterialStatePropertyAll(16.0),
+                                    elevation: MaterialStatePropertyAll(4.0),
                                   ),
                                   onPressed: () {
-                                    _getData();
+                                    _navigateToSubscription();
                                   },
-                                  icon: const Icon(Icons.refresh),
+                                  icon: Icon(
+                                    Icons.back_hand_sharp,
+                                    size: 20,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
                                   label: Padding(
                                     padding: const EdgeInsets.all(16.0),
                                     child: Text(
-                                      'Refresh Dashboard',
-                                      style:
-                                      myTextStyle(context,
+                                      'Manage Subscription',
+                                      style: myTextStyle(
+                                          context,
                                           Theme.of(context).primaryColorLight,
-                                          18, FontWeight.normal),
+                                          18,
+                                          FontWeight.bold),
                                     ),
                                   ),
                                 ),

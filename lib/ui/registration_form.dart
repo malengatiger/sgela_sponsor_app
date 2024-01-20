@@ -122,6 +122,7 @@ class MyForm extends StatelessWidget {
                   gapH8,
                   ReactiveTextField<String>(
                     formControlName: 'orgName',
+                    keyboardType: TextInputType.name,
                     validationMessages: {
                       ValidationMessage.required: (_) =>
                           'The Organization must not be empty',
@@ -138,6 +139,7 @@ class MyForm extends StatelessWidget {
                   gapH16,
                   ReactiveTextField<String>(
                     formControlName: 'adminFirstName',
+                    keyboardType: TextInputType.name,
                     style: myTextStyleSmall(context),
                     validationMessages: {
                       ValidationMessage.required: (_) =>
@@ -154,6 +156,7 @@ class MyForm extends StatelessWidget {
                   gapH16,
                   ReactiveTextField<String>(
                     formControlName: 'adminLastName',
+                    keyboardType: TextInputType.name,
                     validationMessages: {
                       ValidationMessage.required: (_) =>
                           'The Administrator surname must not be empty',
@@ -169,6 +172,8 @@ class MyForm extends StatelessWidget {
                   gapH16,
                   ReactiveTextField<String>(
                     formControlName: 'email',
+                    keyboardType: TextInputType.emailAddress,
+
                     validationMessages: {
                       ValidationMessage.required: (_) =>
                           'The email must not be empty',
@@ -184,7 +189,6 @@ class MyForm extends StatelessWidget {
                       errorStyle: TextStyle(height: 0.6),
                     ),
                   ),
-                  gapH32,
                   gapH32,
                   ElevatedButton(
                     style: const ButtonStyle(

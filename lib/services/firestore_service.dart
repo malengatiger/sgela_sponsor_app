@@ -1,36 +1,41 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sgela_sponsor_app/data/branding.dart';
 import 'package:sgela_sponsor_app/data/organization.dart';
+import 'package:sgela_sponsor_app/data/subscription.dart';
 import 'package:sgela_sponsor_app/data/user.dart';
 
 import '../data/city.dart';
 import '../data/country.dart';
 import '../data/gemini_response_rating.dart';
+import '../data/pricing.dart';
 import '../util/functions.dart';
 import '../util/location_util.dart';
+
 class FirestoreService {
   final FirebaseFirestore firebaseFirestore;
   static const mm = '🌀🌀🌀🌀🌀FirestoreService 🌀';
+
   FirestoreService(this.firebaseFirestore) {
     firebaseFirestore.settings = const Settings(
       persistenceEnabled: true,
     );
     getCountries();
   }
+
   List<Country> countries = [];
   Country? localCountry;
-  
+
   Future<User> addUser(User user) async {
-    var ref =
-    await firebaseFirestore.collection('User').add(user.toJson());
+    var ref = await firebaseFirestore.collection('User').add(user.toJson());
     var m = ref.path;
     pp('$mm user added to database: ${user.toJson()}');
     return user;
   }
+
   Future<List<GeminiResponseRating>> getRatings(int examLinkId) async {
     List<GeminiResponseRating> ratings = [];
-    var querySnapshot =
-    await firebaseFirestore.collection('GeminiResponseRating')
+    var querySnapshot = await firebaseFirestore
+        .collection('GeminiResponseRating')
         .where('examLinkId', isEqualTo: examLinkId)
         .get();
     for (var s in querySnapshot.docs) {
@@ -39,9 +44,27 @@ class FirestoreService {
     }
     return ratings;
   }
+
   Future addRating(GeminiResponseRating rating) async {
     var colRef = firebaseFirestore.collection('GeminiResponseRating');
     await colRef.add(rating.toJson());
+  }
+
+  Future<Subscription?> addSubscription(Subscription subscription) async {
+    pp('$mm addSubscription to be added to database: ${subscription.toJson()}');
+
+    subscription.id = generateUniqueKey();
+    var colRef = firebaseFirestore
+        .collection('Subscription');
+    var docRef =
+    await colRef.add(subscription.toJson());
+    var v = await docRef.get();
+    var doc = v.data();
+    if (doc != null) {
+      pp('$mm subscription added to database: $doc');
+      return Subscription.fromJson(doc);
+    }
+    return null;
   }
 
   Future<List<Country>> getCountries() async {
@@ -49,8 +72,7 @@ class FirestoreService {
     if (countries.isNotEmpty) {
       return countries;
     }
-    var qs = await firebaseFirestore
-        .collection('Country').get();
+    var qs = await firebaseFirestore.collection('Country').get();
     for (var snap in qs.docs) {
       countries.add(Country.fromJson(snap.data()));
     }
@@ -58,6 +80,7 @@ class FirestoreService {
     getLocalCountry();
     return countries;
   }
+
   Future<Country?> getLocalCountry() async {
     if (localCountry != null) {
       return localCountry!;
@@ -77,11 +100,14 @@ class FirestoreService {
     }
     return localCountry;
   }
+
   Future<Organization?> getOrganization(int organizationId) async {
     pp('$mm ... getOrganization from Firestore ... organizationId: $organizationId');
     List<Organization> list = [];
     var qs = await firebaseFirestore
-        .collection('Organization').where('id', isEqualTo: organizationId).get();
+        .collection('Organization')
+        .where('id', isEqualTo: organizationId)
+        .get();
     for (var snap in qs.docs) {
       list.add(Organization.fromJson(snap.data()));
     }
@@ -92,50 +118,113 @@ class FirestoreService {
     }
     return null;
   }
+
+  Future<Pricing?> getPricing(int countryId) async {
+    pp('$mm ... getPricing from Firestore ... countryId: $countryId');
+    List<Pricing> list = [];
+    var qs = await firebaseFirestore
+        .collection('Pricing')
+        .where('countryId', isEqualTo: countryId)
+        .get();
+    for (var snap in qs.docs) {
+      list.add(Pricing.fromJson(snap.data()));
+    }
+    pp('$mm ... pricings found: ${list.length}');
+
+    if (list.isNotEmpty) {
+      list.sort((a,b) => b.date!.compareTo(a.date!));
+      return list.first;
+    }
+    return null;
+  }
+
   Future<List<City>> getCities(int countryId) async {
     pp('$mm ... get cities from Firestore ... countryId: $countryId');
     List<City> cities = [];
     var qs = await firebaseFirestore
-        .collection('City').where('countryId', isEqualTo: countryId).get();
+        .collection('City')
+        .where('countryId', isEqualTo: countryId)
+        .get();
     pp('$mm ... qs found: ${qs.size} cities');
 
     for (var snap in qs.docs) {
-        cities.add(City.fromJson(snap.data()));
+      cities.add(City.fromJson(snap.data()));
     }
 
     pp('$mm ... cities found: ${cities.length}');
     return cities;
-
   }
+
   Future<List<Branding>> getBranding(int organizationId) async {
     pp('$mm ... get branding from Firestore ... organizationId: $organizationId');
 
     var qs = await firebaseFirestore
-        .collection('Branding').where('organizationId', isEqualTo: organizationId).get();
+        .collection('Branding')
+        .where('organizationId', isEqualTo: organizationId)
+        .get();
     brandings.clear();
     for (var snap in qs.docs) {
       brandings.add(Branding.fromJson(snap.data()));
     }
 
     pp('$mm ... branding found: ${brandings.length}');
-    brandings.sort((a,b) => b.date!.compareTo(a.date!));
+    brandings.sort((a, b) => b.date!.compareTo(a.date!));
     return brandings;
   }
+
+  Future<List<Subscription>> getSubscriptions(int organizationId) async {
+    pp('$mm ... getSubscriptions from Firestore ... organizationId: $organizationId');
+
+    var qs = await firebaseFirestore
+        .collection('Subscription')
+        .where('organizationId', isEqualTo: organizationId)
+        .get();
+    List<Subscription> subs = [];
+    for (var snap in qs.docs) {
+      subs.add(Subscription.fromJson(snap.data()));
+    }
+
+    pp('$mm ... subs found: ${subs.length}');
+    subs.sort((a, b) => b.date!.compareTo(a.date!));
+    return subs;
+  }
+
   Future<List<User>> getUsers(int organizationId) async {
     pp('$mm ... get users from Firestore ... organizationId: $organizationId');
 
     var qs = await firebaseFirestore
-        .collection('User').where('organizationId', isEqualTo: organizationId).get();
+        .collection('User')
+        .where('organizationId', isEqualTo: organizationId)
+        .get();
     users.clear();
     for (var snap in qs.docs) {
       users.add(User.fromJson(snap.data()));
     }
 
     pp('$mm ... users found: ${users.length}');
-    users.sort((a,b) => b.lastName!.compareTo(a.lastName!));
+    users.sort((a, b) => b.lastName!.compareTo(a.lastName!));
     return users;
   }
+
+  Future<User?> getUser(String firebaseUserId) async {
+    pp('$mm ... get user from Firestore ... firebaseUserId: $firebaseUserId');
+
+    var qs = await firebaseFirestore
+        .collection('User')
+        .where('firebaseUserId', isEqualTo: firebaseUserId)
+        .get();
+    users.clear();
+    for (var snap in qs.docs) {
+      users.add(User.fromJson(snap.data()));
+    }
+
+    pp('$mm ... users found: ${users.length}');
+    if (users.isNotEmpty) {
+      return users.first;
+    }
+    return null;
+  }
+
   final List<Branding> brandings = [];
   List<User> users = [];
-
 }

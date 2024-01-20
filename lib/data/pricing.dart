@@ -7,11 +7,12 @@ class Pricing {
   double? monthlyPrice, annualPrice;
   String? currency;
   String? date;
-  Country? country;
+  int? countryId;
+  int? id;
 
 
   Pricing(this.monthlyPrice, this.annualPrice, this.currency, this.date,
-      this.country);
+      this.countryId, this.id);
 
   factory Pricing.fromJson(Map<String, dynamic> json) =>
       _$PricingFromJson(json);

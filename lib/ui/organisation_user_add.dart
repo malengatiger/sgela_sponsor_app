@@ -4,6 +4,7 @@ import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sgela_sponsor_app/data/organization.dart';
 import 'package:sgela_sponsor_app/data/user.dart';
 import 'package:sgela_sponsor_app/services/auth_service.dart';
+import 'package:sgela_sponsor_app/ui/busy_indicator.dart';
 import 'package:sgela_sponsor_app/ui/widgets/org_logo_widget.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
 
@@ -116,11 +117,16 @@ class OrganisationUserAddState extends State<OrganisationUserAdd>
 
   @override
   Widget build(BuildContext context) {
+    String name = '';
+    if (organization != null) {
+      name = organization!.name!;
+    }
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
         title: OrgLogoWidget(
           logoUrl: logoUrl,
+          name: name,
         ),
       ),
       body: ScreenTypeLayout.builder(
@@ -137,13 +143,19 @@ class OrganisationUserAddState extends State<OrganisationUserAdd>
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         gapH32,
-                        UserForm(
-                            firstNameController: firstNameController,
-                            lastNameController: lastNameController,
-                            emailController: emailController,
-                            onDone: () {
-                              _submitUser();
-                            }),
+                        _busy? gapH32: gapH4,
+                        _busy
+                            ? const BusyIndicator(
+                                caption: 'Sending new user',
+                                showClock: true,
+                              )
+                            : UserForm(
+                                firstNameController: firstNameController,
+                                lastNameController: lastNameController,
+                                emailController: emailController,
+                                onDone: () {
+                                  _submitUser();
+                                }),
                       ],
                     ),
                   ),
@@ -187,12 +199,13 @@ class UserForm extends StatelessWidget {
           children: [
             Text(
               'User Form',
-              style: myTextStyle(context, Theme.of(context).primaryColorLight,
-                  24, FontWeight.w900),
+              style: myTextStyle(
+                  context, Theme.of(context).primaryColor, 24, FontWeight.w900),
             ),
             gapH32,
             TextField(
               controller: firstNameController,
+              keyboardType: TextInputType.name,
               decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   label: Text('First Name'),
@@ -201,6 +214,7 @@ class UserForm extends StatelessWidget {
             gapH16,
             TextField(
               controller: lastNameController,
+              keyboardType: TextInputType.name,
               decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   label: Text('Surname'),
@@ -209,6 +223,7 @@ class UserForm extends StatelessWidget {
             gapH16,
             TextField(
               controller: emailController,
+              keyboardType: TextInputType.emailAddress,
               decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   label: Text('Email Address'),
@@ -225,9 +240,16 @@ class UserForm extends StatelessWidget {
                   onPressed: () {
                     onDone();
                   },
-                  child: const Padding(
-                    padding: EdgeInsets.all(20.0),
-                    child: Text('Submit User'),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Text(
+                      'Submit User',
+                      style: myTextStyle(
+                          context,
+                          Theme.of(context).primaryColor,
+                          20,
+                          FontWeight.normal),
+                    ),
                   )),
             )
           ],

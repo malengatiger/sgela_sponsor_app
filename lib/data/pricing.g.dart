@@ -11,9 +11,8 @@ Pricing _$PricingFromJson(Map<String, dynamic> json) => Pricing(
       (json['annualPrice'] as num?)?.toDouble(),
       json['currency'] as String?,
       json['date'] as String?,
-      json['country'] == null
-          ? null
-          : Country.fromJson(json['country'] as Map<String, dynamic>),
+      json['countryId'] as int?,
+      json['id'] as int?,
     );
 
 Map<String, dynamic> _$PricingToJson(Pricing instance) => <String, dynamic>{
@@ -21,5 +20,6 @@ Map<String, dynamic> _$PricingToJson(Pricing instance) => <String, dynamic>{
       'annualPrice': instance.annualPrice,
       'currency': instance.currency,
       'date': instance.date,
-      'country': instance.country,
+      'countryId': instance.countryId,
+      'id': instance.id,
     };

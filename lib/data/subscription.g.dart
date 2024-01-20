@@ -7,29 +7,27 @@ part of 'subscription.dart';
 // **************************************************************************
 
 Subscription _$SubscriptionFromJson(Map<String, dynamic> json) => Subscription(
-      json['country'] == null
-          ? null
-          : Country.fromJson(json['country'] as Map<String, dynamic>),
-      json['organization'] == null
-          ? null
-          : Organization.fromJson(json['organization'] as Map<String, dynamic>),
-      json['user'] == null
-          ? null
-          : User.fromJson(json['user'] as Map<String, dynamic>),
+      json['id'] as int?,
+      json['countryId'] as int?,
+      json['organizationId'] as int?,
+      json['userId'] as int?,
       json['date'] as String?,
       json['pricing'] == null
           ? null
           : Pricing.fromJson(json['pricing'] as Map<String, dynamic>),
-      json['subscriptionType'] as int?,
+      json['subscriptionType'] as String?,
       json['activeFlag'] as bool?,
+      json['organizationName'] as String?,
     );
 
 Map<String, dynamic> _$SubscriptionToJson(Subscription instance) =>
     <String, dynamic>{
-      'country': instance.country,
-      'organization': instance.organization,
-      'user': instance.user,
+      'countryId': instance.countryId,
+      'id': instance.id,
+      'organizationId': instance.organizationId,
+      'userId': instance.userId,
       'date': instance.date,
+      'organizationName': instance.organizationName,
       'pricing': instance.pricing,
       'subscriptionType': instance.subscriptionType,
       'activeFlag': instance.activeFlag,

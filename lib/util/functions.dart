@@ -810,7 +810,7 @@ TextStyle myTextStyleMediumBoldGrey(BuildContext context) {
     textStyle: Theme.of(context).textTheme.bodyMedium,
     fontWeight: FontWeight.w900,
     color: Colors.grey.shade600,
-    fontSize: 13.0,
+    fontSize: 20.0,
   );
 }
 

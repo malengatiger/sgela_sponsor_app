@@ -274,6 +274,7 @@ class MyForm2 extends StatelessWidget {
                     const SizedBox(height: 16.0),
                     ReactiveTextField<String>(
                       formControlName: 'password',
+                      keyboardType: TextInputType.visiblePassword,
                       obscureText: true,
                       validationMessages: {
                         ValidationMessage.required: (_) =>
