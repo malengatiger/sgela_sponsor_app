@@ -6,11 +6,59 @@ import 'functions.dart';
 class ChatbotEnvironment {
   //💙Skunk backend -
 
-  static const _ipNormal = '192.168.86.230';
-  static const _ipFibreDown = '192.168.86.242';
+  static const _ipNormal = '192.168.86.242';
+  static const _ipFibreDown = '192.168.86.230';
   static const bool isFibreDown = false;
-  static const _devSkunkUrl = 'http://${isFibreDown? _ipFibreDown: _ipNormal}:8083/skunk-service/';
+  static const _devSkunkUrl = 'http://${isFibreDown? _ipFibreDown: _ipNormal}:8080/skunk-service/';
   static const _prodSkunkUrl = 'https://skunkworks-backend-service-knzs6eczwq-nw.a.run.app/';
+
+  //RAPYD SANDBOX
+  static const _devRapydAccessKey1 = 'AE0D13504D1AC1D5DF7E';
+  static const _devRapydAccessKey0 = 'rak_';
+//rsk_867e77cc057d7ec7daec29bd2e64d1dc8956fdc77
+  static const _devRapydSecretKey1 = 'f08411c7575df54cb03ab648cda6dec47056466';
+  static const _devRapydSecretKey0 = 'rsk_867e77cc057d7ec7daec29bd2e64d1dc8956fdc77';
+  static const String _devRapydUrl = 'https://sandboxapi.rapyd.net/';
+
+  //RAPYD PRODUCTION
+  static const _prodRapydAccessKey1 = '';
+  static const _prodRapydAccessKey0 = '';
+  static const String _prodRapydUrl = '';
+
+  static const String _devRapydCancelUrl = '';
+  static const String _prodRapydCancelUrl = '';
+
+  static const String _devRapydCompleteUrl = '';
+  static const String _prodRapydCompleteUrl = '';
+
+
+  static const _prodRapydSecretKey1 = 'AE0D13504D1AC1D5DF7E';
+  static const _prodRapydSecretKey0 = 'rak_';
+
+
+
+  static String getRapydAccessKey() {
+    //todo - REMOVE AFTER PROD TEST
+    if (kDebugMode) {
+      return '$_devRapydAccessKey0$_devRapydAccessKey1';
+    } else {
+      return '$_prodRapydAccessKey0$_prodRapydAccessKey1';
+    }
+  }
+  static String getRapydSecretKey() {
+    if (kDebugMode) {
+      return '$_devRapydSecretKey0$_devRapydSecretKey1';
+    } else {
+      return '$_prodRapydSecretKey0$_prodRapydSecretKey1';
+    }
+  }
+  static String getRapydUrl() {
+    if (kDebugMode) {
+      return _devRapydUrl;
+    } else {
+      return _prodRapydUrl;
+    }
+  }
 
   static String getProductionSkunkUrl() {
     return _prodSkunkUrl;

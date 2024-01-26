@@ -75,7 +75,6 @@ class AuthService {
        pp(e);
      }
   }
-  //https://sgela-backend-a4oft7zx3q-uk.a.run.app
   auth.ActionCodeSettings _getActionCodeSettings(int userId) {
      //todo - Sort the ActionCodeSettings url parameter
     var acs = auth.ActionCodeSettings(

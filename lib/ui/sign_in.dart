@@ -66,6 +66,7 @@ class SignInState extends State<SignIn> with SingleTickerProviderStateMixin {
               context: context);
           var org =
               await firestoreService.getOrganization(mUser.organizationId!);
+
           if (mounted) {
             if (org != null) {
               Navigator.of(context).pop();

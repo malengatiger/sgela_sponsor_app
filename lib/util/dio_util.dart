@@ -26,8 +26,12 @@ class DioUtil {
         options: Options(responseType: ResponseType.json),
       );
 
-      pp('$mm Dio network response: 🥬🥬🥬🥬🥬🥬 status code: ${response.statusCode}');
-      return response.data;
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        pp('$mm Dio network response: 🥬🥬🥬🥬🥬🥬 status code: ${response.statusCode}');
+        return response.data;
+      }  else {
+        throw Exception('Unable to get data. status code: ${response.statusCode} - ${response.data}');
+      }
     } catch (e) {
       pp('$mm Dio network response: 👿👿👿👿 ERROR: $e');
       pp(e);

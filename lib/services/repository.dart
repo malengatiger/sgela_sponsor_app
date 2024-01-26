@@ -6,6 +6,8 @@ import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:sgela_sponsor_app/data/branding.dart';
+import 'package:sgela_sponsor_app/services/firestore_service.dart';
+import 'package:sgela_sponsor_app/services/rapyd_payment_service.dart';
 import 'package:sgela_sponsor_app/util/prefs.dart';
 
 import '../data/organization.dart';
@@ -20,7 +22,9 @@ class RepositoryService {
 
   static const mm = '💦💦💦💦 RepositoryService 💦';
 
-  RepositoryService(this.dioUtil);
+  RepositoryService(this.dioUtil, this.prefs, this.paymentService,);
+  final Prefs prefs;
+  final RapydPaymentService paymentService;
   Future<Organization?> getSgelaOrganization() async {
     String prefix = ChatbotEnvironment.getSkunkUrl();
     String url = '${prefix}organizations/getSgelaOrganization';
@@ -38,6 +42,10 @@ class RepositoryService {
     var result = await dioUtil.sendPostRequest(url, organization.toJson());
     pp('$mm ... response from call: $result');
     Organization org = Organization.fromJson(result);
+    prefs.saveOrganization(org);
+    prefs.saveCountry(org.country!);
+
+
     return org;
   }
 

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sgela_sponsor_app/data/branding.dart';
 import 'package:sgela_sponsor_app/data/organization.dart';
+import 'package:sgela_sponsor_app/data/sponsor_payment_type.dart';
 import 'package:sgela_sponsor_app/data/subscription.dart';
 import 'package:sgela_sponsor_app/data/user.dart';
 
@@ -66,6 +67,33 @@ class FirestoreService {
     }
     return null;
   }
+
+  final List<SponsorProduct> sponsorPaymentTypes = [];
+
+  Future<List<SponsorProduct>> getSponsorProducts() async {
+    pp('$mm ... get getSponsorPaymentTypes from Firestore ...');
+    if (sponsorPaymentTypes.isNotEmpty) {
+      return sponsorPaymentTypes;
+    }
+    var country = await getLocalCountry();
+    if (country != null) {
+      var qs = await firebaseFirestore.collection('SponsorPaymentType')
+          .where('countryName', isEqualTo: country.name!)
+          .get();
+      for (var snap in qs.docs) {
+        sponsorPaymentTypes.add(SponsorProduct.fromJson(snap.data()));
+      }
+      pp('$mm ... sponsorPaymentTypes found in Firestore: ${sponsorPaymentTypes.length}');
+      for (var t in sponsorPaymentTypes) {
+        pp('$mm SponsorPaymentType: 🔵🔵🔵🔵 ${t.toJson()} 🔵🔵🔵🔵');
+      }
+      return sponsorPaymentTypes;
+    }
+    pp('$mm ... sponsorPaymentTypes found in Firestore: ${sponsorPaymentTypes.length}');
+
+    return sponsorPaymentTypes;
+  }
+
 
   Future<List<Country>> getCountries() async {
     pp('$mm ... get countries from Firestore ...');

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:sgela_sponsor_app/data/rapyd/holder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/country.dart';
@@ -41,6 +42,21 @@ class Prefs {
     var jx = json.decode(string);
     var country = Country.fromJson(jx);
     return country;
+  }
+  void saveCustomer(Customer customer) {
+    Map mJson = customer.toJson();
+    var jx = json.encode(mJson);
+    sharedPreferences.setString('customer', jx);
+  }
+
+  Customer? getCustomer() {
+    var string = sharedPreferences.getString('customer');
+    if (string == null) {
+      return null;
+    }
+    var jx = json.decode(string);
+    var c = Customer.fromJson(jx);
+    return c;
   }
   void saveOrganization(Organization organization) {
     Map mJson = organization.toJson();

@@ -3,8 +3,10 @@ import 'package:get_it/get_it.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sgela_sponsor_app/data/country.dart';
+import 'package:sgela_sponsor_app/data/rapyd/holder.dart';
 import 'package:sgela_sponsor_app/data/user.dart';
 import 'package:sgela_sponsor_app/services/auth_service.dart';
+import 'package:sgela_sponsor_app/services/rapyd_payment_service.dart';
 import 'package:sgela_sponsor_app/services/repository.dart';
 import 'package:sgela_sponsor_app/ui/country_city_selector.dart';
 import 'package:sgela_sponsor_app/util/navigation_util.dart';
@@ -36,6 +38,9 @@ class RegistrationFormFinalState extends State<RegistrationFormFinal>
       GetIt.instance<RepositoryService>();
   final AuthService authService =
   GetIt.instance<AuthService>();
+
+  final RapydPaymentService paymentService =
+  GetIt.instance<RapydPaymentService>();
   static const mm = '🌀🌀🌀🌀🌀RegistrationFormFinal';
 
   @override
@@ -91,8 +96,20 @@ class RegistrationFormFinalState extends State<RegistrationFormFinal>
         prefs.saveUser(orgResult.adminUser!);
         prefs.saveOrganization(orgResult);
         prefs.saveCountry(orgResult.country!);
-        pp('$mm ..... data saved in prefs! 🌀🌀🌀🌀 sign in and pop!');
+        pp('$mm ..... data saved in prefs! 🌀🌀🌀🌀 sign in ...');
         await authService.signIn(user.email!, user.password!);
+        pp('$mm ..... create rapyd customer 🌀🌀🌀🌀 .......');
+
+        CustomerRequest customerRequest = CustomerRequest(
+            org.name!,null, user.email,
+            'SGA', null, null, user.cellphone!);
+        Customer? customer = await paymentService.addCustomer(customerRequest);
+        if ((customer != null)) {
+          pp('$mm ..... 🍀🍀🍀🍀🍀🍀 saving rapyd customer '
+              '🌀🌀🌀🌀 ${customer.toJson()}');
+          prefs.saveCustomer(customer);
+        }
+
         widget.onRegistered(orgResult);
         if (mounted) {
           Navigator.of(context).pop(orgResult);

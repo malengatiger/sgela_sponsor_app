@@ -4,10 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:sgela_sponsor_app/services/register_services.dart';
 import 'package:sgela_sponsor_app/ui/landing_page.dart';
 import 'package:sgela_sponsor_app/util/dark_light_control.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
-import 'package:sgela_sponsor_app/services/register_services.dart';
 
 import 'firebase_options.dart';
 
@@ -51,12 +51,12 @@ class MyApp extends StatelessWidget {
     DarkLightControl dlc = GetIt.instance<DarkLightControl>();
     return StreamBuilder<ModeAndColor>(
       stream: dlc.darkLightStream,
-      builder: (context, snapshot){
+      builder: (context, snapshot) {
         if (snapshot.hasData) {
           modeAndColor = snapshot.data!;
         }
         return GestureDetector(
-          onTap: (){
+          onTap: () {
             dismissKeyboard(context);
           },
           child: MaterialApp(
@@ -69,15 +69,15 @@ class MyApp extends StatelessWidget {
       },
     );
   }
+
   ThemeData _getTheme(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
     if (modeAndColor == null) {
       return ThemeData.dark().copyWith(
-        primaryColor: getColors()
-            .elementAt(0), // Set the primary color
+        primaryColor: getColors().elementAt(0), // Set the primary color
       );
     }
-    if (modeAndColor!.mode> -1) {
+    if (modeAndColor!.mode > -1) {
       if (modeAndColor?.mode == 0) {
         return ThemeData.light().copyWith(
           primaryColor: getColors()
@@ -95,15 +95,12 @@ class MyApp extends StatelessWidget {
     int index = rand.nextInt(getColors().length - 1);
     if (brightness == Brightness.dark) {
       return ThemeData.dark().copyWith(
-        primaryColor: getColors()
-            .elementAt(index), // Set the primary color
+        primaryColor: getColors().elementAt(index), // Set the primary color
       );
     } else {
       return ThemeData.light().copyWith(
-        primaryColor: getColors()
-            .elementAt(index), // Set the primary color
+        primaryColor: getColors().elementAt(index), // Set the primary color
       );
     }
   }
-
 }

@@ -170,8 +170,6 @@ Y
 )android/app/src/debug/AndroidManifest.xml,e/9/e9b8a57f79617fe2b2612f997e0f60425ebc5097
 [
 +android/app/src/profile/AndroidManifest.xml,d/2/d2c744cc316dff823a081098f4a97f18cd817497
-I
-lib/generated/assets.dart,5/b/5b815209f3ac1d4b94a4211dbfb903428d4ed1c2
 U
 %.idea/libraries/KotlinJavaRuntime.xml,0/2/02ddf5725f2ec9b67991423205d2b1a2009ccd06
 L
@@ -196,36 +194,22 @@ Q
 !lib/ui/widgets/color_gallery.dart,1/0/10242b5ae3272c906366788afa62e518526e0efd
 E
 lib/ui/city_list.dart,f/1/f19669cb296e701618a9fb0454bada130aac206b
-B
-lib/data/city.dart,0/a/0ab8303fdb81e122dbb7a276361ce7bcdd983ad5
 L
 lib/data/organization.g.dart,2/9/29073f17a5ea6c0f1d5724c87d5b05df6d30c536
 P
  lib/util/dark_light_control.dart,9/4/94e57fcb7a2744effc92ee90f1a42910b92435d7
 D
 lib/data/city.g.dart,0/1/0183e2dfa51e18404632745d4c39fbb7eb682bbe
-F
-lib/util/dio_util.dart,d/6/d6ac79aa11d2587656b9917711fa98423984c109
-<
-pubspec.lock,c/1/c1c78778a0cef1e5344166792d1d823fdcb8b109
-E
-sgela_sponsor_app.iml,d/a/da23233fc948cc33560f162201f2e8b0c77b9468
 J
 lib/ui/busy_indicator.dart,a/f/af28346354920a511bb684138cf6e2d93a3d44f2
-<
-pubspec.yaml,e/8/e8e045469170189f1d6ef12576bd01af132b1018
 F
 lib/data/branding.dart,4/b/4b8ae383d4825e6ea95635e8ba64ac63d281f564
-S
-#.idea/libraries/Flutter_Plugins.xml,e/8/e8bbc0fdfcefee9aa7b463c83a8a480b92333860
 E
 ios/Runner/Info.plist,7/0/7076b60f5e64ebfddc934ae3c4a7a7b87e461a6f
 H
 lib/data/branding.g.dart,0/b/0be02191b19cbe750d086f44258b704a4813f10b
 L
 ios/Runner/AppDelegate.swift,8/4/84700e47abd691450c7da01b0aa772b1d41e4838
-C
-lib/util/prefs.dart,a/d/ad77dcaaf9e2a3cfd8a8c9cd80f7ff812c4f4e47
 M
 lib/util/navigation_util.dart,c/c/cc02feb81789b5ee764b010da81963a0bd9ba545
 T
@@ -234,24 +218,16 @@ X
 (android/app/src/main/AndroidManifest.xml,e/f/ef79bfd51db69a15dbf5807c05bb249bdccb0556
 ;
 ios/Podfile,5/1/510807778b56990ed3829592aea48d7a35b42809
-@
-ios/Podfile.lock,6/f/6fc5efc9eba1a38c53e9a557a6ebda2b662185e1
 H
 android/app/build.gradle,5/9/594ba479000e0bb5513707b709ad1cd52da9063a
 K
 lib/util/location_util.dart,b/2/b203844ba8108e66eabfd12e02b32415b75bcf22
-I
-lib/util/environment.dart,3/4/341387d5428581097d002040f44d216795195239
 P
  android/app/google-services.json,e/e/ee748fb75df5665a631a74614646f499f3cea78f
 O
 lib/ui/branding_upload_two.dart,0/f/0fdfa374626d1a0cabfcfe8e823720a6b5b6fef8
-L
-lib/services/repository.dart,a/f/afb169e0c106a557815f07f2519b844bcbb6a8e8
 D
 lib/data/user.g.dart,d/0/d0454bee60036ddfe220452ff7a81aff0bbe322b
-S
-#lib/ui/widgets/org_logo_widget.dart,4/c/4c7c31b7692658f45894ba6d4f8bbda217f7d89e
 I
 lib/firebase_options.dart,0/f/0f4c3391435ed7c33948e13687a0bd929288bdb6
 ?
@@ -268,3 +244,35 @@ F
 storage.rules,0/3/0312e13a1fbc361682e3b0bdf8e4ffe09ccc381b
 =
 firebase.json,5/9/59951656e3803454427cfe9d761fed1df10b7528
+H
+lib/ui/landing_page.dart,1/e/1e9c69a1cf5510467046222883bb0a3b57b4cb0a
+W
+'lib/ui/widgets/image_picker_widget.dart,c/b/cb9f3588b3ef76f2c985f6735394a51bd07fc752
+Q
+!lib/ui/country_city_selector.dart,7/b/7b70b859b872d2773a58ca96a2e725e500b80997
+B
+lib/data/user.dart,d/4/d452b7b923f774ba9ed47823766929cf8f62a556
+E
+lib/data/country.dart,3/e/3e3a98e13595816aa0ccf5e3582fc14fa8ba1819
+E
+lib/data/pricing.dart,3/d/3d4d6037a840c303a6cf84f2590a0d0a4eda028c
+M
+lib/ui/registration_form.dart,6/c/6cabc1ea9fef3f36aff2811173934b1ba8ac4a8d
+G
+lib/util/functions.dart,8/c/8cf2d13d02c7074087b4988c8fa824f7e47b70a8
+G
+lib/data/pricing.g.dart,4/4/44b4580e503b25cb65a36e83fef337c871e1d077
+G
+lib/data/country.g.dart,2/e/2eb4a2cc55987888e1721dfcd1fdc435e0ec2dda
+4
+.env,3/c/3c84dcdc6bbe3d7817c49dcdc327b926fea1808a
+B
+lib/data/city.dart,0/a/0ab8303fdb81e122dbb7a276361ce7bcdd983ad5
+O
+lib/ui/branding_upload_one.dart,a/a/aaa8b753d2f7076278e4d4f9dd0dbc93d7e236c0
+J
+lib/data/organization.dart,b/f/bfca618f3edbc002cbbf6d780fcb72245b96ded6
+L
+lib/data/rapyd/holder.g.dart,6/f/6ffbbcc07cae193aa9782699e1a9e4f4d6abdc27
+Q
+!lib/ui/organisation_user_add.dart,f/0/f0c0c29de662810088bcd77ef78b95d2e887a2d7

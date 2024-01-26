@@ -30,14 +30,17 @@ class OrgLogoWidget extends StatelessWidget {
       }
     }
     return SizedBox(
-      height: height == null ? 64 : height!,
+      height: height == null ? 36 : height!,
       // width: width == null? 400: width!,
       child: Row(
         children: [
-          CachedNetworkImage(
-            imageUrl: mLogoUrl,
-            height: height == null ? 64 : height!,
-            // width: height == null ? 64*4 : (height! * 4),
+          Padding(
+            padding: const EdgeInsets.all(2.0),
+            child: CachedNetworkImage(
+              imageUrl: mLogoUrl,
+              height: height == null ? 36 : height!,
+              // width: height == null ? 64*4 : (height! * 4),
+            ),
           ),
           gapW16,
           name == null

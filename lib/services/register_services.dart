@@ -1,4 +1,5 @@
 import 'package:sgela_sponsor_app/services/auth_service.dart';
+import 'package:sgela_sponsor_app/services/rapyd_payment_service.dart';
 import 'package:sgela_sponsor_app/util/prefs.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
@@ -18,11 +19,13 @@ Future<void> registerServices(FirebaseFirestore firebaseFirestore) async {
 
   Dio dio = Dio();
   var dioUtil = DioUtil(dio);
-  var repository = RepositoryService(dioUtil);
   var prefs = Prefs(await SharedPreferences.getInstance());
+  var rapydService = RapydPaymentService(dioUtil, prefs);
+  var repository = RepositoryService(dioUtil, prefs, rapydService);
   var dlc = DarkLightControl(prefs);
   var cWatcher = ColorWatcher(dlc, prefs);
   var firestoreService = FirestoreService(firebaseFirestore);
+
   GetIt.instance.registerLazySingleton<Prefs>(() => prefs);
   GetIt.instance.registerLazySingleton<ColorWatcher>(() => cWatcher);
   GetIt.instance.registerLazySingleton<DarkLightControl>(() => dlc);
@@ -30,12 +33,15 @@ Future<void> registerServices(FirebaseFirestore firebaseFirestore) async {
   GetIt.instance.registerLazySingleton<FirestoreService>(() => firestoreService);
   GetIt.instance.registerLazySingleton<RepositoryService>(() => repository);
   GetIt.instance.registerLazySingleton<AuthService>(() => AuthService());
-
+  GetIt.instance.registerLazySingleton<RapydPaymentService>(() => rapydService);
 
   var org =prefs.getOrganization();
   if (org != null) {
     firestoreService.getBranding(org.id!);
+    rapydService.getCountryPaymentMethods(org.country!.iso2!);
+    firestoreService.getSponsorProducts();
+
   }
 
-  pp('🍎🍎🍎🍎🍎🍎 registerServices: GetIt has registered 6 services. 🍎 Cool!! 🍎🍎🍎');
+  pp('🍎🍎🍎🍎🍎🍎 registerServices: GetIt has registered 7 services. 🍎 Cool!! 🍎🍎🍎');
 }

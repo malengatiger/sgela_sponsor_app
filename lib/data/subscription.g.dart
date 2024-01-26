@@ -11,6 +11,7 @@ Subscription _$SubscriptionFromJson(Map<String, dynamic> json) => Subscription(
       json['countryId'] as int?,
       json['organizationId'] as int?,
       json['userId'] as int?,
+      json['payfastToken'] as String?,
       json['date'] as String?,
       json['pricing'] == null
           ? null
@@ -28,6 +29,7 @@ Map<String, dynamic> _$SubscriptionToJson(Subscription instance) =>
       'userId': instance.userId,
       'date': instance.date,
       'organizationName': instance.organizationName,
+      'payfastToken': instance.payfastToken,
       'pricing': instance.pricing,
       'subscriptionType': instance.subscriptionType,
       'activeFlag': instance.activeFlag,

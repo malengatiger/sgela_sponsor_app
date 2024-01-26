@@ -10,11 +10,12 @@ class Subscription {
   int? organizationId;
   int? userId;
   String? date, organizationName;
+  String? payfastToken;
   Pricing? pricing;
   String? subscriptionType;
   bool? activeFlag;
 
-  Subscription(this.id, this.countryId, this.organizationId, this.userId,
+  Subscription(this.id, this.countryId, this.organizationId, this.userId, this.payfastToken,
       this.date, this.pricing, this.subscriptionType, this.activeFlag, this.organizationName);
 
   factory Subscription.fromJson(Map<String, dynamic> json) =>

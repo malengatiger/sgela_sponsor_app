@@ -11,7 +11,6 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_file_downloader-1.2.1" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/url_launcher_linux-3.1.1" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/geolocator_apple-2.3.4" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/permission_handler_html-0.1.0+2" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/url_launcher_ios-6.2.4" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/play_integrity_flutter-0.0.1" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/shared_preferences_foundation-2.3.5" />
@@ -28,7 +27,6 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/video_thumbnail-0.5.3" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/url_launcher-6.2.3" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/webview_flutter_android-3.13.2" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_local_notifications-16.3.0" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/google_sign_in_ios-5.7.3" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_image_compress_common-1.0.3" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_auth_web-5.8.13" />
@@ -77,7 +75,13 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_sim_country_code-0.1.2" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/url_launcher_web-2.2.3" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/shared_preferences-2.2.2" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/permission_handler-11.1.0" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/permission_handler_html-0.1.1" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/permission_handler-11.2.0" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_credit_card-4.0.1" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_local_notifications-16.3.2" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/pay-1.2.0-beta02" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/pay_ios-1.0.11" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/pay_android-1.1.0-beta01" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
