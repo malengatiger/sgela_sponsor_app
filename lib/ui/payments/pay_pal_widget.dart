@@ -10,6 +10,7 @@ class PayPalWidget extends StatefulWidget {
 class PayPalWidgetState extends State<PayPalWidget>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+  static const mm = '🔵🔵🔵🔵🔵🔵🔵🔵 PayPalWidget 🍎🍎';
 
   @override
   void initState() {

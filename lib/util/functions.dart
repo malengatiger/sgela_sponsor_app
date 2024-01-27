@@ -714,7 +714,8 @@ TextStyle myTextStyleSmallBlack(BuildContext context) {
 TextStyle myTextStyleMedium(BuildContext context) {
   return GoogleFonts.lato(
     textStyle: Theme.of(context).textTheme.bodyMedium,
-    fontWeight: FontWeight.normal,
+    fontWeight: FontWeight.bold,
+    fontSize: 16
   );
 }
 

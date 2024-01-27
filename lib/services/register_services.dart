@@ -24,7 +24,7 @@ Future<void> registerServices(FirebaseFirestore firebaseFirestore) async {
   var repository = RepositoryService(dioUtil, prefs, rapydService);
   var dlc = DarkLightControl(prefs);
   var cWatcher = ColorWatcher(dlc, prefs);
-  var firestoreService = FirestoreService(firebaseFirestore);
+  var firestoreService = FirestoreService(firebaseFirestore, prefs);
 
   GetIt.instance.registerLazySingleton<Prefs>(() => prefs);
   GetIt.instance.registerLazySingleton<ColorWatcher>(() => cWatcher);
@@ -35,13 +35,21 @@ Future<void> registerServices(FirebaseFirestore firebaseFirestore) async {
   GetIt.instance.registerLazySingleton<AuthService>(() => AuthService());
   GetIt.instance.registerLazySingleton<RapydPaymentService>(() => rapydService);
 
+
+  initializeApp(prefs, cWatcher, firestoreService, rapydService);
+
+  pp('🍎🍎🍎🍎🍎🍎 registerServices: GetIt has registered 8 services. 🍎 Cool!! 🍎🍎🍎');
+}
+
+void initializeApp(Prefs prefs, ColorWatcher cWatcher, FirestoreService firestoreService, RapydPaymentService rapydService) {
+  var index = prefs.getColorIndex();
+  cWatcher.setColor(index);
+  
   var org =prefs.getOrganization();
   if (org != null) {
-    firestoreService.getBranding(org.id!);
+    firestoreService.getBranding(org.id!, false);
     rapydService.getCountryPaymentMethods(org.country!.iso2!);
-    firestoreService.getSponsorProducts();
-
+    firestoreService.getSponsorProducts(false);
+  
   }
-
-  pp('🍎🍎🍎🍎🍎🍎 registerServices: GetIt has registered 7 services. 🍎 Cool!! 🍎🍎🍎');
 }

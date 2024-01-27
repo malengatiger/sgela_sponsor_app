@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:sgela_sponsor_app/data/branding.dart';
 import 'package:sgela_sponsor_app/data/rapyd/holder.dart';
+import 'package:sgela_sponsor_app/data/sponsor_product.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/country.dart';
@@ -11,6 +13,112 @@ class Prefs {
   final SharedPreferences sharedPreferences;
 
   Prefs(this.sharedPreferences);
+
+  saveSponsorProducts(List<SponsorProduct> sponsorProducts) {
+    List<Map<String, dynamic>> productStrings =
+        sponsorProducts.map((pm) => pm.toJson()).toList();
+    List<String> productJsonStrings =
+        productStrings.map((pm) => json.encode(pm)).toList();
+    sharedPreferences.setStringList('products', productJsonStrings);
+  }
+
+  List<SponsorProduct> getSponsorProducts() {
+    List<String>? paymentMethodJsonStrings =
+        sharedPreferences.getStringList('products');
+    if (paymentMethodJsonStrings != null) {
+      List<SponsorProduct> paymentMethods = paymentMethodJsonStrings
+          .map((pmJson) => SponsorProduct.fromJson(json.decode(pmJson)))
+          .toList();
+      return paymentMethods;
+    } else {
+      return [];
+    }
+  }
+  //
+  saveCountries(List<Country> countries) {
+    List<Map<String, dynamic>> countryStrings =
+    countries.map((pm) => pm.toJson()).toList();
+    List<String> countryJsonStrings =
+    countryStrings.map((pm) => json.encode(pm)).toList();
+    sharedPreferences.setStringList('countries', countryJsonStrings);
+  }
+
+  List<Country> getCountries() {
+    List<String>? paymentMethodJsonStrings =
+    sharedPreferences.getStringList('countries');
+    if (paymentMethodJsonStrings != null) {
+      List<Country> paymentMethods = paymentMethodJsonStrings
+          .map((pmJson) => Country.fromJson(json.decode(pmJson)))
+          .toList();
+      return paymentMethods;
+    } else {
+      return [];
+    }
+  }
+  //
+  saveBranding(List<Branding> brandings) {
+    List<Map<String, dynamic>> brandingStrings =
+    brandings.map((pm) => pm.toJson()).toList();
+    List<String> brandingJsonStrings =
+    brandingStrings.map((pm) => json.encode(pm)).toList();
+    sharedPreferences.setStringList('brandings', brandingJsonStrings);
+  }
+
+  List<Branding> getBrandings() {
+    List<String>? brandingJsonStrings =
+    sharedPreferences.getStringList('brandings');
+    if (brandingJsonStrings != null) {
+      List<Branding> brandings = brandingJsonStrings
+          .map((pmJson) => Branding.fromJson(json.decode(pmJson)))
+          .toList();
+      return brandings;
+    } else {
+      return [];
+    }
+  }
+  //
+  saveUsers(List<User> users) {
+    List<Map<String, dynamic>> userStrings =
+    users.map((pm) => pm.toJson()).toList();
+    List<String> userJsonStrings =
+    userStrings.map((pm) => json.encode(pm)).toList();
+    sharedPreferences.setStringList('users', userJsonStrings);
+  }
+
+  List<User> getUsers() {
+    List<String>? userJsonStrings =
+    sharedPreferences.getStringList('users');
+    if (userJsonStrings != null) {
+      List<User> users = userJsonStrings
+          .map((pmJson) => User.fromJson(json.decode(pmJson)))
+          .toList();
+      return users;
+    } else {
+      return [];
+    }
+  }
+  // Save the list of PaymentMethod to SharedPreferences
+  savePaymentMethods(List<PaymentMethod> paymentMethods) {
+    List<Map<String, dynamic>> paymentMethodStrings =
+        paymentMethods.map((pm) => pm.toJson()).toList();
+    List<String> paymentMethodJsonStrings =
+        paymentMethodStrings.map((pm) => json.encode(pm)).toList();
+    sharedPreferences.setStringList('paymentMethods', paymentMethodJsonStrings);
+  }
+
+// Retrieve the list of PaymentMethod from SharedPreferences
+  List<PaymentMethod> getPaymentMethods() {
+    List<String>? paymentMethodJsonStrings =
+        sharedPreferences.getStringList('paymentMethods');
+    if (paymentMethodJsonStrings != null) {
+      List<PaymentMethod> paymentMethods = paymentMethodJsonStrings
+          .map((pmJson) => PaymentMethod.fromJson(json.decode(pmJson)))
+          .toList();
+      return paymentMethods;
+    } else {
+      return [];
+    }
+  }
 
   void saveUser(User user) {
     Map mJson = user.toJson();
@@ -43,6 +151,7 @@ class Prefs {
     var country = Country.fromJson(jx);
     return country;
   }
+
   void saveCustomer(Customer customer) {
     Map mJson = customer.toJson();
     var jx = json.encode(mJson);
@@ -58,6 +167,7 @@ class Prefs {
     var c = Customer.fromJson(jx);
     return c;
   }
+
   void saveOrganization(Organization organization) {
     Map mJson = organization.toJson();
     var jx = json.encode(mJson);
@@ -86,9 +196,8 @@ class Prefs {
     return mode;
   }
 
-  void saveColorIndex(int index)  {
+  void saveColorIndex(int index) {
     sharedPreferences.setInt('color', index);
-    return null;
   }
 
   int getColorIndex() {
@@ -99,7 +208,7 @@ class Prefs {
     return color;
   }
 
-  void saveLogoUrl(String logoUrl)  {
+  void saveLogoUrl(String logoUrl) {
     sharedPreferences.setString('logoUrl', logoUrl);
   }
 

@@ -2,77 +2,77 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pay/pay.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:sgela_sponsor_app/data/sponsor_payment_type.dart';
+import 'package:sgela_sponsor_app/data/country.dart';
+import 'package:sgela_sponsor_app/data/rapyd/holder.dart';
+import 'package:sgela_sponsor_app/data/sponsor_product.dart';
 import 'package:sgela_sponsor_app/services/firestore_service.dart';
-import 'package:sgela_sponsor_app/ui/busy_indicator.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
 
-class GoogleApplePayWidget extends StatefulWidget {
-  const GoogleApplePayWidget({super.key, required this.isApplePay});
+import '../../util/prefs.dart';
 
-  final bool isApplePay;
-  static const mm = '🔵🔵🔵🔵🔵🔵🔵🔵 GoogleApplePayWidget 🔵🔵';
+class ApplePayWidget extends StatefulWidget {
+  const ApplePayWidget({super.key, required this.sponsorProduct});
+
+  final SponsorProduct sponsorProduct;
 
   @override
-  GoogleApplePayWidgetState createState() => GoogleApplePayWidgetState();
+  ApplePayWidgetState createState() => ApplePayWidgetState();
 }
 
-class GoogleApplePayWidgetState extends State<GoogleApplePayWidget>
+class ApplePayWidgetState extends State<ApplePayWidget>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late final Future<PaymentConfiguration> _paymentConfigurationFuture;
+  PaymentConfiguration? _paymentConfiguration;
   List<SponsorProduct> sponsorProducts = [];
   FirestoreService firestoreService = GetIt.instance<FirestoreService>();
   bool _busy = false;
+  static const mm = '🍎🍎🍎🍎🍎🍎 ApplePayWidget 🔵🔵';
+  Country? country;
+  Customer? customer;
+  Prefs prefs = GetIt.instance<Prefs>();
 
   @override
   void initState() {
     _controller = AnimationController(vsync: this);
     super.initState();
-    if (widget.isApplePay) {
-      _paymentConfigurationFuture =
-          PaymentConfiguration.fromAsset('default_apple_pay_config.json');
-    } else {
-      _paymentConfigurationFuture =
-          PaymentConfiguration.fromAsset('default_google_pay_config.json');
-    }
-    _getPaymentTypes();
+    _setConfiguration();
+    _setPaymentItem();
   }
 
-  _getPaymentTypes() async {
+  _setConfiguration() async {
+    pp('$mm ... _setConfiguration .....');
+    _paymentConfiguration =
+        await PaymentConfiguration.fromAsset('default_apple_pay_config.json');
+    pp('$mm ... _setConfiguration ..... ${await _paymentConfiguration?.parameterMap()}');
+    _getData();
+  }
+
+  _getData() async {
+    pp('$mm ... _getData.. we are processing: isApplePay');
     setState(() {
       _busy = true;
     });
-    sponsorProducts = await firestoreService.getSponsorProducts();
-    for (var spt in sponsorProducts) {
-      var total = spt.studentsSponsored! * spt.amountPerSponsoree!;
-      var item = PaymentItem(
-          amount: '$total',
-          label: spt.title,
-          status: PaymentItemStatus.final_price,
-          type: PaymentItemType.total);
-      _paymentItems.add(item);
-
-      setState(() {
-        _busy = false;
-      });
+    try {
+      country = prefs.getCountry();
+      customer = prefs.getCustomer();
+      _setPaymentItem();
+      pp('$mm ... _getData.. we are processing: country: ${country!.name}');
+    } catch (e) {
+      pp(e);
+      if (mounted) {
+        showErrorDialog(context, 'Unable to get data');
+      }
     }
+    setState(() {
+      _busy = false;
+    });
   }
 
-  void onGooglePayResult(paymentResult) {
-    debugPrint(paymentResult.toString());
-  }
   void onApplePayResult(paymentResult) {
-    debugPrint(paymentResult.toString());
+    pp('$mm onApplePayResult: paymentResult: ${paymentResult.toString()}');
   }
 
-  static const _paymentItems = [
-    PaymentItem(
-      label: 'Total',
-      amount: '99.99',
-      status: PaymentItemStatus.final_price,
-    )
-  ];
+  final List<PaymentItem> _paymentItems = [];
 
   @override
   void dispose() {
@@ -80,52 +80,65 @@ class GoogleApplePayWidgetState extends State<GoogleApplePayWidget>
     super.dispose();
   }
 
+  _setPaymentItem() {
+    int amount = (widget.sponsorProduct.studentsSponsored! *
+            widget.sponsorProduct.amountPerSponsoree!)
+        .toInt();
+    _paymentItems.add(PaymentItem(
+        amount: '$amount',
+        label: widget.sponsorProduct.title!,
+        status: PaymentItemStatus.final_price));
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
-        title: const Text('Google and Apple Pay'),
+        title: const Text("Apple Pay"),
       ),
       body: ScreenTypeLayout.builder(
         mobile: (_) {
           return Stack(
             children: [
-              _busy? const BusyIndicator(
-                caption: 'Preparing for payment',
-              ):Column(
+              Column(
                 children: [
-                  const Text('Sponsorship Message'),
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Sponsorship Message'),
+                    ],
+                  ),
                   gapH16,
-                  if (!widget.isApplePay)   FutureBuilder<PaymentConfiguration>(
-                      future: _paymentConfigurationFuture,
-                      builder: (context, snapshot) => snapshot.hasData
-                          ? GooglePayButton(
-                              paymentConfiguration: snapshot.data!,
-                              paymentItems: _paymentItems,
-                              type: GooglePayButtonType.buy,
-                              margin: const EdgeInsets.only(top: 15.0),
-                              onPaymentResult: onGooglePayResult,
-                              loadingIndicator: const Center(
-                                child: CircularProgressIndicator(),
+                  Card(
+                    elevation: 8,
+                    color: Colors.purple,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Text('Top of the Card ${widget.sponsorProduct.title}'),
+                          _paymentConfiguration == null? gapW16: Card(
+                            elevation: 12,
+                            color: Colors.amber,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(height: 300, color: Colors.teal,
+                                child: ApplePayButton(
+                                    paymentConfiguration: _paymentConfiguration!,
+                                    paymentItems: _paymentItems,
+                                    margin: const EdgeInsets.all(64),
+                                    type: ApplePayButtonType.order,
+                                    onPaymentResult: onApplePayResult),
                               ),
-                            )
-                          : const SizedBox.shrink()),
-                  if (widget.isApplePay)   FutureBuilder<PaymentConfiguration>(
-                      future: _paymentConfigurationFuture,
-                      builder: (context, snapshot) => snapshot.hasData
-                          ? ApplePayButton(
-                        paymentConfiguration: snapshot.data!,
-                        paymentItems: _paymentItems,
-                        type: ApplePayButtonType.buy,
-                        margin: const EdgeInsets.only(top: 15.0),
-                        onPaymentResult: onApplePayResult,
-                        loadingIndicator: const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      )
-                          : const SizedBox.shrink()),
-
+                            ),
+                          ),
+                          const Text('Bottom of the Card'),
+                        ],
+                      ),
+                    ),
+                  )
                 ],
               )
             ],

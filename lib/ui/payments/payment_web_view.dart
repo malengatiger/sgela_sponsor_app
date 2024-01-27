@@ -4,7 +4,9 @@ import 'package:sgela_sponsor_app/util/functions.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class PaymentWebView extends StatefulWidget {
-  const PaymentWebView({super.key, required this.url});
+  const PaymentWebView({super.key, required this.url, required this.title});
+
+  final String title;
 
   final String url;
 
@@ -13,9 +15,9 @@ class PaymentWebView extends StatefulWidget {
 }
 
 class _PaymentWebViewState extends State<PaymentWebView> {
-
   late WebViewController webViewController;
   static const mm = ' 💚💚💚💚 PaymentWebView  💚💚';
+
   @override
   void initState() {
     super.initState();
@@ -52,20 +54,28 @@ class _PaymentWebViewState extends State<PaymentWebView> {
       )
       ..loadRequest(Uri.parse(widget.url));
   }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
-        title: const Text('Payment'),
+        title: Text(widget.title, style: myTextStyleSmall(context),),
       ),
       body: ScreenTypeLayout.builder(
         mobile: (_) {
-          return  Stack(
+          return Stack(
             children: [
               Column(
                 children: [
-                  const Text('Sponsorship Payment Text'),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'SgelaAI Sponsorship Payment',
+                      style: myTextStyle(context,
+                          Theme.of(context).primaryColor, 16, FontWeight.w900),
+                    ),
+                  ),
                   Expanded(child: WebViewWidget(controller: webViewController))
                 ],
               )

@@ -31,11 +31,16 @@ class AuthService {
       pp('$mm ... device user signed in: ${creds.user?.email} 🥬🥬 ${creds.user?.displayName}');
       var user = await firestoreService.getUser(creds.user!.uid);
       if (user != null) {
+        pp('$mm ... getting all the basic data needed ..... user: ${user.toJson()}');
         prefs.saveUser(user);
+        await firestoreService.getCountries();
         var org = await firestoreService.getOrganization(user.organizationId!);
         if (org != null) {
+          pp('$mm ... getting all the basic data needed ..... organization: ${user.toJson()}');
           prefs.saveOrganization(org);
-          var brandings = await firestoreService.getBranding(org.id!);
+          await firestoreService.getSponsorProducts(true);
+          await firestoreService.getUsers(org.id!,true);
+          var brandings = await firestoreService.getBranding(org.id!, true);
           String? logoUrl;
           for (var b in brandings) {
             if (b.logoUrl != null) {

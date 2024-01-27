@@ -60,7 +60,10 @@ class RapydPaymentService {
       String countryCode) async {
     pp('$mm ... getCountryPaymentMethods ....');
     var prefix = ChatbotEnvironment.getGeminiUrl();
-
+    var pms = prefs.getPaymentMethods();
+    if (pms.isNotEmpty) {
+      return pms;
+    }
     var raw = await dioUtil.sendGetRequest(
         "${prefix}rapyd/getCountryPaymentMethods?countryCode=$countryCode", {});
     var status = Status.fromJson(raw['status']);
@@ -76,12 +79,12 @@ class RapydPaymentService {
       } catch (e,s) {
         pp('$mm ... getCountryPaymentMethods ERROR ... e: $e');
         pp('$mm ... getCountryPaymentMethods ERROR ... stackTrace: $s');
-
         pp(m);
       }
       cnt++;
     }
-
+    pp('$mm ... getCountryPaymentMethods: save payment methods in prefs ... ${methods.length}');
+    prefs.savePaymentMethods(methods);
     return methods;
   }
 
@@ -97,12 +100,16 @@ class RapydPaymentService {
     return cr.data;
   }
 
-  Future addCustomerPaymentMethod(AddCustomerPaymentMethodRequest request) async {
+  //  async addCustomerPaymentMethod(customer: string, type: string): Promise<any> {
+  Future addCustomerPaymentMethod(String customer, String type) async {
     pp(' ... addCustomerPaymentMethod ...');
     var url = '${prefix}rapyd/addCustomerPaymentMethod';
-    var resp = await dioUtil.sendPostRequest(url, request.toJson());
-    var cr = AddCustomerPaymentMethodResponse.fromJson(resp);
-    pp('$mm addCustomerPaymentMethod response: ${cr.toJson()}');
+    var resp = await dioUtil.sendGetRequest(url, {
+      "customer": customer,
+      "type": type,
+    });
+    var cr = CustomerPaymentMethodResponse.fromJson(resp);
+    pp('$mm addCustomerPaymentMethod response:  🥬🥬🥬🥬 ${cr.toJson()}');
     return cr.data;
   }
 
@@ -110,6 +117,8 @@ class RapydPaymentService {
     pp(' ... checkOut ....');
     var url = '${prefix}rapyd/createCheckout';
     var resp = await dioUtil.sendPostRequest(url, request.toJson());
+    pp('$mm raw response from createCheckOut: $resp');
+    myPrettyJsonPrint(resp);
     var cr = CheckoutResponse.fromJson(resp);
     pp('$mm createCheckOut response, will need redirect: ${cr.toJson()}');
     return cr.data!;

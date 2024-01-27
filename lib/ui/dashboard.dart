@@ -3,24 +3,18 @@ import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sgela_sponsor_app/data/organization.dart';
+import 'package:sgela_sponsor_app/data/rapyd/holder.dart';
+import 'package:sgela_sponsor_app/data/sponsor_product.dart';
 import 'package:sgela_sponsor_app/data/user.dart';
 import 'package:sgela_sponsor_app/ui/branding_upload_one.dart';
-import 'package:sgela_sponsor_app/ui/payments/bank_transfer_widget.dart';
-import 'package:sgela_sponsor_app/ui/payments/credit_card_widget.dart';
-import 'package:sgela_sponsor_app/ui/payments/e_wallet_widget.dart';
-import 'package:sgela_sponsor_app/ui/payments/google-apple_pay_widget.dart';
 import 'package:sgela_sponsor_app/ui/organisation_user_add.dart';
-import 'package:sgela_sponsor_app/ui/payments/pay_pal_widget.dart';
-import 'package:sgela_sponsor_app/ui/payments/payment_type_chooser.dart';
 import 'package:sgela_sponsor_app/ui/payments/sponsor_product_selector.dart';
-import 'package:sgela_sponsor_app/ui/sponsor_product_selector.dart';
 import 'package:sgela_sponsor_app/ui/widgets/color_gallery.dart';
 import 'package:sgela_sponsor_app/ui/widgets/org_logo_widget.dart';
 import 'package:sgela_sponsor_app/util/dark_light_control.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
 import 'package:sgela_sponsor_app/util/navigation_util.dart';
 import 'package:sgela_sponsor_app/util/prefs.dart';
-import '../util/Constants.dart';
 import '../data/branding.dart';
 import '../services/firestore_service.dart';
 
@@ -44,6 +38,8 @@ class DashboardState extends State<Dashboard>
 
   List<Branding> brandings = [];
   List<User> users = [];
+  List<PaymentMethod> paymentMethods = [];
+  List<SponsorProduct> sponsorProducts = [];
 
   int transactions = 0;
 
@@ -73,9 +69,10 @@ class DashboardState extends State<Dashboard>
     try {
       logoUrl = prefs.getLogoUrl();
       organization = prefs.getOrganization();
+      sponsorProducts = await firestoreService.getSponsorProducts(false);
       if ((organization != null)) {
-        brandings = await firestoreService.getBranding(organization!.id!);
-        users = await firestoreService.getUsers(organization!.id!);
+        brandings = await firestoreService.getBranding(organization!.id!, false);
+        users = await firestoreService.getUsers(organization!.id!, false);
       }
     } catch (e) {
       pp(e);
@@ -119,59 +116,12 @@ class DashboardState extends State<Dashboard>
           },
         ));
   }
-
-  _navigateToPaymentTypeWidget() {
-    pp('$mm ... _navigateToPaymentTypeWidget ...');
-
-    switch(selectedPaymentType) {
-      case Constants.googlePay:
-        NavigationUtils.navigateToPage(context: context,
-            widget: const GoogleApplePayWidget(isApplePay: false));
-        break;
-      case Constants.applePay:
-        NavigationUtils.navigateToPage(context: context,
-            widget: const GoogleApplePayWidget(isApplePay: true));
-        break;
-      case Constants.visa:
-        NavigationUtils.navigateToPage(context: context,
-            widget: const CreditCardWidget(cardType: Constants.visa));
-        break;
-      case Constants.masterCard:
-        NavigationUtils.navigateToPage(context: context,
-            widget: const CreditCardWidget(cardType: Constants.masterCard));
-        break;
-      case Constants.bankTransfer:
-        NavigationUtils.navigateToPage(context: context,
-            widget: const BankTransferWidget());
-        break;
-      case Constants.payPal:
-        NavigationUtils.navigateToPage(context: context,
-            widget: const PayPalWidget());
-        break;
-      case Constants.eWallet:
-        NavigationUtils.navigateToPage(context: context,
-            widget: const EWalletWidget());
-        break;
-    }
-
+  _navigateToSponsorProductSelector() {
     NavigationUtils.navigateToPage(
-        context: context, widget: const SponsorProductSelector());
+        context: context,
+        widget: const SponsorProductSelector());
   }
 
-  int selectedPaymentType = 0;
-  _showPaymentTypeDialog() {
-    showDialog(context: context, builder: (_){
-      return AlertDialog(
-        content: PaymentTypeChooser(onPaymentTypeSelected: (type){
-          pp('$mm onPaymentTypeSelected: $type');
-          setState(() {
-            selectedPaymentType = type;
-          });
-          _navigateToPaymentTypeWidget();
-        }),
-      );
-    });
-  }
   @override
   Widget build(BuildContext context) {
     var tag = '';
@@ -294,7 +244,7 @@ class DashboardState extends State<Dashboard>
                                   label: Padding(
                                     padding: const EdgeInsets.all(16.0),
                                     child: Text(
-                                      'Upload Branding',
+                                      'Upload Your Branding',
                                       style: myTextStyle(
                                           context,
                                           Theme.of(context).primaryColorLight,
@@ -309,10 +259,10 @@ class DashboardState extends State<Dashboard>
                                 width: 300,
                                 child: ElevatedButton.icon(
                                   style: const ButtonStyle(
-                                    elevation: MaterialStatePropertyAll(4.0),
+                                    elevation: MaterialStatePropertyAll(8.0),
                                   ),
                                   onPressed: () {
-                                    _showPaymentTypeDialog();
+                                    _navigateToSponsorProductSelector();
                                   },
                                   icon: Icon(
                                     Icons.back_hand_sharp,
@@ -322,7 +272,7 @@ class DashboardState extends State<Dashboard>
                                   label: Padding(
                                     padding: const EdgeInsets.all(16.0),
                                     child: Text(
-                                      'Manage Subscription',
+                                      'Sgela AI Sponsorships',
                                       style: myTextStyle(
                                           context,
                                           Theme.of(context).primaryColorLight,

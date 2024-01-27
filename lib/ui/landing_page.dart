@@ -42,7 +42,7 @@ class LandingPageState extends State<LandingPage>
     organization = prefs.getOrganization();
     if (organization != null) {
       _navigateToDashboard();
-      brandings = await firestoreService.getBranding(organization!.id!);
+      brandings = await firestoreService.getBranding(organization!.id!, false);
     }
   }
 

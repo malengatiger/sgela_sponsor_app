@@ -4,7 +4,7 @@ import 'package:sgela_sponsor_app/data/user.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'organization.dart';
-part 'sponsor_payment_type.g.dart';
+part 'sponsor_product.g.dart';
 @JsonSerializable()
 
 class SponsorProduct {
@@ -31,9 +31,9 @@ class SponsorProduct {
       this.studentsSponsored);
 
   factory SponsorProduct.fromJson(Map<String, dynamic> json) =>
-      _$SponsorPaymentTypeFromJson(json);
+      _$SponsorProductFromJson(json);
 
-  Map<String, dynamic> toJson() => _$SponsorPaymentTypeToJson(this);
+  Map<String, dynamic> toJson() => _$SponsorProductToJson(this);
 }
 
 @JsonSerializable()

@@ -46,7 +46,7 @@ class BrandingImagesPickerState extends State<BrandingImagesPicker> {
 
   _getBranding() async {
     logoUrl = prefs.getLogoUrl();
-    brandings = await firestoreService.getBranding(widget.organization.id!);
+    brandings = await firestoreService.getBranding(widget.organization.id!, false);
     setState(() {});
   }
 

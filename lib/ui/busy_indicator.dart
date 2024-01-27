@@ -63,11 +63,11 @@ class _BusyIndicatorState extends State<BusyIndicator> {
 
   @override
   Widget build(BuildContext context) {
-    var height = 210.0;
+    var height = 240.0;
     var show = false;
     if (widget.showClock != null) {
       if (widget.showClock != null) {
-        height = 340.0;
+        height = 360.0;
         show = widget.showClock!;
       }
     }
@@ -78,10 +78,10 @@ class _BusyIndicatorState extends State<BusyIndicator> {
           padding: const EdgeInsets.all(2.0),
           child: Column(
             children: [
-              gapH8,
-              const SizedBox(height: 10, width: 10,
+              gapH32,
+              const SizedBox(height: 16, width: 16,
                 child: CircularProgressIndicator(
-                  strokeWidth: 2,
+                  strokeWidth: 4,
                   backgroundColor: Colors.red,
                 ),
               ),

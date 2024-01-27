@@ -43,7 +43,7 @@ class BrandingUploadOneState extends State<BrandingUploadOne>
 
   _getBranding() async {
     logoUrl = prefs.getLogoUrl();
-    brandings = await firestoreService.getBranding(widget.organization.id!);
+    brandings = await firestoreService.getBranding(widget.organization.id!, false);
     setState(() {});
   }
 

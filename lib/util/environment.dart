@@ -70,6 +70,24 @@ class ChatbotEnvironment {
   static const _devGeminiUrl = 'http://${isFibreDown? _ipFibreDown: _ipNormal}:3010/';
   static const _prodGeminiUrl = 'https://sgela-ai-knzs6eczwq-nw.a.run.app/';
 
+  static const _checkoutCompleteUrl= 'https://sgela-ai-knzs6eczwq-nw.a.run.app/rapyd/checkoutComplete';
+  static const _checkoutCancelUrl= 'https://sgela-ai-knzs6eczwq-nw.a.run.app/rapyd/checkoutError';
+
+  static const _paymentCompleteUrl= 'https://sgela-ai-knzs6eczwq-nw.a.run.app/rapyd/paymentComplete';
+  static const _paymentErrorUrl= 'https://sgela-ai-knzs6eczwq-nw.a.run.app/rapyd/paymentError';
+
+  static String getCheckoutCompleteUrl() {
+    return _checkoutCompleteUrl;
+  }
+  static String getCheckoutCancelUrl() {
+    return _checkoutCancelUrl;
+  }
+  static String getPaymentCompleteUrl() {
+    return _paymentCompleteUrl;
+  }
+  static String getPaymentErrorUrl() {
+    return _paymentErrorUrl;
+  }
   static const _devFirebaseName = 'sgela-ai-33';
   static const _prodFirebaseName = 'sgela-ai-33';
 

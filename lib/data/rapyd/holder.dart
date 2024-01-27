@@ -890,7 +890,7 @@ class Payment {
   dynamic outcome;
   // VisualCodes? visual_codes;
   // TextualCodes? textual_codes;
-  List<Instruction> instructions = [];
+  // List<Instruction> instructions = [];
   String? ewallet_id;
   List<EWallet> ewallets = [];
   // PaymentMethodOptions? payment_method_options;
@@ -949,7 +949,6 @@ class Payment {
       this.refunds,
       this.order,
       this.outcome,
-      this.instructions,
       this.ewallet_id,
       this.ewallets,
       this.payment_method_type,
@@ -1149,6 +1148,106 @@ class Template {
 
   Map<String, dynamic> toJson() => _$TemplateToJson(this);
 }
+/*
+
+export class CustomerPaymentMethodResponse {
+  status: Status;
+  data: CustomerPaymentMethod;
+}
+export class CustomerPaymentMethod {
+  id: string;
+  type: string;
+  category: string;
+  metadata: Metadata;
+  image: string;
+  webhook_url: string;
+  supporting_documentation: string;
+  next_action: string;
+  name: string;
+  last4: string;
+  acs_check: string;
+  cvv_check: string;
+  bin_details: BinDetails;
+  expiration_year: string;
+  expiration_month: string;
+  fingerprint_token: string;
+  redirect_url: string;
+  complete_payment_url: string;
+  error_payment_url: string;
+}
+export class BinDetails {
+  type: string;
+  brand: string;
+  level?: any;
+  issuer: string;
+  country: string;
+  bin_number: string;
+}
+ */
+
+@JsonSerializable()
+class CustomerPaymentMethod {
+  String? id;
+  String? type;
+  String? category;
+  Metadata? metadata;
+  String? image;
+  String? webhook_url;
+  String? supporting_documentation;
+  String? next_action;
+  String? name;
+  String? last4;
+  String? acs_check;
+  String? cvv_check;
+  BinDetails? bin_details;
+  String? expiration_year;
+  String? expiration_month;
+  String? fingerprint_token;
+  String? redirect_url;
+  String? complete_payment_url;
+  String? error_payment_url;
+
+  CustomerPaymentMethod(
+      this.id,
+      this.type,
+      this.category,
+      this.metadata,
+      this.image,
+      this.webhook_url,
+      this.supporting_documentation,
+      this.next_action,
+      this.name,
+      this.last4,
+      this.acs_check,
+      this.cvv_check,
+      this.bin_details,
+      this.expiration_year,
+      this.expiration_month,
+      this.fingerprint_token,
+      this.redirect_url,
+      this.complete_payment_url,
+      this.error_payment_url);
+  factory CustomerPaymentMethod.fromJson(Map<String, dynamic> json) =>
+      _$CustomerPaymentMethodFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CustomerPaymentMethodToJson(this);
+}
+@JsonSerializable()
+class BinDetails {
+  String? type;
+  String? brand;
+  dynamic level;
+  String? issuer;
+  String? country;
+  String? bin_number;
+
+  BinDetails(this.type, this.brand, this.level, this.issuer, this.country,
+      this.bin_number);
+  factory BinDetails.fromJson(Map<String, dynamic> json) =>
+      _$BinDetailsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$BinDetailsToJson(this);
+}
 @JsonSerializable()
 
 class MerchantCustomerSupport {
@@ -1181,13 +1280,13 @@ class AddCustomerPaymentMethodRequest {
 }
 @JsonSerializable()
 
-class AddCustomerPaymentMethodResponse {
+class CustomerPaymentMethodResponse {
   Status? status;
-  PaymentMethodStub? data;
+  CustomerPaymentMethod? data;
 
-  AddCustomerPaymentMethodResponse(this.status, this.data);
-  factory AddCustomerPaymentMethodResponse.fromJson(Map<String, dynamic> json) =>
-      _$AddCustomerPaymentMethodResponseFromJson(json);
+  CustomerPaymentMethodResponse(this.status, this.data);
+  factory CustomerPaymentMethodResponse.fromJson(Map<String, dynamic> json) =>
+      _$CustomerPaymentMethodResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => _$AddCustomerPaymentMethodResponseToJson(this);
+  Map<String, dynamic> toJson() => _$CustomerPaymentMethodResponseToJson(this);
 }

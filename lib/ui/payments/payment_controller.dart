@@ -5,13 +5,13 @@ import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sgela_sponsor_app/data/organization.dart';
 import 'package:sgela_sponsor_app/data/rapyd/holder.dart';
 import 'package:sgela_sponsor_app/services/rapyd_payment_service.dart';
-import 'package:sgela_sponsor_app/ui/widgets/payment_web_view.dart';
+import 'package:sgela_sponsor_app/ui/payments/payment_web_view.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
 import 'package:sgela_sponsor_app/util/navigation_util.dart';
 import 'package:sgela_sponsor_app/util/prefs.dart';
 
 import '../../data/country.dart';
-import '../../data/sponsor_payment_type.dart';
+import '../../data/sponsor_product.dart';
 
 class PaymentController extends StatefulWidget {
   const PaymentController({super.key, required this.sponsorPaymentType});
@@ -95,7 +95,7 @@ class PaymentControllerState extends State<PaymentController>
       Payment? payment = resp.data;
       if (payment != null) {
         if (mounted) {
-          NavigationUtils.navigateToPage(context: context, widget: PaymentWebView(url: payment.redirect_url!));
+          NavigationUtils.navigateToPage(context: context, widget: PaymentWebView(url: payment.redirect_url!, title: '',));
         }
       }
     } else {

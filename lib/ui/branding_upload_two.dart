@@ -96,7 +96,7 @@ class _BrandingUploadTwoState extends State<BrandingUploadTwo> {
       pp('$mm ... _onSubmitBranding completed! ${branding!.toJson()}...');
 
       if (branding != null) {
-        brandings = await firestoreService.getBranding(widget.organization.id!);
+        brandings = await firestoreService.getBranding(widget.organization.id!, false);
         widget.onBrandingUploaded(branding!);
         if (mounted) {
           Navigator.of(context).pop(branding);
