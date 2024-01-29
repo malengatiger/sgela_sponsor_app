@@ -196,12 +196,8 @@ L
 lib/data/organization.g.dart,2/9/29073f17a5ea6c0f1d5724c87d5b05df6d30c536
 D
 lib/data/city.g.dart,0/1/0183e2dfa51e18404632745d4c39fbb7eb682bbe
-F
-lib/data/branding.dart,4/b/4b8ae383d4825e6ea95635e8ba64ac63d281f564
 E
 ios/Runner/Info.plist,7/0/7076b60f5e64ebfddc934ae3c4a7a7b87e461a6f
-H
-lib/data/branding.g.dart,0/b/0be02191b19cbe750d086f44258b704a4813f10b
 L
 ios/Runner/AppDelegate.swift,8/4/84700e47abd691450c7da01b0aa772b1d41e4838
 M
@@ -214,8 +210,6 @@ X
 ios/Podfile,5/1/510807778b56990ed3829592aea48d7a35b42809
 H
 android/app/build.gradle,5/9/594ba479000e0bb5513707b709ad1cd52da9063a
-K
-lib/util/location_util.dart,b/2/b203844ba8108e66eabfd12e02b32415b75bcf22
 P
  android/app/google-services.json,e/e/ee748fb75df5665a631a74614646f499f3cea78f
 D
@@ -241,8 +235,6 @@ Q
 B
 lib/data/user.dart,d/4/d452b7b923f774ba9ed47823766929cf8f62a556
 E
-lib/data/country.dart,3/e/3e3a98e13595816aa0ccf5e3582fc14fa8ba1819
-E
 lib/data/pricing.dart,3/d/3d4d6037a840c303a6cf84f2590a0d0a4eda028c
 M
 lib/ui/registration_form.dart,6/c/6cabc1ea9fef3f36aff2811173934b1ba8ac4a8d
@@ -258,3 +250,59 @@ J
 lib/data/organization.dart,b/f/bfca618f3edbc002cbbf6d780fcb72245b96ded6
 Q
 !lib/ui/organisation_user_add.dart,f/0/f0c0c29de662810088bcd77ef78b95d2e887a2d7
+I
+lib/generated/assets.dart,5/b/5b815209f3ac1d4b94a4211dbfb903428d4ed1c2
+S
+#.idea/libraries/Flutter_Plugins.xml,e/8/e8bbc0fdfcefee9aa7b463c83a8a480b92333860
+C
+lib/ui/sign_in.dart,4/5/45e31bb215d265c432b773043436187bbaad9705
+<
+pubspec.lock,c/1/c1c78778a0cef1e5344166792d1d823fdcb8b109
+N
+lib/ui/registration_form2.dart,a/0/a058e67242e06ac26a3c3356dbf3ec02c2269e1f
+J
+lib/data/subscription.dart,2/f/2f93db1cabcfd43e16aba3119e795c0864a4a2fd
+G
+lib/util/constants.dart,4/6/468a4a4de68b93a3e6b28d38bf0fab5be842b860
+S
+#lib/services/rapyd_service_old.dart,d/a/da2d9e9ab67420042ac801f17b7679b464b63fe7
+F
+lib/util/dio_util.dart,d/6/d6ac79aa11d2587656b9917711fa98423984c109
+L
+lib/data/subscription.g.dart,1/c/1cefe3e2d159451fcfc457a538d651964bc7e3b2
+[
++lib/ui/payments/sponsor_product_widget.dart,8/f/8fc5874b1cdb0098b03a0c3d97f2a28c9690d29f
+J
+lib/ui/busy_indicator.dart,a/f/af28346354920a511bb684138cf6e2d93a3d44f2
+T
+$lib/ui/payments/e_wallet_widget.dart,f/a/fa5d3440f62fa64528f999d1a3f73ad4f44e5d85
+W
+'lib/ui/payments/credit_card_widget.dart,b/1/b1056bafe10d7eba29ce76e711018cbb48203843
+H
+lib/ui/landing_page.dart,1/e/1e9c69a1cf5510467046222883bb0a3b57b4cb0a
+T
+$assets/default_apple_pay_config.json,e/8/e818888432f66f6497b85749eeb44e6871f25209
+U
+%assets/default_google_pay_config.json,e/3/e3dc306f09a4e6026c063b2855f60f138edd3f42
+S
+#lib/ui/payments/pay_pal_widget.dart,3/1/31fc435eb94747ddf8977b1e7c9736e7c2e0ccfa
+\
+,lib/ui/payments/google-apple_pay_widget.dart,1/0/10c87205a702a5f4054629b79a8fe443044ebabb
+@
+ios/Podfile.lock,6/f/6fc5efc9eba1a38c53e9a557a6ebda2b662185e1
+M
+lib/data/sponsor_product.dart,2/d/2d28a7e5f5e2901465a5c25c1f648483c4aeb373
+J
+lib/data/rapyd/holder.dart,6/0/608a5cb765e34e91c38a3d533c0ff63ef96e66dc
+N
+lib/services/auth_service.dart,7/c/7cc586730020cc7684b273e146875b93c183cb29
+W
+'lib/ui/payments/payment_controller.dart,b/f/bf5a6849e7a13a23b5b8a303c26a6af91020fff4
+W
+'lib/services/rapyd_payment_service.dart,0/2/02c968351dfc78f02d74540c6f2b49fcabc6c4c7
+O
+lib/data/sponsor_product.g.dart,d/6/d663bddd61ed19fec5d68e90d40c62cb8894a163
+L
+lib/data/rapyd/holder.g.dart,6/f/6ffbbcc07cae193aa9782699e1a9e4f4d6abdc27
+P
+ .firebase/hosting.cHVibGlj.cache,3/5/35b65056512ce92750ded01b1ca990e3278d3fea

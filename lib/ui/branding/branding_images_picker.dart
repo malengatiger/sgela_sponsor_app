@@ -185,7 +185,7 @@ class BrandingImagesPickerState extends State<BrandingImagesPicker> {
                         children: [
                           gapH16,
                           SizedBox(
-                            height: 64,
+                            height: 48,
                             child: _getExistingLogo()
                           ),
                           SizedBox(

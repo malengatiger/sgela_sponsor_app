@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:sgela_sponsor_app/data/branding.dart';
@@ -17,14 +16,22 @@ import '../util/functions.dart';
 
 class RepositoryService {
   final DioUtil dioUtil;
+  final FirestoreService firestoreService;
 
   // final LocalDataService localDataService;
 
   static const mm = '💦💦💦💦 RepositoryService 💦';
 
-  RepositoryService(this.dioUtil, this.prefs, this.paymentService,);
+  RepositoryService(
+    this.dioUtil,
+    this.prefs,
+    this.paymentService,
+    this.firestoreService,
+  );
+
   final Prefs prefs;
   final RapydPaymentService paymentService;
+
   Future<Organization?> getSgelaOrganization() async {
     String prefix = ChatbotEnvironment.getSkunkUrl();
     String url = '${prefix}organizations/getSgelaOrganization';
@@ -45,7 +52,6 @@ class RepositoryService {
     prefs.saveOrganization(org);
     prefs.saveCountry(org.country!);
 
-
     return org;
   }
 
@@ -54,13 +60,14 @@ class RepositoryService {
       required String organizationName,
       required String tagLine,
       required String orgUrl,
+      required int splashTimeInSeconds,
       required File? logoFile,
       required File splashFile}) async {
     try {
       var prefix = ChatbotEnvironment.getSkunkUrl();
       var url = '';
       if (logoFile != null) {
-       url = '${prefix}organizations/uploadBrandingWithLogo';
+        url = '${prefix}organizations/uploadBrandingWithLogo';
       } else {
         url = '${prefix}organizations/uploadBrandingWithoutLogo';
       }
@@ -71,6 +78,7 @@ class RepositoryService {
       request.fields['organizationName'] = organizationName;
       request.fields['tagLine'] = tagLine;
       request.fields['orgUrl'] = orgUrl;
+      request.fields['splashTimeInSeconds'] = '$splashTimeInSeconds';
 
       if (logoFile != null) {
         request.files
@@ -88,41 +96,11 @@ class RepositoryService {
           Prefs prefs = GetIt.instance<Prefs>();
           prefs.saveLogoUrl(uploadedBranding.logoUrl!);
         }
+        var mList = await firestoreService.getBranding(organizationId, true);
         return uploadedBranding;
       } else {
         var responseData = await response.stream.bytesToString();
         pp('$mm ERROR: $responseData');
-      }
-    } catch (error) {
-      pp('Error uploading branding: $error');
-    }
-    throw Exception(
-        'Sorry, Branding upload failed. Please try again in a minute');
-  }
-
-  Future<Branding> uploadBrandingOld(
-      Branding branding, File logoFile, File splashFile) async {
-    try {
-      Dio dio = Dio();
-      FormData formData = FormData.fromMap({
-        'branding': branding.toJson(),
-        'logoFile': await MultipartFile.fromFile(logoFile.path),
-        'splashFile': await MultipartFile.fromFile(splashFile.path),
-      });
-
-      var prefix = ChatbotEnvironment.getSkunkUrl();
-      var url = '${prefix}organizations/uploadBranding';
-      pp('$mm ... uploadBranding calling: $url');
-      Response response = await dio.post(
-        url,
-        data: formData,
-      );
-      pp('$mm ... response from call, statusCode: ${response.statusCode}');
-      pp('$mm ... response from call, branding: ${response.data}');
-
-      if (response.statusCode == 200) {
-        Branding branding = Branding.fromJson(response.data);
-        return branding;
       }
     } catch (error) {
       pp('Error uploading branding: $error');

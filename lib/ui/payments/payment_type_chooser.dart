@@ -16,13 +16,14 @@ class PaymentTypeChooser extends StatelessWidget {
       height: 400,
       width: 320,
       child: SingleChildScrollView(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             gapH8,
             Text(
               'Payment Types',
-              style: myTextStyleMediumLarge(context, 20),
+              style: myTextStyleMediumBold(context),
             ),
             gapH32,
             SizedBox(
@@ -32,9 +33,20 @@ class PaymentTypeChooser extends StatelessWidget {
                   onPressed: () {
                     onPaymentTypeSelected(Constants.visa);
                   },
-                  child: const Padding(
-                    padding: EdgeInsets.all(20.0),
-                    child: Text('Visa'),
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/visa1.png',
+                          height: 64,
+                        ),
+                        gapW32,
+                        const Text('Visa'),
+                      ],
+                    ),
                   )),
             ),
             gapH16,
@@ -45,9 +57,20 @@ class PaymentTypeChooser extends StatelessWidget {
                   onPressed: () {
                     onPaymentTypeSelected(Constants.masterCard);
                   },
-                  child: const Padding(
-                    padding: EdgeInsets.all(20.0),
-                    child: Text('Mastercard'),
+                  child:  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/mastercard2.png',
+                          height: 48,
+                        ),
+                        gapW32,
+                        const Text('Mastercard'),
+                      ],
+                    ),
                   )),
             ),
             gapH16,
@@ -58,9 +81,18 @@ class PaymentTypeChooser extends StatelessWidget {
                   onPressed: () {
                     onPaymentTypeSelected(Constants.bankTransfer);
                   },
-                  child: const Padding(
-                    padding: EdgeInsets.all(20.0),
-                    child: Text('Bank Transfer (EFT)'),
+                  child:  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          'assets/bank1.jpg',
+                          height: 28, width: 32,
+                        ),
+                        gapW8,
+                        const Text('Bank Transfer (EFT)'),
+                      ],
+                    ),
                   )),
             ),
             // gapH16,
@@ -94,14 +126,25 @@ class PaymentTypeChooser extends StatelessWidget {
                   style: mStyle,
                   onPressed: () {
                     //onPaymentTypeSelected(Constants.payPal);
-                    showToast(message: 'PayPal is not available yet. Stay tuned!', 
+                    showToast(
+                        message: 'PayPal is not available yet. Stay tuned!',
                         backgroundColor: Colors.amber,
-                        textStyle: myTextStyleMediumWithColor(context, Colors.black),
+                        textStyle:
+                            myTextStyleMediumWithColor(context, Colors.black),
                         context: context);
                   },
-                  child: const Padding(
-                    padding: EdgeInsets.all(20.0),
-                    child: Text('PayPal'),
+                  child:  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          'assets/paypal1.png',
+                          height: 48,
+                        ),
+                        gapW32,
+                        const Text('PayPal'),
+                      ],
+                    ),
                   )),
             ),
             // gapH16,

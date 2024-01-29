@@ -785,7 +785,7 @@ TextStyle myTextStyleMediumWithColor(BuildContext context, Color color) {
   return GoogleFonts.lato(
     textStyle: Theme.of(context).textTheme.headlineMedium,
     fontWeight: FontWeight.normal,
-    fontSize: 20.0,
+    fontSize: 16.0,
     color: color,
   );
 }

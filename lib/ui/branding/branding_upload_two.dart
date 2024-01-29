@@ -8,10 +8,10 @@ import 'package:sgela_sponsor_app/services/repository.dart';
 import 'package:sgela_sponsor_app/ui/widgets/org_logo_widget.dart';
 import 'package:sgela_sponsor_app/util/prefs.dart';
 
-import '../data/branding.dart';
-import '../services/firestore_service.dart';
-import '../util/functions.dart';
-import 'busy_indicator.dart';
+import '../../data/branding.dart';
+import '../../services/firestore_service.dart';
+import '../../util/functions.dart';
+import '../busy_indicator.dart';
 
 class BrandingUploadTwo extends StatefulWidget {
   const BrandingUploadTwo(
@@ -34,6 +34,9 @@ class _BrandingUploadTwoState extends State<BrandingUploadTwo> {
   final TextEditingController taglineEditingController =
       TextEditingController();
   final TextEditingController linkEditingController = TextEditingController();
+
+  final TextEditingController splashEditingController = TextEditingController();
+
   static const mm = '🥦🥦🥦🥦🥦🥦 BrandingUploadTwo 🔵🔵';
   FirestoreService firestoreService = GetIt.instance<FirestoreService>();
 
@@ -44,18 +47,20 @@ class _BrandingUploadTwoState extends State<BrandingUploadTwo> {
   Branding? branding;
   List<Branding> brandings = [];
   String? logoUrl;
+
   void _dismissKeyboard(BuildContext context) {
     final currentFocus = FocusScope.of(context);
     if (!currentFocus.hasPrimaryFocus && currentFocus.hasFocus) {
       FocusManager.instance.primaryFocus?.unfocus();
     }
   }
+
   @override
   void initState() {
     super.initState();
     _getLogoUrl();
-
   }
+
   _getLogoUrl() {
     logoUrl = prefs.getLogoUrl();
   }
@@ -73,6 +78,7 @@ class _BrandingUploadTwoState extends State<BrandingUploadTwo> {
         tagLine: taglineEditingController.text,
         organizationName: widget.organization.name!,
         organizationUrl: linkEditingController.text,
+        splashTimeInSeconds: int.parse(splashEditingController.text),
         activeFlag: true);
 
     pp('$mm ... _onSubmitBranding ... submitting ${brand.toJson()}');
@@ -91,16 +97,16 @@ class _BrandingUploadTwoState extends State<BrandingUploadTwo> {
               ? ''
               : linkEditingController.text,
           logoFile: widget.logoFile,
-          splashFile: widget.splashFile);
+          splashFile: widget.splashFile,
+          splashTimeInSeconds: int.parse(splashEditingController.text));
 
       pp('$mm ... _onSubmitBranding completed! ${branding!.toJson()}...');
 
-      if (branding != null) {
-        brandings = await firestoreService.getBranding(widget.organization.id!, false);
-        widget.onBrandingUploaded(branding!);
-        if (mounted) {
-          Navigator.of(context).pop(branding);
-        }
+      brandings =
+          await firestoreService.getBranding(widget.organization.id!, false);
+      widget.onBrandingUploaded(branding!);
+      if (mounted) {
+        Navigator.of(context).pop(branding);
       }
     } catch (e) {
       pp(e);
@@ -139,31 +145,15 @@ class _BrandingUploadTwoState extends State<BrandingUploadTwo> {
                   Thumbnails(
                       logoFile: widget.logoFile, splashFile: widget.splashFile),
                   gapH32,
-                  // gapH16,
-                  // Padding(
-                  //   padding: const EdgeInsets.all(8.0),
-                  //   child: Card(
-                  //     elevation: 8,
-                  //     child: Padding(
-                  //       padding: const EdgeInsets.all(8.0),
-                  //       child: Text(
-                  //         'Use this form to enter your tagline and a link to wherever you want. '
-                  //         'This will show up in the sponsored student and teacher app. ',
-                  //         style: myTextStyleSmall(context),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  gapH16,
                   Text(
                     'This data is optional',
-                    style: myTextStyleMediumLarge(context, 16),
+                    style: myTextStyleMediumWithColor(context, Colors.grey),
                   ),
                   gapH8,
                   TextField(
                     controller: taglineEditingController,
-                    minLines: 3,
-                    maxLines: 5,
+                    minLines: 2,
+                    maxLines: 3,
                     decoration: InputDecoration(
                         border: const OutlineInputBorder(),
                         label: Text(
@@ -172,16 +162,26 @@ class _BrandingUploadTwoState extends State<BrandingUploadTwo> {
                         ),
                         hintText: 'Enter your marketing tagline'),
                   ),
-                  gapH8,
+                  gapH16,
                   TextField(
                     controller: linkEditingController,
+                    keyboardType: TextInputType.text,
                     decoration: InputDecoration(
                         border: const OutlineInputBorder(),
-                        label: Text('Organization Information Url',
+                        label: Text('Organization Information Link',
                             style: myTextStyleSmall(context)),
-                        hintText: 'Enter your organization info url'),
+                        hintText: 'Enter your organization info link'),
                   ),
-                  gapH32,
+                  gapH16,
+                  TextField(
+                    controller: splashEditingController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        label: Text('Splash time in seconds',
+                            style: myTextStyleSmall(context)),
+                        hintText: 'Enter the seconds your splash image will show'),
+                  ),
                   gapH32,
                   _busy
                       ? const BusyIndicator(
@@ -197,7 +197,8 @@ class _BrandingUploadTwoState extends State<BrandingUploadTwo> {
                           child: const Padding(
                             padding: EdgeInsets.all(16.0),
                             child: Text('Upload Branding Materials'),
-                          ))
+                          )),
+                  gapH32,
                 ],
               ),
             ),
@@ -235,13 +236,17 @@ class Thumbnails extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
-          height: logoHeight == null ? 64 : logoHeight!,
+          height: logoHeight == null ? 32 : logoHeight!,
           child: image ?? gapW32,
         ),
         gapH8,
         SizedBox(
-          height: splashHeight == null ? 160 : splashHeight!,
-          child: Image.file(splashFile),
+          height: splashHeight == null ? 240 : splashHeight!,
+          width: 320,
+          child: Image.file(
+            splashFile,
+            fit: BoxFit.cover,
+          ),
         ),
       ],
     );

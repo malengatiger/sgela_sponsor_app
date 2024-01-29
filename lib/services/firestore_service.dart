@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sgela_sponsor_app/data/branding.dart';
+import 'package:sgela_sponsor_app/data/org_sponsoree.dart';
 import 'package:sgela_sponsor_app/data/organization.dart';
 import 'package:sgela_sponsor_app/data/sponsor_product.dart';
 import 'package:sgela_sponsor_app/data/subscription.dart';
@@ -217,6 +218,35 @@ class FirestoreService {
 
     brandings = prefs.getBrandings();
     return brandings;
+  }
+
+  List<OrgSponsoree> orgSponsorees = [];
+  Future<List<OrgSponsoree>> getOrgSponsorees(int organizationId, bool refresh) async {
+    if (refresh) {
+      pp('$mm ... get branding from Firestore ... organizationId: $organizationId');
+      var qs = await firebaseFirestore
+          .collection('OrgSponsoree')
+          .where('organizationId', isEqualTo: organizationId)
+          .get();
+      orgSponsorees.clear();
+      for (var snap in qs.docs) {
+        orgSponsorees.add(OrgSponsoree.fromJson(snap.data()));
+      }
+      pp('$mm ... OrgSponsorees found: ${orgSponsorees.length}');
+      return orgSponsorees;
+    }
+    return orgSponsorees;
+  }
+  Future<int?> countOrgSponsorees(int organizationId) async {
+
+      pp('$mm ... get branding from Firestore ... organizationId: $organizationId');
+      var qs = await firebaseFirestore
+          .collection('OrgSponsoree')
+          .where('organizationId', isEqualTo: organizationId).count()
+          .get();
+
+      return qs.count;
+
   }
 
   Future<List<Subscription>> getSubscriptions(int organizationId) async {

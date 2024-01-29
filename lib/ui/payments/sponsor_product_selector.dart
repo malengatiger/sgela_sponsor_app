@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:sgela_sponsor_app/data/branding.dart';
 import 'package:sgela_sponsor_app/data/country.dart';
 import 'package:sgela_sponsor_app/data/organization.dart';
 import 'package:sgela_sponsor_app/data/sponsor_product.dart' as sp;
@@ -36,6 +37,7 @@ class SponsorProductSelectorState extends State<SponsorProductSelector>
 
   Country? country;
   Organization? organization;
+  Branding? branding;
 
   @override
   void initState() {
@@ -51,6 +53,10 @@ class SponsorProductSelectorState extends State<SponsorProductSelector>
     _filterTypes();
     country = prefs.getCountry();
     organization = prefs.getOrganization();
+    var brandings = prefs.getBrandings();
+    if (brandings.isNotEmpty) {
+      branding = brandings.first;
+    }
     setState(() {});
   }
 
@@ -164,6 +170,7 @@ class SponsorProductSelectorState extends State<SponsorProductSelector>
         title: organization == null
             ? const Text('Sponsorships')
             : OrgLogoWidget(
+                branding: branding,
                 name: organization!.name!,
               ),
       ),
@@ -290,7 +297,7 @@ class SponsorProductCard extends StatelessWidget {
           Text(
             students,
             style: myTextStyle(
-                context, Theme.of(context).primaryColor, 26, FontWeight.w700),
+                context, Theme.of(context).primaryColor, 24, FontWeight.w200),
           ),
           Text(
             "Students Sponsored",

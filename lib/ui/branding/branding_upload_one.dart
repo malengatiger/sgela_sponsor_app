@@ -5,21 +5,24 @@ import 'package:get_it/get_it.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sgela_sponsor_app/data/organization.dart';
 import 'package:sgela_sponsor_app/services/firestore_service.dart';
-import 'package:sgela_sponsor_app/ui/branding_upload_two.dart';
-import 'package:sgela_sponsor_app/ui/widgets/image_picker_widget.dart';
+import 'package:sgela_sponsor_app/ui/branding/branding_images_picker.dart';
+import 'package:sgela_sponsor_app/ui/branding/branding_upload_two.dart';
 import 'package:sgela_sponsor_app/ui/widgets/org_logo_widget.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
 import 'package:sgela_sponsor_app/util/navigation_util.dart';
 
-import '../data/branding.dart';
-import '../util/prefs.dart';
+import '../../data/branding.dart';
+import '../../util/prefs.dart';
 
 class BrandingUploadOne extends StatefulWidget {
-  const BrandingUploadOne({super.key,
-    required this.organization, required this.onBrandingUploaded});
+  const BrandingUploadOne(
+      {super.key,
+      required this.organization,
+      required this.onBrandingUploaded});
 
   final Organization organization;
   final Function(Branding) onBrandingUploaded;
+
   @override
   BrandingUploadOneState createState() => BrandingUploadOneState();
 }
@@ -33,7 +36,6 @@ class BrandingUploadOneState extends State<BrandingUploadOne>
 
   static const mm = '❤️🧡💛💚💙💜 BrandUpload';
 
-
   @override
   void initState() {
     _controller = AnimationController(vsync: this);
@@ -43,7 +45,8 @@ class BrandingUploadOneState extends State<BrandingUploadOne>
 
   _getBranding() async {
     logoUrl = prefs.getLogoUrl();
-    brandings = await firestoreService.getBranding(widget.organization.id!, false);
+    brandings =
+        await firestoreService.getBranding(widget.organization.id!, false);
     setState(() {});
   }
 
@@ -65,20 +68,25 @@ class BrandingUploadOneState extends State<BrandingUploadOne>
     _checkFiles();
   }
 
-  void _checkFiles() {
-    if (brandings.isNotEmpty) {
-      if (splashFile != null) {
-        setState(() {
-          _showNextButton = true;
-        });
-        return;
-      }
+  bool _checkFiles() {
+    if (logoFile == null) {
+      showToast(
+          message: 'Pick the logo file',
+          backgroundColor: Colors.black,
+          padding: 20,
+          context: context);
+      return false;
     }
-    if (logoFile != null && splashFile != null) {
-      setState(() {
-        _showNextButton = true;
-      });
+    if (splashFile == null) {
+      showToast(
+          message: 'Pick the splash file',
+          backgroundColor: Colors.black,
+          padding: 20,
+          context: context);
+      return false;
     }
+
+    return false;
   }
 
   _onSplashPicked() async {
@@ -88,19 +96,31 @@ class BrandingUploadOneState extends State<BrandingUploadOne>
 
   _navigateToBrandingUploadTwo() async {
     pp('$mm ...... _navigateToBrandingUploadTwo ...');
+    if (logoFile != null && splashFile != null) {
+      NavigationUtils.navigateToPage(
+          context: context,
+          widget: BrandingUploadTwo(
+            onBrandingUploaded: (br) {
+              widget.onBrandingUploaded(br);
+              Navigator.of(context).pop(br);
+            },
+            organization: widget.organization,
+            logoFile: logoFile,
+            splashFile: splashFile!,
+          ));
+      return;
+    }
 
-
-    NavigationUtils.navigateToPage(
-        context: context,
-        widget: BrandingUploadTwo(
-          onBrandingUploaded: (br){
-            widget.onBrandingUploaded(br);
-            Navigator.of(context).pop(br);
-          },
-          organization: widget.organization,
-          logoFile: logoFile,
-          splashFile: splashFile!,
-        ));
+    var msg = 'No new files picked, no problem!';
+    if (brandings.isEmpty) {
+      msg = 'Please pick your logo and splash files';
+    }
+    showToast(
+        message: msg,
+        backgroundColor: Colors.black,
+        padding: 24,
+        textStyle: const TextStyle(color: Colors.amber),
+        context: context);
   }
 
   @override
@@ -115,6 +135,7 @@ class BrandingUploadOneState extends State<BrandingUploadOne>
         title: OrgLogoWidget(
           branding: branding,
           logoUrl: logoUrl,
+          height: 32,
         ),
       ),
       body: ScreenTypeLayout.builder(
@@ -141,17 +162,21 @@ class BrandingUploadOneState extends State<BrandingUploadOne>
                     ),
                   ),
                   gapH8,
-                  _showNextButton
-                      ? ElevatedButton(
-                          style: const ButtonStyle(
-                            elevation: MaterialStatePropertyAll(8.0),
-                          ),
-                          onPressed: () {
-                            _navigateToBrandingUploadTwo();
-                          },
-                          child: const Text('Next'))
-                      : gapW32,
-                  gapH16,
+                  SizedBox(
+                    width: 300,
+                    child: ElevatedButton(
+                        style: const ButtonStyle(
+                          elevation: MaterialStatePropertyAll(8.0),
+                        ),
+                        onPressed: () {
+                          _navigateToBrandingUploadTwo();
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.all(20.0),
+                          child: Text('Next'),
+                        )),
+                  ),
+                  gapH32,
                 ],
               )
             ],

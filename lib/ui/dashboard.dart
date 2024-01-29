@@ -6,7 +6,7 @@ import 'package:sgela_sponsor_app/data/organization.dart';
 import 'package:sgela_sponsor_app/data/rapyd/holder.dart';
 import 'package:sgela_sponsor_app/data/sponsor_product.dart';
 import 'package:sgela_sponsor_app/data/user.dart';
-import 'package:sgela_sponsor_app/ui/branding_upload_one.dart';
+import 'package:sgela_sponsor_app/ui/branding/branding_upload_one.dart';
 import 'package:sgela_sponsor_app/ui/organisation_user_add.dart';
 import 'package:sgela_sponsor_app/ui/payments/sponsor_product_selector.dart';
 import 'package:sgela_sponsor_app/ui/widgets/color_gallery.dart';
@@ -142,7 +142,7 @@ class DashboardState extends State<Dashboard>
         leading: gapW4,
         title: OrgLogoWidget(
           branding: branding,
-          logoUrl: logoUrl,
+          logoUrl: logoUrl, height: 32,
         ),
         actions: [
           IconButton(
@@ -191,7 +191,7 @@ class DashboardState extends State<Dashboard>
                           style: myTextStyle(
                               context,
                               Theme.of(context).primaryColorLight,
-                              28,
+                              22,
                               FontWeight.normal),
                         ),
                         Expanded(
@@ -225,7 +225,7 @@ class DashboardState extends State<Dashboard>
                             ),
                           ),
                         ),
-                        // gapH32, gapH32,
+                        gapH32,
                         SizedBox(
                           height: 160,
                           child: Column(
@@ -234,7 +234,7 @@ class DashboardState extends State<Dashboard>
                                 width: 300,
                                 child: ElevatedButton.icon(
                                   style: const ButtonStyle(
-                                    elevation: MaterialStatePropertyAll(16.0),
+                                    elevation: MaterialStatePropertyAll(4.0),
                                   ),
                                   onPressed: () {
                                     _navigateToBrandUpload();
@@ -244,11 +244,11 @@ class DashboardState extends State<Dashboard>
                                   label: Padding(
                                     padding: const EdgeInsets.all(16.0),
                                     child: Text(
-                                      'Upload Your Branding',
+                                      'Organization Branding',
                                       style: myTextStyle(
                                           context,
                                           Theme.of(context).primaryColorLight,
-                                          18,
+                                          16,
                                           FontWeight.normal),
                                     ),
                                   ),
