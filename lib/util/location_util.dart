@@ -25,7 +25,6 @@ class LocationUtil {
   }
 
   static Future<Placemark?> findNearestPlace() async {
-    ppx('$mm ... findNearestPlace ....');
 
     Position position = await getCurrentLocation();
     List<Placemark> placeMarks = await placemarkFromCoordinates(

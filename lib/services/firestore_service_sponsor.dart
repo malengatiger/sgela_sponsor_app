@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get_it/get_it.dart';
 import 'package:sgela_services/data/branding.dart';
 import 'package:sgela_services/data/city.dart';
 import 'package:sgela_services/data/country.dart';
@@ -6,11 +7,10 @@ import 'package:sgela_services/data/gemini_response_rating.dart';
 import 'package:sgela_services/data/org_user.dart';
 import 'package:sgela_services/data/organization.dart';
 import 'package:sgela_services/data/pricing.dart';
+import 'package:sgela_services/data/sponsor_product.dart';
 import 'package:sgela_services/data/sponsoree.dart';
 import 'package:sgela_services/data/subscription.dart';
-import 'package:sgela_services/data/sponsor_product.dart';
 import 'package:sgela_services/sgela_util/prefs.dart';
-
 import 'package:sgela_sponsor_app/util/prefs.dart';
 
 import '../util/functions.dart';
@@ -21,6 +21,7 @@ class FirestoreService {
   static const mm = '🌀🌀🌀🌀🌀FirestoreService 🌀';
 
   final Prefs prefs;
+
   FirestoreService(this.firebaseFirestore, this.prefs) {
     firebaseFirestore.settings = const Settings(
       persistenceEnabled: true,
@@ -51,15 +52,12 @@ class FirestoreService {
     return ratings;
   }
 
-
   Future<Subscription?> addSubscription(Subscription subscription) async {
     ppx('$mm addSubscription to be added to database: ${subscription.toJson()}');
 
     subscription.id = generateUniqueKey();
-    var colRef = firebaseFirestore
-        .collection('Subscription');
-    var docRef =
-    await colRef.add(subscription.toJson());
+    var colRef = firebaseFirestore.collection('Subscription');
+    var docRef = await colRef.add(subscription.toJson());
     var v = await docRef.get();
     var doc = v.data();
     if (doc != null) {
@@ -71,38 +69,37 @@ class FirestoreService {
 
   List<SponsorProduct> sponsorProducts = [];
 
-  // Future<List<SponsorProduct>> getSponsorProducts(bool refresh) async {
-  //   var country = await getLocalCountry();
-  //   if (refresh) {
-  //     if (country != null) {
-  //       pp('$mm ... get getSponsorProducts from Firestore ...');
-  //       var qs = await firebaseFirestore.collection('SponsorPaymentType')
-  //           .where('countryName', isEqualTo: country.name!)
-  //           .get();
-  //       sponsorProducts.clear();
-  //       for (var snap in qs.docs) {
-  //         sponsorProducts.add(SponsorProduct.fromJson(snap.data()));
-  //       }
-  //       pp('$mm ... sponsorProducts found in Firestore: ${sponsorProducts.length}');
-  //       for (var t in sponsorProducts) {
-  //         pp('$mm SponsorProduct: 🔵🔵🔵🔵 ${t.toJson()} 🔵🔵🔵🔵');
-  //       }
-  //       prefs.saveSponsorProducts(sponsorProducts);
-  //       return sponsorProducts;
-  //     }
-  //     pp('$mm ... SponsorProducts found in Firestore: ${sponsorProducts.length}');
-  //   }
-  //   sponsorProducts = prefs.getSponsorProducts();
-  //   if (sponsorProducts.isNotEmpty) {
-  //     return sponsorProducts;
-  //   } else {
-  //     getSponsorProducts(true);
-  //   }
-  //
-  //
-  //   return sponsorProducts;
-  // }
+  Future<List<SponsorProduct>> getSponsorProducts(bool refresh) async {
+    var country = await getLocalCountry();
+    if (refresh) {
+      if (country != null) {
+        ppx('$mm ... get getSponsorProducts from Firestore ...');
+        var qs = await firebaseFirestore
+            .collection('SponsorPaymentType')
+            .where('countryName', isEqualTo: country.name!)
+            .get();
+        sponsorProducts.clear();
+        for (var snap in qs.docs) {
+          sponsorProducts.add(SponsorProduct.fromJson(snap.data()));
+        }
+        ppx('$mm ... sponsorProducts found in Firestore: ${sponsorProducts.length}');
+        for (var t in sponsorProducts) {
+          ppx('$mm SponsorProduct: 🔵🔵🔵🔵 ${t.toJson()} 🔵🔵🔵🔵');
+        }
+        sponsorPrefs.saveSponsorProducts(sponsorProducts);
+        return sponsorProducts;
+      }
+      ppx('$mm ... SponsorProducts found in Firestore: ${sponsorProducts.length}');
+    }
+    sponsorProducts = sponsorPrefs.getSponsorProducts();
+    if (sponsorProducts.isNotEmpty) {
+      return sponsorProducts;
+    } else {
+      getSponsorProducts(true);
+    }
 
+    return sponsorProducts;
+  }
 
   Future<List<Country>> getCountries() async {
     countries = prefs.getCountries();
@@ -173,7 +170,7 @@ class FirestoreService {
     ppx('$mm ... pricings found: ${list.length}');
 
     if (list.isNotEmpty) {
-      list.sort((a,b) => b.date!.compareTo(a.date!));
+      list.sort((a, b) => b.date!.compareTo(a.date!));
       return list.first;
     }
     return null;
@@ -218,7 +215,9 @@ class FirestoreService {
   }
 
   List<Sponsoree> orgSponsorees = [];
-  Future<List<Sponsoree>> getOrgSponsorees(int organizationId, bool refresh) async {
+
+  Future<List<Sponsoree>> getOrgSponsorees(
+      int organizationId, bool refresh) async {
     if (refresh) {
       ppx('$mm ... get branding from Firestore ... organizationId: $organizationId');
       var qs = await firebaseFirestore
@@ -234,16 +233,16 @@ class FirestoreService {
     }
     return orgSponsorees;
   }
+
   Future<int?> countOrgSponsorees(int organizationId) async {
+    ppx('$mm ... get branding from Firestore ... organizationId: $organizationId');
+    var qs = await firebaseFirestore
+        .collection('OrgSponsoree')
+        .where('organizationId', isEqualTo: organizationId)
+        .count()
+        .get();
 
-      ppx('$mm ... get branding from Firestore ... organizationId: $organizationId');
-      var qs = await firebaseFirestore
-          .collection('OrgSponsoree')
-          .where('organizationId', isEqualTo: organizationId).count()
-          .get();
-
-      return qs.count;
-
+    return qs.count;
   }
 
   Future<List<Subscription>> getSubscriptions(int organizationId) async {
@@ -263,9 +262,11 @@ class FirestoreService {
     return subs;
   }
 
+  SponsorPrefs sponsorPrefs = GetIt.instance<SponsorPrefs>();
+
   Future<List<OrgUser>> getUsers(int organizationId, bool refresh) async {
     if (refresh) {
-      ppx('$mm ... get users from Firestore ... organizationId: $organizationId');
+      // ppx('$mm ... get users from Firestore ... organizationId: $organizationId');
       var qs = await firebaseFirestore
           .collection('User')
           .where('organizationId', isEqualTo: organizationId)
@@ -276,7 +277,7 @@ class FirestoreService {
       }
       ppx('$mm ... users found: ${users.length}');
       users.sort((a, b) => b.lastName!.compareTo(a.lastName!));
-      //prefs.saveUsers(users);
+      sponsorPrefs.saveUsers(users);
       return users;
     }
     //users = prefs.getUsers();
@@ -302,39 +303,39 @@ class FirestoreService {
     return null;
   }
 
-   List<Branding> brandings = [];
+  List<Branding> brandings = [];
   List<OrgUser> users = [];
 
-  Future<List<SponsorProduct>> getSponsorProducts(bool refresh) async {
-    var country = await getLocalCountry();
-    if (refresh) {
-      if (country != null) {
-        ppx('$mm ... get getSponsorProducts from Firestore ...');
-
-        var qs = await firebaseFirestore.collection('SponsorPaymentType')
-            .where('countryName', isEqualTo: country.name!)
-            .get();
-        sponsorProducts.clear();
-        for (var snap in qs.docs) {
-          sponsorProducts.add(SponsorProduct.fromJson(snap.data()));
-        }
-        ppx('$mm ... sponsorProducts found in Firestore: ${sponsorProducts.length}');
-        for (var t in sponsorProducts) {
-          ppx('$mm SponsorProduct: 🔵🔵🔵🔵 ${t.toJson()} 🔵🔵🔵🔵');
-        }
-        // prefs.saveSponsorProducts(sponsorProducts);
-        return sponsorProducts;
-      }
-      ppx('$mm ... SponsorProducts found in Firestore: ${sponsorProducts.length}');
-    }
-    // sponsorProducts = prefs.getSponsorProducts();
-    // if (sponsorProducts.isNotEmpty) {
-    //   return sponsorProducts;
-    // } else {
-    //   getSponsorProducts(true);
-    // }
-
-
-    return sponsorProducts;
-  }
+// Future<List<SponsorProduct>> getSponsorProducts(bool refresh) async {
+//   var country = await getLocalCountry();
+//   if (refresh) {
+//     if (country != null) {
+//       ppx('$mm ... get getSponsorProducts from Firestore ...');
+//
+//       var qs = await firebaseFirestore.collection('SponsorPaymentType')
+//           .where('countryName', isEqualTo: country.name!)
+//           .get();
+//       sponsorProducts.clear();
+//       for (var snap in qs.docs) {
+//         sponsorProducts.add(SponsorProduct.fromJson(snap.data()));
+//       }
+//       ppx('$mm ... sponsorProducts found in Firestore: ${sponsorProducts.length}');
+//       for (var t in sponsorProducts) {
+//         ppx('$mm SponsorProduct: 🔵🔵🔵🔵 ${t.toJson()} 🔵🔵🔵🔵');
+//       }
+//       // prefs.saveSponsorProducts(sponsorProducts);
+//       return sponsorProducts;
+//     }
+//     ppx('$mm ... SponsorProducts found in Firestore: ${sponsorProducts.length}');
+//   }
+//   sponsorProducts = sponsorPrefs.getSponsorProducts();
+//   if (sponsorProducts.isNotEmpty) {
+//     return sponsorProducts;
+//   } else {
+//     getSponsorProducts(true);
+//   }
+//
+//
+//   return sponsorProducts;
+// }
 }

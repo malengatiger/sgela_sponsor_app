@@ -86,7 +86,6 @@ class DashboardState extends State<Dashboard>
   }
 
   _getData() async {
-    ppx('$mm ......................... get data; logoUrl & org');
     setState(() {
       _busy = true;
     });
