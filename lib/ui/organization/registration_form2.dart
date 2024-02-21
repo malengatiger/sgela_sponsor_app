@@ -2,27 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:sgela_sponsor_app/data/country.dart';
-import 'package:sgela_sponsor_app/data/rapyd/holder.dart';
-import 'package:sgela_sponsor_app/data/user.dart';
-import 'package:sgela_sponsor_app/services/auth_service.dart';
+import 'package:sgela_services/data/city.dart';
+import 'package:sgela_services/data/country.dart';
+import 'package:sgela_services/data/holder.dart';
+import 'package:sgela_services/data/org_user.dart';
+import 'package:sgela_services/data/organization.dart';
+import 'package:sgela_services/services/auth_service.dart';
 import 'package:sgela_sponsor_app/services/rapyd_payment_service.dart';
 import 'package:sgela_sponsor_app/services/repository.dart';
 import 'package:sgela_sponsor_app/ui/country_city_selector.dart';
 import 'package:sgela_sponsor_app/util/navigation_util.dart';
-
-import '../data/city.dart';
-import '../data/organization.dart';
-import '../util/functions.dart';
-import '../util/prefs.dart';
-import 'busy_indicator.dart';
+import '../../util/functions.dart';
+import '../../util/prefs.dart';
+import '../../util/registration_stream_handler.dart';
+import '../busy_indicator.dart';
 
 class RegistrationFormFinal extends StatefulWidget {
-  const RegistrationFormFinal(
-      {super.key, required this.variables, required this.onRegistered});
+  const RegistrationFormFinal({super.key, required this.variables});
 
   final Map<String, dynamic> variables;
-  final Function(Organization) onRegistered;
 
   @override
   RegistrationFormFinalState createState() => RegistrationFormFinalState();
@@ -36,18 +34,19 @@ class RegistrationFormFinalState extends State<RegistrationFormFinal>
 
   final RepositoryService repositoryService =
       GetIt.instance<RepositoryService>();
-  final AuthService authService =
-  GetIt.instance<AuthService>();
+  final AuthService authService = GetIt.instance<AuthService>();
+  RegistrationStreamHandler handler =
+      GetIt.instance<RegistrationStreamHandler>();
 
   final RapydPaymentService paymentService =
-  GetIt.instance<RapydPaymentService>();
-  static const mm = '🌀🌀🌀🌀🌀RegistrationFormFinal';
+      GetIt.instance<RapydPaymentService>();
+  static const mm = '🌀🌀🌀🌀🌀RegistrationFormFinal 🌀🌀';
 
   @override
   void initState() {
     _controller = AnimationController(vsync: this);
     super.initState();
-    pp('$mm ......... initState ..... variables : ${widget.variables}');
+    ppx('$mm ......... initState ..... variables : ${widget.variables}');
   }
 
   @override
@@ -57,23 +56,26 @@ class RegistrationFormFinalState extends State<RegistrationFormFinal>
   }
 
   _onSubmit(Map<String, dynamic> map) async {
-    pp('$mm ......... _onSubmit ..... map: $map 🌀🌀variables : ${widget.variables}');
-    pp('$mm ......... _onSubmit ..... 🌀🌀city : ${_city!.toJson()}');
+    ppx('$mm ......... _onSubmit ..... map: $map 🌀🌀variables : ${widget.variables}');
+    ppx('$mm ......... _onSubmit ..... 🌀🌀city : ${_city!.toJson()}');
 
     if ((_country == null || _city == null)) {
       showToast(message: 'Country and City not selected', context: context);
       return;
     }
 
-    var user = User(
-      firstName: widget.variables['adminFirstName'],
-      lastName:  widget.variables['adminLastName'],
-      cellphone: map['cellPhone'],
-      email: widget.variables['email'],
-      date: DateTime.now().toIso8601String(),
-      organizationName: widget.variables['orgName'],
-      activeFlag: true,
-      password:  map['password']);
+    var user = OrgUser(
+        firstName: widget.variables['adminFirstName'],
+        lastName: widget.variables['adminLastName'],
+        cellphone: map['cellPhone'],
+        email: widget.variables['email'],
+        date: DateTime.now().toIso8601String(),
+        organizationName: widget.variables['orgName'],
+        activeFlag: true,
+        organizationId: 9999,
+        cityName: '',
+        firebaseUserId: '',
+        password: map['password'], id: DateTime.now().millisecondsSinceEpoch);
 
     var org = Organization(
         name: widget.variables['orgName'],
@@ -82,48 +84,56 @@ class RegistrationFormFinalState extends State<RegistrationFormFinal>
         adminUser: user,
         country: _country,
         city: _city,
-        date: DateTime.now().toIso8601String());
+        splashUrl: '',
+        logoUrl: '',
+        tagLine: '',
+        activeFlag: true,
+        date: DateTime.now().toIso8601String(), id: DateTime.now().millisecondsSinceEpoch);
 
     setState(() {
       _busy = true;
     });
-    pp('$mm ..... registering org, check data!:  🌀🌀 ${org.toJson()}  🌀🌀');
+    ppx('$mm ..... registering org, check data!:  🌀🌀 ${org.toJson()}  🌀🌀');
     try {
       var orgResult = await repositoryService.registerOrganization(org);
       if (orgResult != null) {
-        pp('$mm ..... back from backend; orgResult:  🌀🌀 🌀🌀 🍎 🍎${orgResult.toJson()}  🍎 🍎 🌀🌀 🌀🌀');
-        var prefs = GetIt.instance<Prefs>();
+        ppx('$mm ..... back from backend; orgResult:  🌀🌀 🌀🌀 🍎 🍎${orgResult.toJson()}  🍎 🍎 🌀🌀 🌀🌀');
+        var prefs = GetIt.instance<SponsorPrefs>();
         prefs.saveUser(orgResult.adminUser!);
         prefs.saveOrganization(orgResult);
         prefs.saveCountry(orgResult.country!);
-        pp('$mm ..... data saved in prefs! 🌀🌀🌀🌀 sign in ...');
+        ppx('$mm ..... data saved in prefs! 🌀🌀🌀🌀 sign in ...');
         await authService.signIn(user.email!, user.password!);
-        pp('$mm ..... create rapyd customer 🌀🌀🌀🌀 .......');
+        ppx('$mm ..... create rapyd customer 🌀🌀🌀🌀 .......');
 
         CustomerRequest customerRequest = CustomerRequest(
-            org.name!,null, user.email,
-            'SGA', null, null, user.cellphone!);
+            org.name!, null, user.email, 'SGA', null, null, user.cellphone!);
         Customer? customer = await paymentService.addCustomer(customerRequest);
         if ((customer != null)) {
-          pp('$mm ..... 🍀🍀🍀🍀🍀🍀 saving rapyd customer '
+          ppx('$mm ..... 🍀🍀🍀🍀🍀🍀 saving rapyd customer '
               '🌀🌀🌀🌀 ${customer.toJson()}');
           prefs.saveCustomer(customer);
         }
-
-        widget.onRegistered(orgResult);
+        handler.setCompleted();
         if (mounted) {
-          Navigator.of(context).pop(orgResult);
+          Navigator.of(context).pop(true);
+        }
+      } else {
+        if (mounted) {
+          showErrorDialog(context, 'Something went wrong somewhere');
         }
       }
     } catch (e) {
-      pp(e);
+      ppx(e);
       if (mounted) {
         showErrorDialog(context, 'Error: $e');
       }
     }
-    setState(() {
-      _busy = false;
-    });
+    if (mounted) {
+      setState(() {
+        _busy = false;
+      });
+    }
   }
 
   @override
@@ -195,7 +205,7 @@ class RegistrationFormFinalState extends State<RegistrationFormFinal>
                             gapH16,
                             MyForm2(
                               onSubmit: (formVariables) {
-                                pp('$mm form returned, check that form filled in: $formVariables');
+                                ppx('$mm form returned, check that form filled in: $formVariables');
                                 var filledIn = false;
                                 var cnt = 0;
                                 if (formVariables['password'] != null) {
@@ -212,14 +222,14 @@ class RegistrationFormFinalState extends State<RegistrationFormFinal>
                                 }
                               },
                               onCitySelected: (c) {
-                                pp('$mm ... city has been selected and delivered: ${c.toJson()}');
+                                ppx('$mm ... city has been selected and delivered: ${c.toJson()}');
                                 setState(() {
                                   _city = c;
                                 });
                               },
                               showRegisterButton: _city == null ? false : true,
                               onCountrySelected: (c) {
-                                pp('$mm ... country has been selected and delivered: ${c.toJson()}');
+                                ppx('$mm ... country has been selected and delivered: ${c.toJson()}');
                                 setState(() {
                                   _country = c;
                                 });
@@ -314,16 +324,16 @@ class MyForm2 extends StatelessWidget {
                         elevation: MaterialStatePropertyAll(8.0),
                       ),
                       onPressed: () async {
-                        pp('$mm ... navigating to CountryCitySelector ...');
+                        ppx('$mm ... navigating to CountryCitySelector ...');
                         NavigationUtils.navigateToPage(
                             context: context,
                             widget: CountryCitySelector(
                               onCountrySelected: (mCountry) {
-                                pp('$mm ... onCountrySelected: ${mCountry.emoji} ${mCountry.name} ...');
+                                ppx('$mm ... onCountrySelected: ${mCountry.emoji} ${mCountry.name} ...');
                                 onCountrySelected(mCountry);
                               },
                               onCitySelected: (mCity) {
-                                pp('$mm ... onCitySelected:  ${mCity.name} ...');
+                                ppx('$mm ... onCitySelected:  ${mCity.name} ...');
                                 onCitySelected(mCity);
                               },
                             ));
@@ -345,7 +355,7 @@ class MyForm2 extends StatelessWidget {
                             ),
                             onPressed: () {
                               if (form.valid) {
-                                pp(form.value);
+                                ppx(form.value);
                               } else {
                                 form.markAllAsTouched();
                               }

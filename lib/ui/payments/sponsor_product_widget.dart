@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:sgela_sponsor_app/data/sponsor_product.dart';
+import 'package:sgela_services/data/sponsor_product.dart';
 
 import '../../util/functions.dart';
 

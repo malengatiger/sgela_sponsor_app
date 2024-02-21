@@ -5,11 +5,11 @@ import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:sgela_services/data/organization.dart';
 import 'package:sgela_sponsor_app/util/environment.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
 import 'package:sgela_sponsor_app/util/prefs.dart';
 
-import '../data/organization.dart';
 
 class RapydServiceOld {
   // Declaring variables
@@ -22,7 +22,7 @@ class RapydServiceOld {
   }
 
   static const mm = '☘️☘️☘️☘️☘️RapydService: ☘️';
-  Prefs prefs = GetIt.instance<Prefs>();
+  SponsorPrefs prefs = GetIt.instance<SponsorPrefs>();
   Organization? organization;
 
   _init() async {
@@ -108,8 +108,8 @@ class RapydServiceOld {
     var sig = calculateSignature(method, urlEndpoint,
         salt, timestamp, _accessKey, _secretKey, body);
 
-    pp('$mm old signature: $signature');
-    pp('$mm new signature: $sig');
+    ppx('$mm old signature: $signature');
+    ppx('$mm new signature: $sig');
 
     //Returning a map containing the headers and generated values
     return <String, String>{
@@ -126,23 +126,23 @@ class RapydServiceOld {
     var countryCode = organization!.country!.iso2!;
     var currencyName = organization!.country!.currencyName!;
     var url = '${_baseUrl}payment_methods/country?country=$countryCode';
-    pp('$mm ........ RAPYD url: $url');
+    ppx('$mm ........ RAPYD url: $url');
     var headers = _getHeaders(url, 'get', body: "");
-    pp('$mm ... headers ............');
+    ppx('$mm ... headers ............');
     myPrettyJsonPrint(headers);
     //
     // Make the HTTP GET request
     http.Response response = await http.get(Uri.parse(url), headers: headers);
-    pp('$mm ... RAPYD response, statusCode: ${response.statusCode} - ${response.body}');
+    ppx('$mm ... RAPYD response, statusCode: ${response.statusCode} - ${response.body}');
     // Handle the response
     if (response.statusCode == 200) {
       // Successful response
       Map<String, dynamic> responseBody = jsonDecode(response.body);
-      pp('$mm ... RAPYD responseBody: $responseBody ');
+      ppx('$mm ... RAPYD responseBody: $responseBody ');
     } else {
       // Error response
-      pp('$mm  👿 👿Error StatusCode: ${response.statusCode}');
-      pp('$mm  👿 👿Error Response body: ${response.body}');
+      ppx('$mm  👿 👿Error StatusCode: ${response.statusCode}');
+      ppx('$mm  👿 👿Error Response body: ${response.body}');
     }
   }
 

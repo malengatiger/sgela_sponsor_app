@@ -2,19 +2,17 @@ import 'package:badges/badges.dart' as bd;
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:sgela_sponsor_app/services/firestore_service.dart';
+import 'package:sgela_services/data/city.dart';
+import 'package:sgela_services/data/country.dart';
+import 'package:sgela_services/sgela_util/dark_light_control.dart';
+import 'package:sgela_sponsor_app/services/firestore_service_sponsor.dart';
 import 'package:sgela_sponsor_app/ui/city_list.dart';
 import 'package:sgela_sponsor_app/ui/country_list.dart';
-import 'package:sgela_sponsor_app/ui/registration_form2.dart';
 import 'package:sgela_sponsor_app/ui/widgets/color_gallery.dart';
 import 'package:sgela_sponsor_app/ui/widgets/row_content_view.dart';
-import 'package:sgela_sponsor_app/util/dark_light_control.dart';
-import 'package:sgela_sponsor_app/util/location_util.dart';
 import 'package:sgela_sponsor_app/util/navigation_util.dart';
 import 'package:sgela_sponsor_app/util/prefs.dart';
 
-import '../data/city.dart';
-import '../data/country.dart';
 import '../util/functions.dart';
 
 class CountryCitySelector extends StatefulWidget {
@@ -54,21 +52,21 @@ class CountryCitySelectorState extends State<CountryCitySelector>
   }
 
   _getCountries() async {
-    pp('$mm ... getting countries ....');
+    ppx('$mm ... getting countries ....');
     setState(() {
       busy = true;
     });
     try {
       _countries = await firestoreService.getCountries();
       _filteredCountries.addAll(_countries);
-      pp('$mm ... gotten countries : ${_countries.length}, filter for sou');
+      ppx('$mm ... gotten countries : ${_countries.length}, filter for sou');
       localCountry = await firestoreService.getLocalCountry();
       if (localCountry != null) {
         String prefix = localCountry!.name!.substring(0,3);
         _filterCountries(prefix);
       }
     } catch (e) {
-      pp(e);
+      ppx(e);
       if (mounted) {
         showErrorDialog(context, 'Error: $e');
       }
@@ -79,10 +77,10 @@ class CountryCitySelectorState extends State<CountryCitySelector>
   }
 
   _filterCountries(String name) {
-    pp('$mm ... filter countries with: $name '
+    ppx('$mm ... filter countries with: $name '
         'for ${_countries.length} countries');
     if (name.isEmpty) {
-      pp('$mm ... filter name is empty');
+      ppx('$mm ... filter name is empty');
       _filteredCountries.clear();
       _filteredCountries.addAll(_countries);
     } else {
@@ -95,7 +93,7 @@ class CountryCitySelectorState extends State<CountryCitySelector>
         }
       }
     }
-    pp('$mm ... filtered countries with: $name '
+    ppx('$mm ... filtered countries with: $name '
         'found: ${_filteredCountries.length} countries');
 
     setState(() {});
@@ -103,9 +101,9 @@ class CountryCitySelectorState extends State<CountryCitySelector>
   }
 
   _filterCities(String name) {
-    pp('$mm ... filter cities with: $name for ${_cities.length} cities');
+    ppx('$mm ... filter cities with: $name for ${_cities.length} cities');
     if (name.isEmpty) {
-      pp('$mm ... filter name is empty');
+      ppx('$mm ... filter name is empty');
       _filteredCities.clear();
       _filteredCities.addAll(_cities);
     } else {
@@ -132,7 +130,7 @@ class CountryCitySelectorState extends State<CountryCitySelector>
     try {
       _cities = await firestoreService.getCities(countryId);
       _filteredCities.addAll(_cities);
-      pp('$mm ... cities found for country id: $countryId : ${_cities.length}');
+      ppx('$mm ... cities found for country id: $countryId : ${_cities.length}');
       if (_cities.isNotEmpty) {
         _showCityList = true;
         _textEditingController = TextEditingController();
@@ -140,7 +138,7 @@ class CountryCitySelectorState extends State<CountryCitySelector>
         _showCityList = false;
       }
     } catch (e) {
-      pp(e);
+      ppx(e);
       if (mounted) {
         showErrorDialog(context, 'Error: $e');
       }
@@ -158,7 +156,7 @@ class CountryCitySelectorState extends State<CountryCitySelector>
   }
 
   TextEditingController _textEditingController = TextEditingController();
-  final Prefs prefs = GetIt.instance<Prefs>();
+  final SponsorPrefs prefs = GetIt.instance<SponsorPrefs>();
   final ColorWatcher colorWatcher = GetIt.instance<ColorWatcher>();
 
   @override
@@ -191,7 +189,7 @@ class CountryCitySelectorState extends State<CountryCitySelector>
         actions: [
           IconButton(
               onPressed: () {
-                pp('$mm ... dark/light pressed, Brightness: ${b.name}');
+                ppx('$mm ... dark/light pressed, Brightness: ${b.name}');
                 var mode = prefs.getMode();
                 if (mode == DARK) {
                   dlc.setLightMode();
@@ -244,7 +242,7 @@ class CountryCitySelectorState extends State<CountryCitySelector>
                           ? 'Search Cities/Towns'
                           : 'Search countries',
                       onChanged: (c) {
-                        pp('$mm onChanged, will filter: ${_textEditingController.text}');
+                        ppx('$mm onChanged, will filter: ${_textEditingController.text}');
                         if (_textEditingController.text.length > 2) {
                           if (_showCityList) {
                             _filterCities(_textEditingController.text);
@@ -254,7 +252,7 @@ class CountryCitySelectorState extends State<CountryCitySelector>
                         }
                       },
                       onSubmitted: (s) {
-                        pp('$mm ... onSub: $s');
+                        ppx('$mm ... onSub: $s');
                       },
                       elevation: const MaterialStatePropertyAll(8.0),
                       leading: const Icon(Icons.search),
@@ -272,7 +270,7 @@ class CountryCitySelectorState extends State<CountryCitySelector>
                                 cities: _filteredCities,
                                 country: _selectedCountry!,
                                 onCityTapped: (c) {
-                                  pp('$mm .... city tapped, will pop! ...: ${c.name}');
+                                  ppx('$mm .... city tapped, will pop! ...: ${c.name}');
                                   setState(() {
                                     _selectedCity = c;
                                   });
@@ -296,7 +294,7 @@ class CountryCitySelectorState extends State<CountryCitySelector>
                               child: CountryList(
                                 countries: _filteredCountries,
                                 onCountryTapped: (c) {
-                                  pp('$mm .... country tapped, get cities ...: ${c.name}');
+                                  ppx('$mm .... country tapped, get cities ...: ${c.name}');
                                   _selectedCountry = c;
                                   widget.onCountrySelected(c);
                                   _getCities(c.id!);
@@ -314,7 +312,7 @@ class CountryCitySelectorState extends State<CountryCitySelector>
                             width: 420,
                             child: GestureDetector(
                               onTap: () {
-                                pp('$mm .... Das vi da nia!');
+                                ppx('$mm .... Das vi da nia!');
                                 Navigator.of(context).pop();
                               },
                               child: Card(
@@ -362,7 +360,7 @@ class CountryCitySelectorState extends State<CountryCitySelector>
                     showAsGrid: true,
                     countries: _countries,
                     onCountryTapped: (country) {
-                      pp('$mm country tapped: ${country.name}');
+                      ppx('$mm country tapped: ${country.name}');
                       _selectedCountry = country;
                       _getCities(country.id!);
                     },
@@ -371,7 +369,7 @@ class CountryCitySelectorState extends State<CountryCitySelector>
                       cities: _cities,
                       country: _selectedCountry!,
                       onCityTapped: (city) {
-                        pp('$mm( city tapped: ${city.name})');
+                        ppx('$mm( city tapped: ${city.name})');
                       }))
             ],
           );

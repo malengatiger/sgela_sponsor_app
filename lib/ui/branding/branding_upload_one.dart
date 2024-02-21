@@ -1,27 +1,28 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:sgela_sponsor_app/data/organization.dart';
-import 'package:sgela_sponsor_app/services/firestore_service.dart';
+import 'package:sgela_services/data/branding.dart';
+import 'package:sgela_services/data/organization.dart';
+import 'package:sgela_services/sgela_util/prefs.dart';
+import 'package:sgela_sponsor_app/services/firestore_service_sponsor.dart';
 import 'package:sgela_sponsor_app/ui/branding/branding_images_picker.dart';
 import 'package:sgela_sponsor_app/ui/branding/branding_upload_two.dart';
 import 'package:sgela_sponsor_app/ui/widgets/org_logo_widget.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
 import 'package:sgela_sponsor_app/util/navigation_util.dart';
 
-import '../../data/branding.dart';
 import '../../util/prefs.dart';
+import '../../util/registration_stream_handler.dart';
 
 class BrandingUploadOne extends StatefulWidget {
   const BrandingUploadOne(
       {super.key,
-      required this.organization,
-      required this.onBrandingUploaded});
+      required this.organization});
 
   final Organization organization;
-  final Function(Branding) onBrandingUploaded;
 
   @override
   BrandingUploadOneState createState() => BrandingUploadOneState();
@@ -32,7 +33,6 @@ class BrandingUploadOneState extends State<BrandingUploadOne>
   late AnimationController _controller;
   List<Branding> brandings = [];
   FirestoreService firestoreService = GetIt.instance<FirestoreService>();
-  Prefs prefs = GetIt.instance<Prefs>();
 
   static const mm = '❤️🧡💛💚💙💜 BrandUpload';
 
@@ -40,11 +40,21 @@ class BrandingUploadOneState extends State<BrandingUploadOne>
   void initState() {
     _controller = AnimationController(vsync: this);
     super.initState();
+    _listen();
     _getBranding();
   }
+  _listen() {
+    regSubscription = handler.registrationStream.listen((completed) {
+      ppx('$mm branding upload ... completed: $completed');
 
+      if (completed) {
+        if (mounted) {
+          Navigator.of(context).pop();
+        }
+      }
+    });
+  }
   _getBranding() async {
-    logoUrl = prefs.getLogoUrl();
     brandings =
         await firestoreService.getBranding(widget.organization.id!, false);
     setState(() {});
@@ -62,9 +72,12 @@ class BrandingUploadOneState extends State<BrandingUploadOne>
 
   var taglineEditingController = TextEditingController();
   var linkEditingController = TextEditingController();
+  RegistrationStreamHandler handler = GetIt.instance<RegistrationStreamHandler>();
+  late StreamSubscription<bool> regSubscription;
+
 
   _onLogoPicked() async {
-    pp('$mm ... _onLogoPicked: ${logoFile!.path}');
+    ppx('$mm ... _onLogoPicked: ${logoFile!.path}');
     _checkFiles();
   }
 
@@ -90,37 +103,33 @@ class BrandingUploadOneState extends State<BrandingUploadOne>
   }
 
   _onSplashPicked() async {
-    pp('$mm ... _onSplashPicked: ${splashFile!.path}');
+    ppx('$mm ... _onSplashPicked: ${splashFile!.path}');
     _checkFiles();
   }
 
   _navigateToBrandingUploadTwo() async {
-    pp('$mm ...... _navigateToBrandingUploadTwo ...');
-    if (logoFile != null && splashFile != null) {
-      NavigationUtils.navigateToPage(
-          context: context,
-          widget: BrandingUploadTwo(
-            onBrandingUploaded: (br) {
-              widget.onBrandingUploaded(br);
-              Navigator.of(context).pop(br);
-            },
-            organization: widget.organization,
-            logoFile: logoFile,
-            splashFile: splashFile!,
-          ));
-      return;
+    ppx('$mm ...... _navigateToBrandingUploadTwo ...');
+    var msg = 'No new files picked, no problem!';
+    if (logoFile == null && splashFile == null) {
+      if (brandings.isEmpty) {
+        msg = 'Please pick your logo and splash files';
+        showToast(
+            message: msg,
+            backgroundColor: Colors.black,
+            padding: 24,
+            textStyle: const TextStyle(color: Colors.amber),
+            context: context);
+        return;
+      }
     }
 
-    var msg = 'No new files picked, no problem!';
-    if (brandings.isEmpty) {
-      msg = 'Please pick your logo and splash files';
-    }
-    showToast(
-        message: msg,
-        backgroundColor: Colors.black,
-        padding: 24,
-        textStyle: const TextStyle(color: Colors.amber),
-        context: context);
+    NavigationUtils.navigateToPage(
+        context: context,
+        widget: BrandingUploadTwo(
+          organization: widget.organization,
+          logoFile: logoFile,
+          splashFile: splashFile,
+        ));
   }
 
   @override
@@ -135,7 +144,7 @@ class BrandingUploadOneState extends State<BrandingUploadOne>
         title: OrgLogoWidget(
           branding: branding,
           logoUrl: logoUrl,
-          height: 32,
+          height: 48,
         ),
       ),
       body: ScreenTypeLayout.builder(

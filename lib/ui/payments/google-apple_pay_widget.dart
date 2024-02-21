@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pay/pay.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:sgela_sponsor_app/data/country.dart';
-import 'package:sgela_sponsor_app/data/rapyd/holder.dart';
-import 'package:sgela_sponsor_app/data/sponsor_product.dart';
-import 'package:sgela_sponsor_app/services/firestore_service.dart';
+import 'package:sgela_services/data/country.dart';
+import 'package:sgela_services/data/holder.dart';
+import 'package:sgela_services/data/sponsor_product.dart';
+import 'package:sgela_sponsor_app/services/firestore_service_sponsor.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
 
 import '../../util/prefs.dart';
@@ -29,7 +29,7 @@ class ApplePayWidgetState extends State<ApplePayWidget>
   static const mm = '🍎🍎🍎🍎🍎🍎 ApplePayWidget 🔵🔵';
   Country? country;
   Customer? customer;
-  Prefs prefs = GetIt.instance<Prefs>();
+  SponsorPrefs prefs = GetIt.instance<SponsorPrefs>();
 
   @override
   void initState() {
@@ -40,15 +40,15 @@ class ApplePayWidgetState extends State<ApplePayWidget>
   }
 
   _setConfiguration() async {
-    pp('$mm ... _setConfiguration .....');
+    ppx('$mm ... _setConfiguration .....');
     _paymentConfiguration =
         await PaymentConfiguration.fromAsset('default_apple_pay_config.json');
-    pp('$mm ... _setConfiguration ..... ${await _paymentConfiguration?.parameterMap()}');
+    ppx('$mm ... _setConfiguration ..... ${await _paymentConfiguration?.parameterMap()}');
     _getData();
   }
 
   _getData() async {
-    pp('$mm ... _getData.. we are processing: isApplePay');
+    ppx('$mm ... _getData.. we are processing: isApplePay');
     setState(() {
       _busy = true;
     });
@@ -56,9 +56,9 @@ class ApplePayWidgetState extends State<ApplePayWidget>
       country = prefs.getCountry();
       customer = prefs.getCustomer();
       _setPaymentItem();
-      pp('$mm ... _getData.. we are processing: country: ${country!.name}');
+      ppx('$mm ... _getData.. we are processing: country: ${country!.name}');
     } catch (e) {
-      pp(e);
+      ppx(e);
       if (mounted) {
         showErrorDialog(context, 'Unable to get data');
       }
@@ -69,7 +69,7 @@ class ApplePayWidgetState extends State<ApplePayWidget>
   }
 
   void onApplePayResult(paymentResult) {
-    pp('$mm onApplePayResult: paymentResult: ${paymentResult.toString()}');
+    ppx('$mm onApplePayResult: paymentResult: ${paymentResult.toString()}');
   }
 
   final List<PaymentItem> _paymentItems = [];

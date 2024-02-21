@@ -2,14 +2,14 @@ import 'package:badges/badges.dart' as bd;
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:sgela_sponsor_app/data/country.dart';
-import 'package:sgela_sponsor_app/data/sponsor_product.dart';
+import 'package:sgela_services/data/country.dart';
+import 'package:sgela_services/data/holder.dart';
+import 'package:sgela_services/data/sponsor_product.dart';
 import 'package:sgela_sponsor_app/ui/busy_indicator.dart';
 import 'package:sgela_sponsor_app/ui/payments/payment_web_view.dart';
 import 'package:sgela_sponsor_app/ui/payments/sponsor_product_widget.dart';
 import 'package:sgela_sponsor_app/util/environment.dart';
 
-import '../../data/rapyd/holder.dart';
 import '../../services/rapyd_payment_service.dart';
 import '../../util/functions.dart';
 import '../../util/navigation_util.dart';
@@ -30,7 +30,7 @@ class BankTransferWidgetState extends State<BankTransferWidget>
   static const mm = '🔵🍐🍐🍐🍐 BankTransferWidget 🍎🍎';
   RapydPaymentService rapydPaymentService =
       GetIt.instance<RapydPaymentService>();
-  Prefs prefs = GetIt.instance<Prefs>();
+  SponsorPrefs prefs = GetIt.instance<SponsorPrefs>();
   List<PaymentMethod> paymentMethods = [];
   List<PaymentMethod> filtered = [];
   PaymentMethod? paymentMethod;
@@ -46,7 +46,7 @@ class BankTransferWidgetState extends State<BankTransferWidget>
   }
 
   _getPaymentMethods() async {
-    pp('$mm ... _getPaymentMethods ...');
+    ppx('$mm ... _getPaymentMethods ...');
     setState(() {
       _busy = false;
     });
@@ -57,7 +57,7 @@ class BankTransferWidgetState extends State<BankTransferWidget>
           await rapydPaymentService.getCountryPaymentMethods(country!.iso2!);
       _filterPaymentMethods();
     } catch (e) {
-      pp(e);
+      ppx(e);
       if (mounted) {
         showErrorDialog(context, 'Unable to get Payment methods');
       }
@@ -68,7 +68,7 @@ class BankTransferWidgetState extends State<BankTransferWidget>
   }
 
   void _handlePaymentResponse(PaymentResponse resp) {
-    pp('$mm ... _handlePaymentResponse ... ${resp.status!.status}');
+    ppx('$mm ... _handlePaymentResponse ... ${resp.status!.status}');
     if (resp.status!.status!.contains('SUCCESS')) {
       Payment? payment = resp.data;
       if (payment != null) {
@@ -95,7 +95,7 @@ class BankTransferWidgetState extends State<BankTransferWidget>
     }
   }
   _startCheckout() async {
-    pp('$mm ... _startCheckout ... ${widget.sponsorProduct.title} ');
+    ppx('$mm ... _startCheckout ... ${widget.sponsorProduct.title} ');
     var amount = widget.sponsorProduct.studentsSponsored! *
         widget.sponsorProduct.amountPerSponsoree!;
     String ref = 'sgelaAI_${DateTime.now().millisecondsSinceEpoch}';
@@ -119,9 +119,9 @@ class BankTransferWidgetState extends State<BankTransferWidget>
           ChatbotEnvironment.getCheckoutCompleteUrl(),
           []);
 
-      pp('$mm ... sending checkOut request: ${checkOutRequest.toJson()}');
+      ppx('$mm ... sending checkOut request: ${checkOutRequest.toJson()}');
       var gr = await rapydPaymentService.createCheckOut(checkOutRequest);
-      pp('$mm ... _startCheckout returned with checkout, should redirect');
+      ppx('$mm ... _startCheckout returned with checkout, should redirect');
       if (mounted) {
         NavigationUtils.navigateToPage(
             context: context,
@@ -133,8 +133,8 @@ class BankTransferWidgetState extends State<BankTransferWidget>
 
       // _handlePaymentResponse(resp);
     } catch (e, s) {
-      pp(e);
-      pp(s);
+      ppx(e);
+      ppx(s);
       if (mounted) {
         showErrorDialog(context, '$e');
       }
@@ -142,7 +142,7 @@ class BankTransferWidgetState extends State<BankTransferWidget>
   }
 
   _startBankTransfer(PaymentMethod paymentMethod) async {
-    pp('$mm ... _startBankTransfer ...');
+    ppx('$mm ... _startBankTransfer ...');
     this.paymentMethod = paymentMethod;
     var amount = widget.sponsorProduct.studentsSponsored! *
         widget.sponsorProduct.amountPerSponsoree!;
@@ -159,12 +159,12 @@ class BankTransferWidgetState extends State<BankTransferWidget>
 
         var resp =
             await rapydPaymentService.createPaymentByBankTransfer(request);
-        pp('$mm ... _startBankTransfer came back. status: ${resp.status!.toJson()} .');
-        pp('$mm ... _startBankTransfer came back. data(Payment): ${resp.data!.toJson()} .');
+        ppx('$mm ... _startBankTransfer came back. status: ${resp.status!.toJson()} .');
+        ppx('$mm ... _startBankTransfer came back. data(Payment): ${resp.data!.toJson()} .');
         _handlePaymentResponse(resp);
       }
     } catch (e) {
-      pp(e);
+      ppx(e);
       if (mounted) {
         showErrorDialog(context, '$e');
       }

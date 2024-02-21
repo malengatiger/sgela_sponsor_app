@@ -1,16 +1,19 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:sgela_sponsor_app/data/organization.dart';
-import 'package:sgela_sponsor_app/ui/registration_form2.dart';
+import 'package:sgela_sponsor_app/ui/organization/registration_form2.dart';
 import 'package:sgela_sponsor_app/ui/widgets/org_logo_widget.dart';
 import 'package:sgela_sponsor_app/util/navigation_util.dart';
+import 'package:sgela_sponsor_app/util/registration_stream_handler.dart';
 
-import '../util/functions.dart';
+import '../../util/functions.dart';
 
 class RegistrationForm extends StatefulWidget {
-  const RegistrationForm({super.key, required this.onRegistered});
-  final Function(Organization) onRegistered;
+  const RegistrationForm({super.key});
+
   @override
   RegistrationFormState createState() => RegistrationFormState();
 }
@@ -18,11 +21,26 @@ class RegistrationForm extends StatefulWidget {
 class RegistrationFormState extends State<RegistrationForm>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+  RegistrationStreamHandler handler =
+      GetIt.instance<RegistrationStreamHandler>();
+  late StreamSubscription<bool> regSubscription;
 
   @override
   void initState() {
     _controller = AnimationController(vsync: this);
     super.initState();
+    _listen();
+  }
+
+  _listen() {
+    regSubscription = handler.registrationStream.listen((completed) {
+      ppx('$mm registrationStream ... completed: $completed');
+      if (completed) {
+        if (mounted) {
+          Navigator.of(context).pop();
+        }
+      }
+    });
   }
 
   @override
@@ -48,7 +66,7 @@ class RegistrationFormState extends State<RegistrationForm>
                 padding: const EdgeInsets.all(8.0),
                 child: MyForm(
                   onNext: (map) async {
-                    pp('$mm Next pressed ... check that all fields are filled in: $map');
+                    ppx('$mm Next pressed ... check that all fields are filled in: $map');
                     bool filledIn = false;
                     int cnt = 0;
                     if (map['orgName'] != null) {
@@ -67,15 +85,7 @@ class RegistrationFormState extends State<RegistrationForm>
                       filledIn = true;
                     }
                     if (filledIn) {
-                       NavigationUtils.navigateToPage(
-                          context: context,
-                          widget: RegistrationFormFinal(variables: map,
-                            onRegistered: (org ) {
-                            pp('$mm .....................'
-                                ' onRegistered! ${org.name}');
-                            widget.onRegistered(org);
-                            Navigator.of(context).pop(org);
-                            },));
+                      _navigateToForm2(context, map);
                     }
                   },
                 ),
@@ -85,7 +95,15 @@ class RegistrationFormState extends State<RegistrationForm>
         ));
   }
 
-  static const mm = '🌀🌀🌀🌀🌀RegistrationForm';
+  void _navigateToForm2(BuildContext context, Map<String, dynamic> map) async {
+    var ok = await NavigationUtils.navigateToPage(
+        context: context,
+        widget: RegistrationFormFinal(
+          variables: map,
+        ));
+  }
+
+  static const mm = '🌀🌀🌀🌀🌀RegistrationForm 🌀🌀';
 }
 
 class MyForm extends StatelessWidget {
@@ -173,7 +191,6 @@ class MyForm extends StatelessWidget {
                   ReactiveTextField<String>(
                     formControlName: 'email',
                     keyboardType: TextInputType.emailAddress,
-
                     validationMessages: {
                       ValidationMessage.required: (_) =>
                           'The email must not be empty',
@@ -196,7 +213,7 @@ class MyForm extends StatelessWidget {
                     ),
                     onPressed: () {
                       if (form.valid) {
-                        pp(form.value);
+                        ppx(form.value);
                       } else {
                         form.markAllAsTouched();
                       }
@@ -219,7 +236,7 @@ class MyForm extends StatelessWidget {
   }
 
   _onNext(FormGroup formGroup, BuildContext context) {
-    pp('$mm _onNext: formGroup.value : ${formGroup.value}');
+    ppx('$mm _onNext: formGroup.value : ${formGroup.value}');
     onNext(formGroup.value);
   }
 

@@ -1,22 +1,26 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:sgela_sponsor_app/data/organization.dart';
-import 'package:sgela_sponsor_app/data/rapyd/holder.dart';
-import 'package:sgela_sponsor_app/data/sponsor_product.dart';
-import 'package:sgela_sponsor_app/data/user.dart';
+import 'package:sgela_services/data/branding.dart';
+import 'package:sgela_services/data/holder.dart';
+import 'package:sgela_services/data/org_user.dart';
+import 'package:sgela_services/data/organization.dart';
+import 'package:sgela_services/data/sponsor_product.dart';
+import 'package:sgela_services/sgela_util/dark_light_control.dart';
 import 'package:sgela_sponsor_app/ui/branding/branding_upload_one.dart';
-import 'package:sgela_sponsor_app/ui/organisation_user_add.dart';
+import 'package:sgela_sponsor_app/ui/organization/organisation_user_add.dart';
 import 'package:sgela_sponsor_app/ui/payments/sponsor_product_selector.dart';
 import 'package:sgela_sponsor_app/ui/widgets/color_gallery.dart';
 import 'package:sgela_sponsor_app/ui/widgets/org_logo_widget.dart';
-import 'package:sgela_sponsor_app/util/dark_light_control.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
 import 'package:sgela_sponsor_app/util/navigation_util.dart';
 import 'package:sgela_sponsor_app/util/prefs.dart';
-import '../data/branding.dart';
-import '../services/firestore_service.dart';
+import 'package:sgela_sponsor_app/util/registration_stream_handler.dart';
+
+import '../services/firestore_service_sponsor.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key, required this.organization});
@@ -30,14 +34,14 @@ class Dashboard extends StatefulWidget {
 class DashboardState extends State<Dashboard>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  static const mm = '🔵🔵🔵🔵🔵🔵🔵🔵 Dashboard 🔵🔵';
+  static const mm = '🍔🍔🍔🍔 Dashboard 🍔🍔';
 
-  Prefs prefs = GetIt.instance<Prefs>();
+  SponsorPrefs prefs = GetIt.instance<SponsorPrefs>();
   ColorWatcher colorWatcher = GetIt.instance<ColorWatcher>();
   FirestoreService firestoreService = GetIt.instance<FirestoreService>();
 
   List<Branding> brandings = [];
-  List<User> users = [];
+  List<OrgUser> users = [];
   List<PaymentMethod> paymentMethods = [];
   List<SponsorProduct> sponsorProducts = [];
 
@@ -45,16 +49,36 @@ class DashboardState extends State<Dashboard>
 
   double averageRating = 0.0;
   Organization? organization;
+  OrgUser? user;
   bool _busy = false;
   String? logoUrl;
+  RegistrationStreamHandler handler = GetIt.instance<RegistrationStreamHandler>();
+  late StreamSubscription<bool> regSubscription;
+
 
   @override
   void initState() {
     _controller = AnimationController(vsync: this);
     super.initState();
+    _listen();
     _getData();
   }
 
+  _listen() {
+    regSubscription = handler.registrationStream.listen((completed) {
+      ppx('$mm registrationStream ... completed: $completed');
+
+      if (completed) {
+        showToast(
+            message: 'Branding items uploaded OK',
+            backgroundColor: Colors.green,
+            padding: 24,
+            duration: const Duration(seconds: 6),
+            context: context);
+        _getData();
+      }
+    });
+  }
   @override
   void dispose() {
     _controller.dispose();
@@ -62,28 +86,34 @@ class DashboardState extends State<Dashboard>
   }
 
   _getData() async {
-    pp('$mm ..... get data; logoUrl & org');
+    ppx('$mm ......................... get data; logoUrl & org');
     setState(() {
       _busy = true;
     });
     try {
       logoUrl = prefs.getLogoUrl();
       organization = prefs.getOrganization();
+      user = prefs.getUser();
       sponsorProducts = await firestoreService.getSponsorProducts(false);
-      if ((organization != null)) {
-        brandings = await firestoreService.getBranding(organization!.id!, false);
-        users = await firestoreService.getUsers(organization!.id!, false);
+      if ((user != null)) {
+        brandings =
+            await firestoreService.getBranding(user!.organizationId!, true);
+        users = await firestoreService.getUsers(user!.organizationId!, true);
+      } else {
+        ppx('$mm user is NULL!! - FIND OUT WHY?');
       }
     } catch (e) {
-      pp(e);
+      ppx(e);
       if (mounted) {
         showErrorDialog(context, '$e');
       }
     }
 
-    setState(() {
-      _busy = false;
-    });
+    if (mounted) {
+      setState(() {
+        _busy = false;
+      });
+    }
   }
 
   _navigateToColorPicker() {
@@ -93,7 +123,7 @@ class DashboardState extends State<Dashboard>
   }
 
   _navigateToAddPerson() async {
-    pp('$mm ... navigation to user add ...');
+    ppx('$mm ... navigation to user add ...');
     await NavigationUtils.navigateToPage(
         context: context, widget: const OrganisationUserAdd());
     _getData();
@@ -104,22 +134,13 @@ class DashboardState extends State<Dashboard>
         context: context,
         widget: BrandingUploadOne(
           organization: widget.organization,
-          onBrandingUploaded: (br) {
-            pp('$mm ... branding uploaded OK ....');
-            showToast(
-                message: 'Branding items uploaded OK',
-                backgroundColor: Colors.green,
-                padding: 24,
-                duration: const Duration(seconds: 6),
-                context: context);
-            _getData();
-          },
+
         ));
   }
+
   _navigateToSponsorProductSelector() {
     NavigationUtils.navigateToPage(
-        context: context,
-        widget: const SponsorProductSelector());
+        context: context, widget: const SponsorProductSelector());
   }
 
   @override
@@ -142,7 +163,8 @@ class DashboardState extends State<Dashboard>
         leading: gapW4,
         title: OrgLogoWidget(
           branding: branding,
-          logoUrl: logoUrl, height: 32,
+          logoUrl: logoUrl,
+          height: 48,
         ),
         actions: [
           IconButton(
@@ -187,11 +209,11 @@ class DashboardState extends State<Dashboard>
                       children: [
                         gapH32,
                         Text(
-                          name,
+                          "Dashboard",
                           style: myTextStyle(
                               context,
                               Theme.of(context).primaryColorLight,
-                              22,
+                              18,
                               FontWeight.normal),
                         ),
                         Expanded(
@@ -248,8 +270,8 @@ class DashboardState extends State<Dashboard>
                                       style: myTextStyle(
                                           context,
                                           Theme.of(context).primaryColorLight,
-                                          16,
-                                          FontWeight.normal),
+                                          18,
+                                          FontWeight.bold),
                                     ),
                                   ),
                                 ),

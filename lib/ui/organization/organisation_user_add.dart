@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:sgela_sponsor_app/data/organization.dart';
-import 'package:sgela_sponsor_app/data/user.dart';
-import 'package:sgela_sponsor_app/services/auth_service.dart';
+import 'package:sgela_services/data/organization.dart';
+import 'package:sgela_services/services/auth_service.dart';
 import 'package:sgela_sponsor_app/ui/busy_indicator.dart';
 import 'package:sgela_sponsor_app/ui/widgets/org_logo_widget.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
+import 'package:sgela_services/data/org_user.dart';
 
-import '../util/prefs.dart';
+import '../../util/prefs.dart';
 
 class OrganisationUserAdd extends StatefulWidget {
   const OrganisationUserAdd({super.key});
@@ -20,7 +20,7 @@ class OrganisationUserAdd extends StatefulWidget {
 class OrganisationUserAddState extends State<OrganisationUserAdd>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  Prefs prefs = GetIt.instance<Prefs>();
+  SponsorPrefs prefs = GetIt.instance<SponsorPrefs>();
   AuthService authService = GetIt.instance<AuthService>();
 
   String? logoUrl;
@@ -45,7 +45,7 @@ class OrganisationUserAddState extends State<OrganisationUserAdd>
   }
 
   _submitUser() async {
-    pp('$mm ... _submitUser ... check controllers ...');
+    ppx('$mm ... _submitUser ... check controllers ...');
     if (firstNameController.text.isEmpty) {
       showToast(
           message: 'Please enter user first name',
@@ -78,27 +78,27 @@ class OrganisationUserAddState extends State<OrganisationUserAdd>
       _busy = true;
     });
     try {
-      var user = User(
+      var user = OrgUser(
         firstName: firstNameController.text,
         lastName: lastNameController.text,
         email: emailController.text,
         organizationId: organization!.id!,
         organizationName: organization!.name!,
-        activeFlag: true,
+        activeFlag: true, cellphone: '', date: '', id: 65676,
       );
-      await authService.authenticateUser(user);
+      //await authService.authenticateUser(user);
       if (mounted) {
         showToast(message: 'User added to organization app', context: context);
         Navigator.of(context).pop(user);
       }
     } catch (e) {
-      pp(e);
+      ppx(e);
       if (mounted) {
         showErrorDialog(context, '$e');
       }
     }
     setState(() {
-      _busy = true;
+      _busy = false;
     });
   }
 
@@ -133,11 +133,11 @@ class OrganisationUserAddState extends State<OrganisationUserAdd>
         mobile: (_) {
           return Stack(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  elevation: 8,
-                  child: SingleChildScrollView(
+              SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Card(
+                    elevation: 8,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,

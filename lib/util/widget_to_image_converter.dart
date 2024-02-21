@@ -17,7 +17,7 @@ class WidgetToImageConverter {
     Uint8List? pngBytes = byteData?.buffer.asUint8List();
     File file = await File('${Directory.systemTemp.path}/widget_image.png').create();
     await file.writeAsBytes(pngBytes!);
-    pp('🍎🍎WidgetToImageConverter: image file created: 🍎${await file.length()} bytes 🍎');
+    ppx('🍎🍎WidgetToImageConverter: image file created: 🍎${await file.length()} bytes 🍎');
     return file;
   }
 

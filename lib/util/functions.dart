@@ -5,6 +5,8 @@ import 'dart:math';
 import 'dart:ui' as ui;
 import 'dart:ui';
 
+import 'package:sgela_services/sgela_util/dark_light_control.dart';
+import 'package:sgela_services/sgela_util/functions.dart' as srv;
 import 'package:sgela_sponsor_app/util/prefs.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -23,22 +25,21 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pretty_json/pretty_json.dart';
 import 'package:video_thumbnail/video_thumbnail.dart' as vt;
 
-import '../data/gemini/gemini_response.dart';
-import 'dark_light_control.dart';
 import 'emojis.dart';
 
-pp(dynamic msg) {
+ppx(dynamic msg) {
   var time = getFormattedDateHour(DateTime.now().toIso8601String());
-  if (kReleaseMode) {
-    return;
-  }
-  if (kDebugMode) {
-    if (msg is String) {
-      debugPrint('$time ==> $msg');
-    } else {
-      print('$time ==> $msg');
-    }
-  }
+  // if (kReleaseMode) {
+  //   return;
+  // }
+  // if (kDebugMode) {
+  //   if (msg is String) {
+  //     debugPrint('$time ==> $msg');
+  //   } else {
+  //     print('$time ==> $msg');
+  //   }
+  // }
+  srv.pp(msg);
 }
 
 int generateUniqueKey() {
@@ -62,6 +63,33 @@ final List<Color> _colors = [
   Colors.lightGreen[200]!,
   Colors.orange[200]!,
   Colors.cyan[200]!,
+  Colors.red[300]!,
+  Colors.green[300]!,
+  Colors.blue[300]!,
+  Colors.yellow[300]!,
+  Colors.pink[300]!,
+  Colors.teal[300]!,
+  Colors.indigo[300]!,
+  Colors.brown[300]!,
+  Colors.deepPurple[300]!,
+  Colors.amber[300]!,
+  Colors.lightGreen[300]!,
+  Colors.orange[300]!,
+  Colors.cyan[300]!,
+  Colors.red[400]!,
+  Colors.green[400]!,
+  Colors.blue[400]!,
+  Colors.yellow[400]!,
+  Colors.pink[400]!,
+  Colors.teal[400]!,
+  Colors.indigo[400]!,
+  Colors.brown[400]!,
+  Colors.deepPurple[400]!,
+  Colors.amber[400]!,
+  Colors.lightGreen[400]!,
+  Colors.orange[400]!,
+  Colors.cyan[400]!,
+  Colors.grey[600]!,
   Colors.red,
   Colors.green,
   Colors.blue,
@@ -75,6 +103,19 @@ final List<Color> _colors = [
   Colors.lightGreen,
   Colors.orange,
   Colors.cyan,
+  Colors.red[700]!,
+  Colors.green[700]!,
+  Colors.blue[700]!,
+  Colors.yellow[700]!,
+  Colors.pink[700]!,
+  Colors.teal[700]!,
+  Colors.indigo[700]!,
+  Colors.brown[700]!,
+  Colors.deepPurple[700]!,
+  Colors.amber[700]!,
+  Colors.lightGreen[700]!,
+  Colors.orange[700]!,
+  Colors.cyan[700]!,
 ];
 
 List<Color> getColors() {
@@ -102,10 +143,10 @@ Future<File?> compressImage({required File file, required int quality}) async {
   final fileType = fileName.split('.').last;
   final compressedFile =
       File('$tempPath/f_${DateTime.now().millisecondsSinceEpoch}.$fileType');
-  pp('🌍🌍🌍🌍compressing file, size: ${await file.length()} bytes, quality: $quality');
+  ppx('🌍🌍🌍🌍compressing file, size: ${await file.length()} bytes, quality: $quality');
   final fileSize = await file.length();
   if (fileSize < 2 * 1024 * 1024) {
-    pp('🌍🌍🌍🌍file NOT compressed, no need to, size: ${await file.length()} bytes');
+    ppx('🌍🌍🌍🌍file NOT compressed, no need to, size: ${await file.length()} bytes');
     return file;
   }
   File? resultFile;
@@ -118,9 +159,9 @@ Future<File?> compressImage({required File file, required int quality}) async {
       );
       resultFile = File(result!.path);
       var size = await resultFile.length();
-      pp('🌍🌍🌍🌍compressed file, size: $size bytes');
+      ppx('🌍🌍🌍🌍compressed file, size: $size bytes');
       if (size > 3 * 1024 * 1024) {
-        pp('🌍🌍🌍🌍compressed file still too big, bigger than 3MB: ${await resultFile.length()} bytes');
+        ppx('🌍🌍🌍🌍compressed file still too big, bigger than 3MB: ${await resultFile.length()} bytes');
         return compressImage(file: resultFile, quality: 60);
       }
       return resultFile;
@@ -134,10 +175,10 @@ Future<File?> compressImage({required File file, required int quality}) async {
         resultFile = compressedFile;
 
         final size = await resultFile.length();
-        pp('Compressed file, size: $size bytes');
+        ppx('Compressed file, size: $size bytes');
 
         if (size > 3 * 1024 * 1024) {
-          pp('Compressed file still too big, bigger than 3MB: ${await resultFile.length()} bytes');
+          ppx('Compressed file still too big, bigger than 3MB: ${await resultFile.length()} bytes');
           return compressImage(file: resultFile, quality: 60);
         }
       }
@@ -145,17 +186,6 @@ Future<File?> compressImage({required File file, required int quality}) async {
     return resultFile;
   }
   return file;
-}
-
-String getResponseString(MyGeminiResponse geminiResponse) {
-  var sb = StringBuffer();
-  geminiResponse.candidates?.forEach((candidate) {
-    candidate.content?.parts?.forEach((parts) {
-      sb.write(parts.text ?? '');
-      sb.write('\n');
-    });
-  });
-  return sb.toString();
 }
 
 String formatMilliseconds(int milliseconds) {
@@ -193,7 +223,7 @@ bool isMarkdownFormat(String text) {
   return false;
 }
 
-bool isDarkMode(Prefs prefs, Brightness brightness) {
+bool isDarkMode(SponsorPrefs prefs, Brightness brightness) {
   var mode = prefs.getMode();
   if (mode == DARK) {
     return true;
@@ -494,7 +524,7 @@ Future<File> getPhotoThumbnail({required File file}) async {
       '${directory.path}$slash${DateTime.now().millisecondsSinceEpoch}.jpg');
   var thumb = mFile..writeAsBytesSync(img.encodeJpg(thumbnail, quality: 100));
   var len = await thumb.length();
-  pp('🔷🔷 photo thumbnail generated: 😡 ${(len / 1024).toStringAsFixed(1)} KB');
+  ppx('🔷🔷 photo thumbnail generated: 😡 ${(len / 1024).toStringAsFixed(1)} KB');
   return thumb;
 }
 
@@ -512,10 +542,10 @@ Future<File> getVideoThumbnail(File file) async {
       quality: 100,
     );
     await thumbFile.writeAsBytes(data!);
-    pp('🔷🔷Video thumbnail created. length: ${await thumbFile.length()} 🔷🔷🔷');
+    ppx('🔷🔷Video thumbnail created. length: ${await thumbFile.length()} 🔷🔷🔷');
     return thumbFile;
   } catch (e) {
-    pp('ERROR: $e');
+    ppx('ERROR: $e');
     var m = await getImageFileFromAssets('assets/intro/small.jpg');
     return m;
   }
@@ -1004,7 +1034,7 @@ Future<cc.Country?> getDeviceCountry(String countryCode) async {
 
   try {
     //code = await FlutterSimCountryCode.simCountryCode;
-    pp('....................... _countryCode: $code');
+    ppx('....................... _countryCode: $code');
     for (var value in cc.countries) {
       if (value.code == code) {
         country = value;
@@ -1020,7 +1050,7 @@ Future<String?> getDeviceCountryCode() async {
   String? code;
   try {
     code = await FlutterSimCountryCode.simCountryCode;
-    pp('....................... _countryCode: $code');
+    ppx('....................... _countryCode: $code');
   } on PlatformException {
     return null;
   }
@@ -1364,7 +1394,7 @@ showToast(
   try {
     fToast.init(context);
   } catch (e) {
-    pp('$mm FToast may already be initialized');
+    ppx('$mm FToast may already be initialized');
   }
   Widget toastContainer = Container(
     width: 320,
@@ -1396,7 +1426,7 @@ showToast(
       toastDuration: duration ?? const Duration(seconds: 3),
     );
   } catch (e) {
-    pp('$mm 👿👿👿👿👿 we have a small TOAST problem, Boss! - 👿 $e');
+    ppx('$mm 👿👿👿👿👿 we have a small TOAST problem, Boss! - 👿 $e');
   }
 }
 
@@ -1413,7 +1443,7 @@ showOKToast(
   try {
     fToast.init(context);
   } catch (e) {
-    pp('$mm FToast may already be initialized');
+    ppx('$mm FToast may already be initialized');
   }
   Widget toastContainer = Container(
     width: 320,
@@ -1445,14 +1475,14 @@ showOKToast(
       toastDuration: duration ?? const Duration(seconds: 3),
     );
   } catch (e) {
-    pp('$mm 👿👿👿👿👿 we have a small TOAST problem, Boss! - 👿 $e');
+    ppx('$mm 👿👿👿👿👿 we have a small TOAST problem, Boss! - 👿 $e');
   }
 }
 
 Future<String> getStringFromAssets(String path) async {
   final mPath = 'assets/l10n/$path.json';
 
-  pp('${E.blueDot}${E.blueDot}${E.blueDot} getStringFromAssets: locale: $mPath');
+  ppx('${E.blueDot}${E.blueDot}${E.blueDot} getStringFromAssets: locale: $mPath');
   final stringData = await rootBundle.loadString(mPath);
   // pp('${E.blueDot}${E.blueDot}${E.blueDot} getStringFromAssets: stringData: $stringData');
 

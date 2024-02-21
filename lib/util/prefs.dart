@@ -1,18 +1,20 @@
 import 'dart:convert';
 
-import 'package:sgela_sponsor_app/data/branding.dart';
-import 'package:sgela_sponsor_app/data/rapyd/holder.dart';
-import 'package:sgela_sponsor_app/data/sponsor_product.dart';
+import 'package:sgela_services/data/branding.dart';
+import 'package:sgela_services/data/country.dart';
+import 'package:sgela_services/data/holder.dart';
+import 'package:sgela_services/data/org_user.dart';
+import 'package:sgela_services/data/organization.dart';
+import 'package:sgela_services/data/sponsor_product.dart';
+import 'package:sgela_sponsor_app/util/functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../data/country.dart';
-import '../data/organization.dart';
-import '../data/user.dart';
 
-class Prefs {
+class SponsorPrefs {
   final SharedPreferences sharedPreferences;
+  static const mm = '🍀🍀🍀🍀🍀🍀 Prefs 🍀🍀';
 
-  Prefs(this.sharedPreferences);
+  SponsorPrefs(this.sharedPreferences);
 
   saveSponsorProducts(List<SponsorProduct> sponsorProducts) {
     List<Map<String, dynamic>> productStrings =
@@ -20,16 +22,20 @@ class Prefs {
     List<String> productJsonStrings =
         productStrings.map((pm) => json.encode(pm)).toList();
     sharedPreferences.setStringList('products', productJsonStrings);
+    ppx('$mm sponsorProducts saved : ${sponsorProducts.length}');
+
   }
 
   List<SponsorProduct> getSponsorProducts() {
-    List<String>? paymentMethodJsonStrings =
+    List<String>? sponsorProductJsonStrings =
         sharedPreferences.getStringList('products');
-    if (paymentMethodJsonStrings != null) {
-      List<SponsorProduct> paymentMethods = paymentMethodJsonStrings
+    if (sponsorProductJsonStrings != null) {
+      List<SponsorProduct> sponsorProducts = sponsorProductJsonStrings
           .map((pmJson) => SponsorProduct.fromJson(json.decode(pmJson)))
           .toList();
-      return paymentMethods;
+      ppx('$mm sponsorProducts retrieved: ${sponsorProducts.length}');
+
+      return sponsorProducts;
     } else {
       return [];
     }
@@ -44,13 +50,15 @@ class Prefs {
   }
 
   List<Country> getCountries() {
-    List<String>? paymentMethodJsonStrings =
+    List<String>? countryJsonStrings =
     sharedPreferences.getStringList('countries');
-    if (paymentMethodJsonStrings != null) {
-      List<Country> paymentMethods = paymentMethodJsonStrings
+    if (countryJsonStrings != null) {
+      List<Country> countries = countryJsonStrings
           .map((pmJson) => Country.fromJson(json.decode(pmJson)))
           .toList();
-      return paymentMethods;
+      ppx('$mm countries retrieved: ${countries.length}');
+
+      return countries;
     } else {
       return [];
     }
@@ -62,6 +70,8 @@ class Prefs {
     List<String> brandingJsonStrings =
     brandingStrings.map((pm) => json.encode(pm)).toList();
     sharedPreferences.setStringList('brandings', brandingJsonStrings);
+    ppx('$mm brandings saved : ${brandings.length}');
+
   }
 
   List<Branding> getBrandings() {
@@ -71,13 +81,14 @@ class Prefs {
       List<Branding> brandings = brandingJsonStrings
           .map((pmJson) => Branding.fromJson(json.decode(pmJson)))
           .toList();
+      ppx('$mm brandings retrieved: ${brandings.length}');
       return brandings;
     } else {
       return [];
     }
   }
   //
-  saveUsers(List<User> users) {
+  saveUsers(List<OrgUser> users) {
     List<Map<String, dynamic>> userStrings =
     users.map((pm) => pm.toJson()).toList();
     List<String> userJsonStrings =
@@ -85,13 +96,14 @@ class Prefs {
     sharedPreferences.setStringList('users', userJsonStrings);
   }
 
-  List<User> getUsers() {
+  List<OrgUser> getUsers() {
     List<String>? userJsonStrings =
     sharedPreferences.getStringList('users');
     if (userJsonStrings != null) {
-      List<User> users = userJsonStrings
-          .map((pmJson) => User.fromJson(json.decode(pmJson)))
+      List<OrgUser> users = userJsonStrings
+          .map((pmJson) => OrgUser.fromJson(json.decode(pmJson)))
           .toList();
+      ppx('$mm users retrieved: ${users.length}');
       return users;
     } else {
       return [];
@@ -120,19 +132,22 @@ class Prefs {
     }
   }
 
-  void saveUser(User user) {
+  void saveUser(OrgUser user) {
     Map mJson = user.toJson();
     var jx = json.encode(mJson);
     sharedPreferences.setString('user', jx);
+    ppx('$mm user saved ');
+
   }
 
-  User? getUser() {
+  OrgUser? getUser() {
     var string = sharedPreferences.getString('user');
     if (string == null) {
       return null;
     }
     var jx = json.decode(string);
-    var user = User.fromJson(jx);
+    var user = OrgUser.fromJson(jx);
+    ppx('$mm user retrieved: ${user.toJson()}');
     return user;
   }
 
@@ -140,6 +155,8 @@ class Prefs {
     Map mJson = country.toJson();
     var jx = json.encode(mJson);
     sharedPreferences.setString('country', jx);
+    ppx('$mm country saved ${country.name}');
+
   }
 
   Country? getCountry() {
@@ -149,6 +166,7 @@ class Prefs {
     }
     var jx = json.decode(string);
     var country = Country.fromJson(jx);
+    ppx('$mm country retrieved: ${country.name}');
     return country;
   }
 
@@ -172,15 +190,20 @@ class Prefs {
     Map mJson = organization.toJson();
     var jx = json.encode(mJson);
     sharedPreferences.setString('Organization', jx);
+    ppx('$mm organization saved : ${organization.name}');
+
   }
 
   Organization? getOrganization() {
     var string = sharedPreferences.getString('Organization');
     if (string == null) {
+      ppx('$mm organization NOT FOUND!!!');
       return null;
     }
     var jx = json.decode(string);
     var org = Organization.fromJson(jx);
+    ppx('$mm organization retrieved: ${org.name}');
+
     return org;
   }
 
@@ -210,10 +233,14 @@ class Prefs {
 
   void saveLogoUrl(String logoUrl) {
     sharedPreferences.setString('logoUrl', logoUrl);
+    ppx('$mm logoUrl saved ');
+
   }
 
   String? getLogoUrl() {
     var url = sharedPreferences.getString('logoUrl');
+    ppx('$mm logoUrl retrieved: $url');
+
     return url;
   }
 }

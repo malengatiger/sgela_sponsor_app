@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:sgela_sponsor_app/services/auth_service.dart';
-import 'package:sgela_sponsor_app/services/firestore_service.dart';
+import 'package:sgela_services/services/auth_service.dart';
+import 'package:sgela_sponsor_app/services/firestore_service_sponsor.dart';
 import 'package:sgela_sponsor_app/ui/busy_indicator.dart';
 import 'package:sgela_sponsor_app/ui/dashboard.dart';
 import 'package:sgela_sponsor_app/util/navigation_util.dart';
 
-import '../util/functions.dart';
+import '../../util/functions.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -48,7 +48,7 @@ class SignInState extends State<SignIn> with SingleTickerProviderStateMixin {
       showToast(message: 'Please enter your password', context: context);
       return;
     }
-    pp('$mm ... start user sign in ...');
+    ppx('$mm ... start user sign in ...');
     setState(() {
       _busy = true;
     });
@@ -56,7 +56,7 @@ class SignInState extends State<SignIn> with SingleTickerProviderStateMixin {
       var mUser = await authService.signIn(
           emailController.text, passwordController.text);
       if (mUser != null) {
-        pp('$mm user signed in OK, user : ${mUser.toJson()}');
+        ppx('$mm user signed in OK, user : ${mUser.toJson()}');
         if (mounted) {
           showToast(
               message: 'Signed in OK',
@@ -64,14 +64,14 @@ class SignInState extends State<SignIn> with SingleTickerProviderStateMixin {
               backgroundColor: Colors.green,
               textStyle: myTextStyleMediumWithColor(context, Colors.white),
               context: context);
+
           var org =
               await firestoreService.getOrganization(mUser.organizationId!);
-
           if (mounted) {
             if (org != null) {
               Navigator.of(context).pop();
               NavigationUtils.navigateToPage(
-                  context: context, widget: Dashboard(organization: org!));
+                  context: context, widget: Dashboard(organization: org));
             } else {
               throw Exception('User sign in failed');
             }
@@ -79,7 +79,7 @@ class SignInState extends State<SignIn> with SingleTickerProviderStateMixin {
         }
       }
     } catch (e) {
-      pp(e);
+      ppx(e);
       if (mounted) {
         showErrorDialog(context, '$e');
       }

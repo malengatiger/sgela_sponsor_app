@@ -1,18 +1,21 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:sgela_sponsor_app/data/organization.dart';
-import 'package:sgela_sponsor_app/services/firestore_service.dart';
+import 'package:sgela_services/data/branding.dart';
+import 'package:sgela_services/data/organization.dart';
+import 'package:sgela_sponsor_app/services/firestore_service_sponsor.dart';
 import 'package:sgela_sponsor_app/ui/dashboard.dart';
-import 'package:sgela_sponsor_app/ui/registration_form.dart';
-import 'package:sgela_sponsor_app/ui/sign_in.dart';
+import 'package:sgela_sponsor_app/ui/organization/registration_form.dart';
+import 'package:sgela_sponsor_app/ui/organization/sign_in.dart';
 import 'package:sgela_sponsor_app/ui/widgets/org_logo_widget.dart';
 import 'package:sgela_sponsor_app/util/environment.dart';
 import 'package:sgela_sponsor_app/util/navigation_util.dart';
 import 'package:sgela_sponsor_app/util/prefs.dart';
+import 'package:sgela_sponsor_app/util/registration_stream_handler.dart';
 
-import '../data/branding.dart';
 import '../util/functions.dart';
 
 class LandingPage extends StatefulWidget {
@@ -27,48 +30,59 @@ class LandingPageState extends State<LandingPage>
   late AnimationController _controller;
   static const mm = ' 🍐🍐🍐🍐 LandingPage  🍐🍐';
   Organization? organization;
-  Prefs prefs = GetIt.instance<Prefs>();
+  SponsorPrefs prefs = GetIt.instance<SponsorPrefs>();
   List<Branding> brandings = [];
   FirestoreService firestoreService = GetIt.instance<FirestoreService>();
+  RegistrationStreamHandler handler = GetIt.instance<RegistrationStreamHandler>();
+  late StreamSubscription<bool> regSubscription;
 
   @override
   void initState() {
     _controller = AnimationController(vsync: this);
     super.initState();
-    _getOrg();
+    _listen();
+    _getOrganization();
   }
 
-  _getOrg() async {
+  bool _showDashboard = false;
+  _listen() {
+    regSubscription = handler.registrationStream.listen((completed) {
+      ppx('$mm registrationStream ... completed: $completed');
+      organization = prefs.getOrganization();
+      if (completed) {
+         setState(() {
+           _showDashboard = true;
+         });
+      }
+    });
+  }
+  _getOrganization() async {
     organization = prefs.getOrganization();
     if (organization != null) {
-      _navigateToDashboard();
       brandings = await firestoreService.getBranding(organization!.id!, false);
+      _navigateToDashboard();
     }
   }
 
   _navigateToRegistration() async {
+    ppx('$mm _navigateToRegistration  ......');
     NavigationUtils.navigateToPage(
         context: context,
-        widget: RegistrationForm(
-          onRegistered: (org) {
-            setState(() {
-              organization = org;
-            });
-            Future.delayed(const Duration(milliseconds: 1000),(){
-              _navigateToDashboard();
-            });
-          },
-        ));
+        widget: const RegistrationForm());
+
   }
 
   _navigateToSignIn() async {
-    await NavigationUtils.navigateToPage(
+    ppx('$mm _navigateToSignIn  ......');
+    NavigationUtils.navigateToPage(
         context: context, widget: const SignIn());
   }
 
   _navigateToDashboard() {
-    Future.delayed(const Duration(milliseconds: 100), (){
-      NavigationUtils.navigateToPage(context: context, widget: Dashboard(organization: organization!));
+    ppx('$mm ...... _navigateToDashboard  ......');
+    Future.delayed(const Duration(milliseconds: 20), () {
+      NavigationUtils.navigateToPage(
+          context: context, widget: Dashboard(organization: organization!));
     });
   }
 
@@ -82,6 +96,9 @@ class LandingPageState extends State<LandingPage>
   Widget build(BuildContext context) {
     var logoUrl = ChatbotEnvironment.sgelaLogoUrl;
     var splashUrl = ChatbotEnvironment.sgelaSplashUrl;
+    if (_showDashboard) {
+      return Dashboard(organization: organization!);
+    }
     if (organization != null) {
       if (organization!.logoUrl != null) {
         logoUrl = organization!.logoUrl!;

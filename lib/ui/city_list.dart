@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sgela_services/data/city.dart';
+import 'package:sgela_services/data/country.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
-
-import '../data/city.dart';
-import '../data/country.dart';
 
 class CityList extends StatelessWidget {
   const CityList({super.key, required this.cities, required this.onCityTapped, required this.country});

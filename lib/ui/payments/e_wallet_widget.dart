@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:sgela_sponsor_app/data/country.dart';
-import 'package:sgela_sponsor_app/data/rapyd/holder.dart';
-import 'package:sgela_sponsor_app/data/sponsor_product.dart';
+import 'package:sgela_services/data/country.dart';
+import 'package:sgela_services/data/holder.dart';
+import 'package:sgela_services/data/sponsor_product.dart';
 import 'package:sgela_sponsor_app/services/rapyd_payment_service.dart';
 import 'package:sgela_sponsor_app/ui/payments/payment_web_view.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
@@ -24,7 +24,7 @@ class EWalletWidgetState extends State<EWalletWidget>
   static const mm = '🔵🔵🔵🔵🔵🔵🔵🔵 EWalletWidget 🔵🔵';
   RapydPaymentService rapydPaymentService =
       GetIt.instance<RapydPaymentService>();
-  Prefs prefs = GetIt.instance<Prefs>();
+  SponsorPrefs prefs = GetIt.instance<SponsorPrefs>();
   List<PaymentMethod> paymentMethods = [];
   List<PaymentMethod> filtered = [];
   PaymentMethod? paymentMethod;
@@ -40,7 +40,7 @@ class EWalletWidgetState extends State<EWalletWidget>
   }
 
   _getPaymentMethods() async {
-    pp('$mm ... _getPaymentMethods ...');
+    ppx('$mm ... _getPaymentMethods ...');
     setState(() {
       _busy = false;
     });
@@ -51,7 +51,7 @@ class EWalletWidgetState extends State<EWalletWidget>
           await rapydPaymentService.getCountryPaymentMethods(country!.iso2!);
       _buildPaymentMethods();
     } catch (e) {
-      pp(e);
+      ppx(e);
     }
     setState(() {
       _busy = false;
@@ -59,7 +59,7 @@ class EWalletWidgetState extends State<EWalletWidget>
   }
 
   void _handlePaymentResponse(PaymentResponse resp) {
-    pp('$mm ... _handlePaymentResponse ... ${resp.status!.status}');
+    ppx('$mm ... _handlePaymentResponse ... ${resp.status!.status}');
     if (resp.status!.status!.contains('SUCCESS')) {
       Payment? payment = resp.data;
       if (payment != null) {
@@ -77,7 +77,7 @@ class EWalletWidgetState extends State<EWalletWidget>
   }
 
   _startBankTransfer() async {
-    pp('$mm ... _startBankTransfer ...');
+    ppx('$mm ... _startBankTransfer ...');
     var amount = widget.sponsorProduct.studentsSponsored! *
         widget.sponsorProduct.amountPerSponsoree!;
     try {
@@ -86,7 +86,7 @@ class EWalletWidgetState extends State<EWalletWidget>
       var resp = await rapydPaymentService.createPaymentByBankTransfer(request);
       _handlePaymentResponse(resp);
     } catch (e) {
-      pp(e);
+      ppx(e);
       if (mounted) {
         showErrorDialog(context, '$e');
       }

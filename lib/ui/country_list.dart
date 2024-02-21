@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sgela_services/data/country.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
 
-import '../data/country.dart';
 
 class CountryList extends StatelessWidget {
   const CountryList(
@@ -64,7 +64,7 @@ class CountryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        pp('CountryList: country: ${country.toJson()}');
+        ppx('CountryList: country: ${country.toJson()}');
         onCountryTapped(country);
       },
       child: Card(

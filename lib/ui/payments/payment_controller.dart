@@ -2,16 +2,16 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:sgela_sponsor_app/data/organization.dart';
-import 'package:sgela_sponsor_app/data/rapyd/holder.dart';
+import 'package:sgela_services/data/country.dart';
+import 'package:sgela_services/data/holder.dart';
+import 'package:sgela_services/data/organization.dart';
+import 'package:sgela_services/data/sponsor_product.dart';
 import 'package:sgela_sponsor_app/services/rapyd_payment_service.dart';
 import 'package:sgela_sponsor_app/ui/payments/payment_web_view.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
 import 'package:sgela_sponsor_app/util/navigation_util.dart';
 import 'package:sgela_sponsor_app/util/prefs.dart';
 
-import '../../data/country.dart';
-import '../../data/sponsor_product.dart';
 
 class PaymentController extends StatefulWidget {
   const PaymentController({super.key, required this.sponsorPaymentType});
@@ -26,7 +26,7 @@ class PaymentControllerState extends State<PaymentController>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   RapydPaymentService paymentService = GetIt.instance<RapydPaymentService>();
-  Prefs prefs = GetIt.instance<Prefs>();
+  SponsorPrefs prefs = GetIt.instance<SponsorPrefs>();
   Country? country;
   int _showPaymentType = payByCard;
 
@@ -66,7 +66,7 @@ class PaymentControllerState extends State<PaymentController>
       var resp = await paymentService.createPaymentByCard(request);
       _handlePaymentResponse(resp);
     } catch (e) {
-      pp(e);
+      ppx(e);
       if (mounted) {
         showErrorDialog(context, '$e');
       }
@@ -83,7 +83,7 @@ class PaymentControllerState extends State<PaymentController>
       var resp =  await paymentService.createPaymentByBankTransfer(request);
       _handlePaymentResponse(resp);
     } catch (e) {
-      pp(e);
+      ppx(e);
       if (mounted) {
         showErrorDialog(context, '$e');
       }
@@ -113,7 +113,7 @@ class PaymentControllerState extends State<PaymentController>
       var resp =  await paymentService.createPaymentByWallet(request);
       _handlePaymentResponse(resp);
     } catch (e) {
-      pp(e);
+      ppx(e);
       if (mounted) {
         showErrorDialog(context, '$e');
       }
@@ -327,7 +327,7 @@ class StartPaymentProcess extends StatefulWidget {
 
 class _StartPaymentProcessState extends State<StartPaymentProcess> {
   RapydPaymentService paymentService = GetIt.instance<RapydPaymentService>();
-  Prefs prefs = GetIt.instance<Prefs>();
+  SponsorPrefs prefs = GetIt.instance<SponsorPrefs>();
   Country? country;
 
   @override

@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:sgela_sponsor_app/data/organization.dart';
+import 'package:sgela_services/data/branding.dart';
+import 'package:sgela_services/data/organization.dart';
 import 'package:sgela_sponsor_app/util/environment.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
 
-import '../../data/branding.dart';
-import '../../services/firestore_service.dart';
+import '../../services/firestore_service_sponsor.dart';
 import '../../util/prefs.dart';
 
 class BrandingImagesPicker extends StatefulWidget {
@@ -34,7 +34,7 @@ class BrandingImagesPickerState extends State<BrandingImagesPicker> {
   File? _splashFile;
   List<Branding> brandings = [];
   FirestoreService firestoreService = GetIt.instance<FirestoreService>();
-  Prefs prefs = GetIt.instance<Prefs>();
+  SponsorPrefs prefs = GetIt.instance<SponsorPrefs>();
 
   String? logoUrl;
 
@@ -154,7 +154,7 @@ class BrandingImagesPickerState extends State<BrandingImagesPicker> {
       branding = brandings.first;
       return CachedNetworkImage(
         imageUrl: branding.splashUrl!,
-        fit: BoxFit.fill,
+        fit: BoxFit.cover,
       );
     }
 
@@ -185,7 +185,7 @@ class BrandingImagesPickerState extends State<BrandingImagesPicker> {
                         children: [
                           gapH16,
                           SizedBox(
-                            height: 48,
+                            height: 64,
                             child: _getExistingLogo()
                           ),
                           SizedBox(

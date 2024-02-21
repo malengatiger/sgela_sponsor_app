@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:sgela_sponsor_app/data/country.dart';
-import 'package:sgela_sponsor_app/data/rapyd/holder.dart';
-import 'package:sgela_sponsor_app/data/sponsor_product.dart';
-import 'package:sgela_sponsor_app/services/firestore_service.dart';
+import 'package:sgela_services/data/country.dart';
+import 'package:sgela_services/data/holder.dart';
+import 'package:sgela_services/data/sponsor_product.dart';
+import 'package:sgela_sponsor_app/services/firestore_service_sponsor.dart';
 import 'package:sgela_sponsor_app/services/rapyd_payment_service.dart';
 import 'package:sgela_sponsor_app/ui/payments/payment_web_view.dart';
 import 'package:sgela_sponsor_app/ui/payments/sponsor_product_widget.dart';
@@ -32,7 +32,7 @@ class CreditCardWidgetState extends State<CreditCardWidget>
   RapydPaymentService rapydPaymentService =
       GetIt.instance<RapydPaymentService>();
   FirestoreService firestoreService = GetIt.instance<FirestoreService>();
-  Prefs prefs = GetIt.instance<Prefs>();
+  SponsorPrefs prefs = GetIt.instance<SponsorPrefs>();
   List<PaymentMethod> paymentMethods = [];
   List<PaymentMethod> filtered = [];
   PaymentMethod? paymentMethod;
@@ -82,7 +82,7 @@ class CreditCardWidgetState extends State<CreditCardWidget>
   }
 
   _startCheckout() async {
-    pp('$mm ... _startCheckout ... ${widget.sponsorProduct.title} with card: $cardName');
+    ppx('$mm ... _startCheckout ... ${widget.sponsorProduct.title} with card: $cardName');
     var amount = widget.sponsorProduct.studentsSponsored! *
         widget.sponsorProduct.amountPerSponsoree!;
     String ref = 'sgelaAI_${DateTime.now().millisecondsSinceEpoch}';
@@ -106,9 +106,9 @@ class CreditCardWidgetState extends State<CreditCardWidget>
           ChatbotEnvironment.getCheckoutCompleteUrl(),
           []);
 
-      pp('$mm ... sending checkOut request: ${checkOutRequest.toJson()}');
+      ppx('$mm ... sending checkOut request: ${checkOutRequest.toJson()}');
       var gr = await rapydPaymentService.createCheckOut(checkOutRequest);
-      pp('$mm ... _startCheckout returned with checkout, should redirect');
+      ppx('$mm ... _startCheckout returned with checkout, should redirect');
       if (mounted) {
         NavigationUtils.navigateToPage(
             context: context,
@@ -120,8 +120,8 @@ class CreditCardWidgetState extends State<CreditCardWidget>
 
       // _handlePaymentResponse(resp);
     } catch (e, s) {
-      pp(e);
-      pp(s);
+      ppx(e);
+      ppx(s);
       if (mounted) {
         showErrorDialog(context, '$e');
       }

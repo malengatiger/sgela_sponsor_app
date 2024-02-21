@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:sgela_services/data/branding.dart';
+import 'package:sgela_services/sgela_util/environment.dart';
 
-import '../../data/branding.dart';
-import '../../util/environment.dart';
 import '../../util/functions.dart';
 
 class OrgLogoWidget extends StatelessWidget {
@@ -50,7 +50,7 @@ class OrgLogoWidget extends StatelessWidget {
                         ? defaultName
                         : '${branding!.organizationName}',
                     style: myTextStyle(context, Theme.of(context).primaryColor,
-                        12, FontWeight.normal),
+                        16, FontWeight.w900),
                   ),
                 )
               : Flexible(
@@ -59,7 +59,7 @@ class OrgLogoWidget extends StatelessWidget {
                         ? defaultName
                         : name!,
                     style: myTextStyle(context, Theme.of(context).primaryColor,
-                        12, FontWeight.normal),
+                        16, FontWeight.w900),
                   ),
                 ),
         ],

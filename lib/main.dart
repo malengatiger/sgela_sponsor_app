@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:sgela_services/sgela_util/dark_light_control.dart';
+import 'package:sgela_services/sgela_util/prefs.dart';
 import 'package:sgela_sponsor_app/services/register_services.dart';
 import 'package:sgela_sponsor_app/ui/landing_page.dart';
-import 'package:sgela_sponsor_app/util/dark_light_control.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
 import 'package:sgela_sponsor_app/util/prefs.dart';
 
@@ -21,24 +23,24 @@ void dismissKeyboard(BuildContext context) {
 }
 
 void main() async {
-  pp('$mx SgelaAI Sponsor App starting .... $mx');
+  ppx('$mx SgelaAI Sponsor App starting .... $mx');
   WidgetsFlutterBinding.ensureInitialized();
   try {
-    pp('$mx SgelaAI Sponsor App Firebase.initializeApp ... ');
+    ppx('$mx SgelaAI Sponsor App Firebase.initializeApp ... ');
 
     await Firebase.initializeApp(
       // name: ChatbotEnvironment.getFirebaseName(),
       options: DefaultFirebaseOptions.currentPlatform,
     );
-    pp('$mx Firebase has been initialized!! 🍀🍀name: ${Firebase.app().name}');
-    pp('$mx Firebase has been initialized!! 🍀🍀options: ${Firebase.app().options.asMap}');
+    ppx('$mx Firebase has been initialized!! 🍀🍀name: ${Firebase.app().name}');
+    ppx('$mx Firebase has been initialized!! 🍀🍀options: ${Firebase.app().options.asMap}');
 
-    await registerServices(
-        FirebaseFirestore.instance); // Pass the firestore instance
-
+    await ServiceRegistrar.registerSponsorServices(
+        FirebaseFirestore.instance, FirebaseAuth.instance);
     runApp(const MyApp());
   } catch (e) {
-    pp('👿👿👿Error initializing Firebase: 👿$e 👿');
+    ppx('\n\n👿👿👿Error initializing either Firebase '
+        'OR the bleeding services!! : 👿$e 👿\n\n');
   }
 }
 
@@ -49,7 +51,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DarkLightControl dlc = GetIt.instance<DarkLightControl>();
-    Prefs prefs = GetIt.instance<Prefs>();
     return StreamBuilder<ModeAndColor>(
       stream: dlc.darkLightStream,
       builder: (context, snapshot) {
@@ -63,7 +64,7 @@ class MyApp extends StatelessWidget {
           child: MaterialApp(
             title: 'SgelaSponsor',
             debugShowCheckedModeBanner: false,
-            theme: _getTheme(context, prefs),
+            theme: _getTheme(context),
             home: const LandingPage(),
           ),
         );
@@ -71,19 +72,22 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  ThemeData _getTheme(BuildContext context, Prefs prefs) {
-    var brightness = MediaQuery.of(context).platformBrightness;
-    var colorIndex = prefs.getColorIndex();
-    var mode = prefs.getMode();
+  ThemeData _getTheme(BuildContext context )  {
+    Prefs mPrefs = GetIt.instance<Prefs>();
+    var colorIndex = mPrefs.getColorIndex();
+    var mode = mPrefs.getMode();
+    if (mode == -1) {
+      mode = DARK;
+    }
     if (mode == DARK) {
       return ThemeData.dark().copyWith(
         primaryColor:
-            getColors().elementAt(colorIndex), // Set the primary color
+        getColors().elementAt(colorIndex), // Set the primary color
       );
     } else {
       return ThemeData.light().copyWith(
         primaryColor:
-            getColors().elementAt(colorIndex), // Set the primary color
+        getColors().elementAt(colorIndex), // Set the primary color
       );
     }
   }

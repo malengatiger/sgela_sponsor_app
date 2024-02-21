@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:sgela_services/sgela_util/dark_light_control.dart';
 
-import '../../util/dark_light_control.dart';
 import '../../util/functions.dart';
 import '../../util/prefs.dart';
 
@@ -11,7 +11,7 @@ class ColorGallery extends StatefulWidget {
   const ColorGallery(
       {super.key, required this.prefs, required this.colorWatcher});
 
-  final Prefs prefs;
+  final SponsorPrefs prefs;
   final ColorWatcher colorWatcher;
 
   @override
@@ -22,13 +22,13 @@ class ColorGalleryState extends State<ColorGallery> {
   Color? selectedColor;
   List<Color> colors = [];
   DarkLightControl darkLightControl = GetIt.instance<DarkLightControl>();
-  Prefs prefs = GetIt.instance<Prefs>();
+  SponsorPrefs prefs = GetIt.instance<SponsorPrefs>();
 
   @override
   void initState() {
     super.initState();
     colors = getColors();
-    pp('colors available: ${colors.length}');
+    ppx('colors available: ${colors.length}');
     _getMode();
   }
 
@@ -40,8 +40,9 @@ class ColorGalleryState extends State<ColorGallery> {
     widget.prefs.saveColorIndex(index);
     widget.colorWatcher.setColor(index);
     prefs.saveColorIndex(index);
+
     Future.delayed(const Duration(milliseconds: 1000), () {
-      Navigator.of(context).pop();
+      Navigator.of(context).pop(index);
     });
   }
 
@@ -117,7 +118,7 @@ class ColorGalleryState extends State<ColorGallery> {
                                 value: 0,
                                 groupValue: groupValue,
                                 onChanged: (c) {
-                                  pp('on DARK radio changed c:$c');
+                                  ppx('on DARK radio changed c:$c');
                                   _setMode(c!);
                                 },
                                 child: const Text('Dark Mode')),
@@ -125,7 +126,7 @@ class ColorGalleryState extends State<ColorGallery> {
                                 value: 1,
                                 groupValue: groupValue,
                                 onChanged: (c) {
-                                  pp('on LIGHT radio changed c:$c');
+                                  ppx('on LIGHT radio changed c:$c');
                                   _setMode(c!);
                                 },
                                 child: const Text('Light Mode')),
@@ -144,7 +145,7 @@ class ColorGalleryState extends State<ColorGallery> {
   int groupValue = -1;
 
   void _setMode(int c) {
-    pp('...mode is $c');
+    ppx('...mode is $c');
     if (c == 0) {
       darkLightControl.setDarkMode();
     } else {

@@ -16,7 +16,7 @@ class DioUtil {
 
   Future<dynamic> sendGetRequest(
       String path, Map<String, dynamic> queryParameters) async {
-    pp('$mm Dio starting ...: 🍎🍎🍎 path: $path 🍎🍎');
+    ppx('$mm Dio starting ...: 🍎🍎🍎 path: $path 🍎🍎');
     try {
       Response response;
       // The below request is the same as above.
@@ -27,20 +27,20 @@ class DioUtil {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        pp('$mm Dio network response: 🥬🥬🥬🥬🥬🥬 status code: ${response.statusCode}');
+        ppx('$mm Dio network response: 🥬🥬🥬🥬🥬🥬 status code: ${response.statusCode}');
         return response.data;
       }  else {
         throw Exception('Unable to get data. status code: ${response.statusCode} - ${response.data}');
       }
     } catch (e) {
-      pp('$mm Dio network response: 👿👿👿👿 ERROR: $e');
-      pp(e);
+      ppx('$mm Dio network response: 👿👿👿👿 ERROR: $e');
+      ppx(e);
       rethrow;
     }
   }
 
   Future<dynamic> sendPostRequest(String path, dynamic body) async {
-    pp('$mm Dio sendPostRequest ...: 🍎🍎🍎 path: $path 🍎🍎');
+    ppx('$mm Dio sendPostRequest ...: 🍎🍎🍎 path: $path 🍎🍎');
     try {
       Response response;
       response = await dio
@@ -57,14 +57,14 @@ class DioUtil {
           )
           .timeout(const Duration(seconds: 300))
           .catchError((error, stackTrace) {
-            pp('$mm Error occurred during the POST request: $error');
+            ppx('$mm Error occurred during the POST request: $error');
           });
-      pp('$mm .... network POST response, 💚status code: ${response.statusCode} 💚💚');
+      ppx('$mm .... network POST response, 💚status code: ${response.statusCode} 💚💚');
       return response.data;
     } catch (e) {
-      pp('$mm .... network POST error response, '
+      ppx('$mm .... network POST error response, '
           '👿👿👿👿 $e 👿👿👿👿');
-      pp(e);
+      ppx(e);
       rethrow;
     }
   }

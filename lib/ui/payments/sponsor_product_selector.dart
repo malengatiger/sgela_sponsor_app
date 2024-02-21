@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:sgela_sponsor_app/data/branding.dart';
-import 'package:sgela_sponsor_app/data/country.dart';
-import 'package:sgela_sponsor_app/data/organization.dart';
-import 'package:sgela_sponsor_app/data/sponsor_product.dart' as sp;
-import 'package:sgela_sponsor_app/services/firestore_service.dart';
+import 'package:sgela_services/data/branding.dart';
+import 'package:sgela_services/data/country.dart';
+import 'package:sgela_services/data/organization.dart';
+import 'package:sgela_services/data/sponsor_product.dart' as sp;
+import 'package:sgela_sponsor_app/services/firestore_service_sponsor.dart';
 import 'package:sgela_sponsor_app/ui/payments/bank_transfer_widget.dart';
 import 'package:sgela_sponsor_app/ui/payments/credit_card_widget.dart';
 import 'package:sgela_sponsor_app/ui/payments/e_wallet_widget.dart';
@@ -32,7 +32,7 @@ class SponsorProductSelectorState extends State<SponsorProductSelector>
 
   List<sp.SponsorProduct> sponsorProducts = [];
   FirestoreService firestoreService = GetIt.instance<FirestoreService>();
-  Prefs prefs = GetIt.instance<Prefs>();
+  SponsorPrefs prefs = GetIt.instance<SponsorPrefs>();
   static const mm = '🔵🔵🔵🔵🔵🔵🔵🔵 SponsorProductSelector 🔵🔵';
 
   Country? country;
@@ -77,7 +77,7 @@ class SponsorProductSelectorState extends State<SponsorProductSelector>
         builder: (_) {
           return AlertDialog(
             content: PaymentTypeChooser(onPaymentTypeSelected: (type) {
-              pp('$mm .... onPaymentTypeSelected: $type');
+              ppx('$mm .... onPaymentTypeSelected: $type');
               setState(() {
                 selectedPaymentType = type;
               });
@@ -89,7 +89,7 @@ class SponsorProductSelectorState extends State<SponsorProductSelector>
   }
 
   _navigateToPaymentTypeWidget(sp.SponsorProduct sponsorProduct) {
-    pp('$mm ... _navigateToPaymentTypeWidget ...');
+    ppx('$mm ... _navigateToPaymentTypeWidget ...');
 
     switch (selectedPaymentType) {
       case Constants.googlePay:

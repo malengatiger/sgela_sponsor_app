@@ -34,14 +34,14 @@ class _PaymentWebViewState extends State<PaymentWebView> {
             // Update loading bar.
           },
           onPageStarted: (String url) {
-            pp('$mm ... onPageStarted ... url: $url');
+            ppx('$mm ... onPageStarted ... url: $url');
           },
           onPageFinished: (String url) {
-            pp('$mm ... onPageFinished... url: $url');
+            ppx('$mm ... onPageFinished... url: $url');
             //Navigator.of(context).pop(true);
           },
           onWebResourceError: (WebResourceError error) {
-            pp('$mm ... onWebResourceError ... error: ${error.description}');
+            ppx('$mm ... onWebResourceError ... error: ${error.description}');
             Navigator.of(context).pop(false);
           },
           onNavigationRequest: (NavigationRequest request) {

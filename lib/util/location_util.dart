@@ -3,21 +3,21 @@ import 'dart:collection';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
-import '../data/country.dart';
+import 'package:sgela_services/data/country.dart';
 import 'functions.dart';
 
 class LocationUtil {
-  static const mm = '🔵🔵🔵🔵LocationUtil: 🔵🔵';
+  static const mm = '😎😎😎😎LocationUtil: 😎😎';
 
   static Future<String?> getCountryName() async {
-    pp('$mm getCountryName .... ');
+    ppx('$mm getCountryName .... ');
     var ps = await Permission.location.request();
     if (ps.isDenied) {
-      pp('$mm getCountryName .... location permission denied');
+      ppx('$mm getCountryName .... location permission denied');
       return '';
     }
     if (ps.isGranted) {
-      pp('$mm getCountryName .... location permission granted');
+      ppx('$mm getCountryName .... location permission granted');
       Position position = await getCurrentLocation();
 
     }
@@ -25,13 +25,13 @@ class LocationUtil {
   }
 
   static Future<Placemark?> findNearestPlace() async {
-    pp('$mm ... findNearestPlace ....');
+    ppx('$mm ... findNearestPlace ....');
 
     Position position = await getCurrentLocation();
     List<Placemark> placeMarks = await placemarkFromCoordinates(
         position.latitude, position.longitude);
     for (var value in placeMarks) {
-      pp('$mm placeMark: .... 🔵street: ${value.street}, '
+      ppx('$mm placeMark: .... 🔵street: ${value.street}, '
           '🔵area: ${value.administrativeArea}, 🔵country: ${value.country}');
 
     }
@@ -54,10 +54,10 @@ class LocationUtil {
      keys.sort();
      for (var key in keys) {
        var country = hash[key];
-       pp('$mm country: .... found: ${country!.name}');
+       ppx('$mm country: .... found: ${country!.name}');
      }
      Country country = hash[keys.first]!;
-    pp('$mm findNearestCountry: .... found: ${country.name}');
+    ppx('$mm findNearestCountry: .... found: ${country.name}');
     return country;
 
   }
