@@ -261,7 +261,7 @@ class DashboardState extends State<Dashboard>
                                   onPressed: () {
                                     _navigateToBrandUpload();
                                   },
-                                  icon: Icon(Icons.upload,
+                                  icon: Icon(Icons.art_track,
                                       color: Theme.of(context).primaryColor),
                                   label: Padding(
                                     padding: const EdgeInsets.all(16.0),
@@ -270,8 +270,8 @@ class DashboardState extends State<Dashboard>
                                       style: myTextStyle(
                                           context,
                                           Theme.of(context).primaryColorLight,
-                                          18,
-                                          FontWeight.bold),
+                                          16,
+                                          FontWeight.normal),
                                     ),
                                   ),
                                 ),
@@ -298,8 +298,8 @@ class DashboardState extends State<Dashboard>
                                       style: myTextStyle(
                                           context,
                                           Theme.of(context).primaryColorLight,
-                                          18,
-                                          FontWeight.bold),
+                                          16,
+                                          FontWeight.normal),
                                     ),
                                   ),
                                 ),
