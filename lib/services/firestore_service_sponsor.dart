@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:get_it/get_it.dart';
 import 'package:sgela_services/data/branding.dart';
 import 'package:sgela_services/data/city.dart';
 import 'package:sgela_services/data/country.dart';
@@ -10,23 +9,21 @@ import 'package:sgela_services/data/pricing.dart';
 import 'package:sgela_services/data/sponsor_product.dart';
 import 'package:sgela_services/data/sponsoree.dart';
 import 'package:sgela_services/data/subscription.dart';
-import 'package:sgela_services/sgela_util/prefs.dart';
-import 'package:sgela_sponsor_app/util/prefs.dart';
+import 'package:get_it/get_it.dart';
 
 import '../util/functions.dart';
 import '../util/location_util.dart';
+import '../util/sponsor_prefs.dart';
 
 class FirestoreService {
   final FirebaseFirestore firebaseFirestore;
   static const mm = '🌀🌀🌀🌀🌀FirestoreService 🌀';
 
-  final Prefs prefs;
 
-  FirestoreService(this.firebaseFirestore, this.prefs) {
+  FirestoreService(this.firebaseFirestore) {
     firebaseFirestore.settings = const Settings(
       persistenceEnabled: true,
     );
-    getCountries();
   }
 
   List<Country> countries = [];
@@ -55,7 +52,7 @@ class FirestoreService {
   Future<Subscription?> addSubscription(Subscription subscription) async {
     ppx('$mm addSubscription to be added to database: ${subscription.toJson()}');
 
-    subscription.id = generateUniqueKey();
+    subscription.id = DateTime.now().millisecondsSinceEpoch;
     var colRef = firebaseFirestore.collection('Subscription');
     var docRef = await colRef.add(subscription.toJson());
     var v = await docRef.get();
@@ -70,6 +67,8 @@ class FirestoreService {
   List<SponsorProduct> sponsorProducts = [];
 
   Future<List<SponsorProduct>> getSponsorProducts(bool refresh) async {
+    var sponsorPrefs = GetIt.instance<SponsorPrefs>();
+
     var country = await getLocalCountry();
     if (refresh) {
       if (country != null) {
@@ -102,10 +101,8 @@ class FirestoreService {
   }
 
   Future<List<Country>> getCountries() async {
-    countries = prefs.getCountries();
-    if (countries.isNotEmpty) {
-      return countries;
-    }
+    var sponsorPrefs = GetIt.instance<SponsorPrefs>();
+
     countries.clear();
     ppx('$mm ... get countries from Firestore ...');
 
@@ -114,7 +111,7 @@ class FirestoreService {
       countries.add(Country.fromJson(snap.data()));
     }
     ppx('$mm ... countries found in Firestore: ${countries.length}');
-    prefs.saveCountries(countries);
+    sponsorPrefs.saveCountries(countries);
     getLocalCountry();
     return countries;
   }
@@ -194,6 +191,8 @@ class FirestoreService {
   }
 
   Future<List<Branding>> getBranding(int organizationId, bool refresh) async {
+    var sponsorPrefs = GetIt.instance<SponsorPrefs>();
+
     if (refresh) {
       ppx('$mm ... get branding from Firestore ... organizationId: $organizationId');
       var qs = await firebaseFirestore
@@ -206,11 +205,11 @@ class FirestoreService {
       }
       ppx('$mm ... getBranding: brandings found: ${brandings.length}');
       brandings.sort((a, b) => b.date!.compareTo(a.date!));
-      prefs.saveBrandings(brandings);
+      sponsorPrefs.saveBrandings(brandings);
       return brandings;
     }
 
-    brandings = prefs.getBrandings();
+    // brandings = prefs.getBrandings();
     return brandings;
   }
 
@@ -262,9 +261,8 @@ class FirestoreService {
     return subs;
   }
 
-  SponsorPrefs sponsorPrefs = GetIt.instance<SponsorPrefs>();
-
   Future<List<OrgUser>> getUsers(int organizationId, bool refresh) async {
+    var sponsorPrefs = GetIt.instance<SponsorPrefs>();
     if (refresh) {
       // ppx('$mm ... get users from Firestore ... organizationId: $organizationId');
       var qs = await firebaseFirestore
@@ -280,7 +278,7 @@ class FirestoreService {
       sponsorPrefs.saveUsers(users);
       return users;
     }
-    //users = prefs.getUsers();
+    users = sponsorPrefs.getUsers();
     return users;
   }
 

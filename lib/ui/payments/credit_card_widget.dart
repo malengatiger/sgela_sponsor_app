@@ -12,7 +12,7 @@ import 'package:sgela_sponsor_app/util/Constants.dart';
 import 'package:sgela_sponsor_app/util/environment.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
 import 'package:sgela_sponsor_app/util/navigation_util.dart';
-import 'package:sgela_sponsor_app/util/prefs.dart';
+import 'package:sgela_sponsor_app/util/sponsor_prefs.dart';
 
 class CreditCardWidget extends StatefulWidget {
   const CreditCardWidget(
@@ -91,19 +91,19 @@ class CreditCardWidgetState extends State<CreditCardWidget>
       var now = DateTime.now().millisecondsSinceEpoch ~/ 1000 + (60 * 20);
       var checkOutRequest = CheckoutRequest(
           amount.toInt(),
-          ChatbotEnvironment.getPaymentCompleteUrl(),
+          SponsorsEnvironment.getPaymentCompleteUrl(),
           country!.iso2!,
           paymentMethod!.currencies.first,
           null,
-          ChatbotEnvironment.getPaymentErrorUrl(),
+          SponsorsEnvironment.getPaymentErrorUrl(),
           ref,
           true,
           'en',
           null,
           [paymentMethod!.type!],
           now,
-          ChatbotEnvironment.getCheckoutCancelUrl(),
-          ChatbotEnvironment.getCheckoutCompleteUrl(),
+          SponsorsEnvironment.getCheckoutCancelUrl(),
+          SponsorsEnvironment.getCheckoutCompleteUrl(),
           []);
 
       ppx('$mm ... sending checkOut request: ${checkOutRequest.toJson()}');

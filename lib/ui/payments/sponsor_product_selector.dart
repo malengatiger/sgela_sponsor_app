@@ -6,6 +6,7 @@ import 'package:sgela_services/data/branding.dart';
 import 'package:sgela_services/data/country.dart';
 import 'package:sgela_services/data/organization.dart';
 import 'package:sgela_services/data/sponsor_product.dart' as sp;
+import 'package:sgela_shared_widgets/widgets/org_logo_widget.dart';
 import 'package:sgela_sponsor_app/services/firestore_service_sponsor.dart';
 import 'package:sgela_sponsor_app/ui/payments/bank_transfer_widget.dart';
 import 'package:sgela_sponsor_app/ui/payments/credit_card_widget.dart';
@@ -13,11 +14,10 @@ import 'package:sgela_sponsor_app/ui/payments/e_wallet_widget.dart';
 import 'package:sgela_sponsor_app/ui/payments/google-apple_pay_widget.dart';
 import 'package:sgela_sponsor_app/ui/payments/pay_pal_widget.dart';
 import 'package:sgela_sponsor_app/ui/payments/payment_type_chooser.dart';
-import 'package:sgela_sponsor_app/ui/widgets/org_logo_widget.dart';
 import 'package:sgela_sponsor_app/util/Constants.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
 import 'package:sgela_sponsor_app/util/navigation_util.dart';
-import 'package:sgela_sponsor_app/util/prefs.dart';
+import 'package:sgela_sponsor_app/util/sponsor_prefs.dart';
 
 class SponsorProductSelector extends StatefulWidget {
   const SponsorProductSelector({super.key});

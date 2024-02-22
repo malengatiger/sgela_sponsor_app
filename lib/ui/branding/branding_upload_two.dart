@@ -7,16 +7,18 @@ import 'package:get_it/get_it.dart';
 import 'package:sgela_services/data/branding.dart';
 import 'package:sgela_services/data/organization.dart';
 import 'package:sgela_services/sgela_util/dark_light_control.dart';
+import 'package:sgela_shared_widgets/util/widget_prefs.dart';
+import 'package:sgela_shared_widgets/widgets/busy_indicator.dart';
+import 'package:sgela_shared_widgets/widgets/org_logo_widget.dart';
+import 'package:sgela_shared_widgets/widgets/color_gallery.dart';
+
 import 'package:sgela_sponsor_app/services/repository.dart';
-import 'package:sgela_sponsor_app/ui/widgets/color_gallery.dart';
-import 'package:sgela_sponsor_app/ui/widgets/org_logo_widget.dart';
 import 'package:sgela_sponsor_app/util/navigation_util.dart';
-import 'package:sgela_sponsor_app/util/prefs.dart';
+import 'package:sgela_sponsor_app/util/sponsor_prefs.dart';
 import 'package:sgela_sponsor_app/util/registration_stream_handler.dart';
 
 import '../../services/firestore_service_sponsor.dart';
 import '../../util/functions.dart';
-import '../busy_indicator.dart';
 
 class BrandingUploadTwo extends StatefulWidget {
   const BrandingUploadTwo(
@@ -35,18 +37,20 @@ class BrandingUploadTwo extends StatefulWidget {
 }
 
 class _BrandingUploadTwoState extends State<BrandingUploadTwo> {
-  final TextEditingController taglineEditingController =
+   TextEditingController taglineController =
       TextEditingController();
-  final TextEditingController linkEditingController = TextEditingController();
+   TextEditingController splashUrlController = TextEditingController();
 
-  final TextEditingController splashEditingController = TextEditingController(text: '5');
+   TextEditingController splashTimeController = TextEditingController(text: '5');
 
   static const mm = '🥦🥦🥦🥦🥦🥦 BrandingUploadTwo 🔵🔵';
   FirestoreService firestoreService = GetIt.instance<FirestoreService>();
 
   RepositoryService repositoryService = GetIt.instance<RepositoryService>();
   SponsorPrefs prefs = GetIt.instance<SponsorPrefs>();
-  RegistrationStreamHandler handler = GetIt.instance<RegistrationStreamHandler>();
+   WidgetPrefs widgetPrefs = GetIt.instance<WidgetPrefs>();
+
+   RegistrationStreamHandler handler = GetIt.instance<RegistrationStreamHandler>();
   late StreamSubscription<bool> regSubscription;
 
 
@@ -65,17 +69,20 @@ class _BrandingUploadTwoState extends State<BrandingUploadTwo> {
   @override
   void initState() {
     super.initState();
-    _getLogoAndBrandings();
+    _getLogoAndBrandings(true);
   }
 
-  _getLogoAndBrandings() async {
-    ppx('$mm ... _getLogoAndBrandings starting ...');
+  _getLogoAndBrandings(bool refresh) async {
+    ppx('$mm ... _getLogoAndBrandings starting ... refresh: $refresh');
 
     logoUrl = prefs.getLogoUrl();
     brandings =
-        await firestoreService.getBranding(widget.organization.id!, false);
+        await firestoreService.getBranding(widget.organization.id!, refresh);
     if (brandings.isNotEmpty) {
       branding = brandings.first;
+      splashUrlController = TextEditingController(text: branding?.splashUrl!);
+      taglineController = TextEditingController(text: branding?.tagLine!);
+      splashTimeController = TextEditingController(text: '${branding?.splashTimeInSeconds!}');
       logoUrl = branding!.logoUrl;
       colorIndex =
           branding!.colorIndex == null ? colorIndex : branding!.colorIndex!;
@@ -99,35 +106,36 @@ class _BrandingUploadTwoState extends State<BrandingUploadTwo> {
         }
 
         branding = brandings.first;
-        branding!.splashTimeInSeconds = splashEditingController.text.isNotEmpty
-            ? int.parse(splashEditingController.text)
+        branding!.splashTimeInSeconds = splashTimeController.text.isNotEmpty
+            ? int.parse(splashTimeController.text)
             : branding!.splashTimeInSeconds == null
                 ? 7
                 : branding!.splashTimeInSeconds!;
-        branding!.tagLine = taglineEditingController.text.isEmpty
+        branding!.tagLine = taglineController.text.isEmpty
             ? branding!.tagLine
-            : taglineEditingController.text;
-        branding!.organizationUrl = linkEditingController.text.isEmpty
+            : taglineController.text;
+        branding!.organizationUrl = splashUrlController.text.isEmpty
             ? branding!.organizationUrl
-            : '$prefix${linkEditingController.text}';
+            : '$prefix${splashUrlController.text}';
         branding!.colorIndex = colorIndex;
         branding = await repositoryService.uploadBrandingWithNoFiles(branding!);
       } else {
         branding = await repositoryService.uploadBranding(
             organizationId: widget.organization.id!,
             organizationName: widget.organization.name!,
-            tagLine: taglineEditingController.text.isEmpty
+            tagLine: taglineController.text.isEmpty
                 ? ''
-                : taglineEditingController.text,
-            orgUrl: linkEditingController.text.isEmpty
+                : taglineController.text,
+            orgUrl: splashUrlController.text.isEmpty
                 ? ''
-                : '$prefix${linkEditingController.text}',
+                : '$prefix${splashUrlController.text}',
             logoFile: widget.logoFile,
             splashFile: widget.splashFile,
             colorIndex: colorIndex,
-            splashTimeInSeconds: int.parse(splashEditingController.text));
+            splashTimeInSeconds: int.parse(splashTimeController.text));
       }
       ppx('$mm ... _onSubmitBranding completed! ${branding!.toJson()}...');
+      await _getLogoAndBrandings(true);
       handler.setCompleted();
       if (mounted) {
         Navigator.of(context).pop(true);
@@ -153,7 +161,7 @@ class _BrandingUploadTwoState extends State<BrandingUploadTwo> {
     _dismissKeyboard(context);
     var res = await NavigationUtils.navigateToPage(
         context: context,
-        widget: ColorGallery(prefs: prefs, colorWatcher: colorWatcher));
+        widget: ColorGallery(prefs: widgetPrefs, colorWatcher: colorWatcher));
     if (res is int) {
       setState(() {
         colorIndex = res;
@@ -207,7 +215,7 @@ class _BrandingUploadTwoState extends State<BrandingUploadTwo> {
                   ),
                   gapH8,
                   TextField(
-                    controller: taglineEditingController,
+                    controller: taglineController,
                     minLines: 2,
                     maxLines: 3,
                     decoration: InputDecoration(
@@ -220,7 +228,7 @@ class _BrandingUploadTwoState extends State<BrandingUploadTwo> {
                   ),
                   gapH16,
                   TextField(
-                    controller: linkEditingController,
+                    controller: splashUrlController,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
                         border: const OutlineInputBorder(),
@@ -230,7 +238,7 @@ class _BrandingUploadTwoState extends State<BrandingUploadTwo> {
                   ),
                   gapH16,
                   TextField(
-                    controller: splashEditingController,
+                    controller: splashTimeController,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                         border: const OutlineInputBorder(),

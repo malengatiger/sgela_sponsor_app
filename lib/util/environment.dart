@@ -3,7 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart' as dot;
 
 import 'functions.dart';
 
-class ChatbotEnvironment {
+class SponsorsEnvironment {
   //💙Skunk backend -
 
   static const _ipNormal = '192.168.86.242';
@@ -12,10 +12,21 @@ class ChatbotEnvironment {
   static const _devSkunkUrl = 'http://${isFibreDown? _ipFibreDown: _ipNormal}:8080/skunk-service/';
   static const _prodSkunkUrl = 'https://skunkworks-backend-service-knzs6eczwq-nw.a.run.app/';
 
+  //REV CAT
+  static const _devRevenueGoogleKey1 = 'WNhiHknjOqKjEHxAh';
+  static const _devRevenueGoogleKey0 = 'goog_PizWlEGzms';
+  static String getRevenueGoogleKey() {
+    return '$_devRevenueGoogleKey0$_devRevenueGoogleKey1';
+  }
+
+  static const _devRevenueAppleKey1 = 'YQWjxspVrBnGes';
+  static const _devRevenueAppleKey0 = 'appl_DwggzCvznLfPp';
+  static String getRevenueAppleKey() {
+    return '$_devRevenueAppleKey0$_devRevenueAppleKey1';
+  }
   //RAPYD SANDBOX
   static const _devRapydAccessKey1 = 'AE0D13504D1AC1D5DF7E';
   static const _devRapydAccessKey0 = 'rak_';
-//rsk_867e77cc057d7ec7daec29bd2e64d1dc8956fdc77
   static const _devRapydSecretKey1 = 'f08411c7575df54cb03ab648cda6dec47056466';
   static const _devRapydSecretKey0 = 'rsk_867e77cc057d7ec7daec29bd2e64d1dc8956fdc77';
   static const String _devRapydUrl = 'https://sandboxapi.rapyd.net/';

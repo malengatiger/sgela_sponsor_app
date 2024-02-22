@@ -8,14 +8,14 @@ import 'package:sgela_services/data/holder.dart';
 import 'package:sgela_services/data/org_user.dart';
 import 'package:sgela_services/data/organization.dart';
 import 'package:sgela_services/services/auth_service.dart';
+import 'package:sgela_shared_widgets/widgets/busy_indicator.dart';
 import 'package:sgela_sponsor_app/services/rapyd_payment_service.dart';
 import 'package:sgela_sponsor_app/services/repository.dart';
 import 'package:sgela_sponsor_app/ui/country_city_selector.dart';
 import 'package:sgela_sponsor_app/util/navigation_util.dart';
 import '../../util/functions.dart';
-import '../../util/prefs.dart';
+import '../../util/sponsor_prefs.dart';
 import '../../util/registration_stream_handler.dart';
-import '../busy_indicator.dart';
 
 class RegistrationFormFinal extends StatefulWidget {
   const RegistrationFormFinal({super.key, required this.variables});

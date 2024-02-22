@@ -10,7 +10,7 @@ import 'package:sgela_sponsor_app/services/rapyd_payment_service.dart';
 import 'package:sgela_sponsor_app/ui/payments/payment_web_view.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
 import 'package:sgela_sponsor_app/util/navigation_util.dart';
-import 'package:sgela_sponsor_app/util/prefs.dart';
+import 'package:sgela_sponsor_app/util/sponsor_prefs.dart';
 
 
 class PaymentController extends StatefulWidget {

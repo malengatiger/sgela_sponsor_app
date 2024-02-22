@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:sgela_services/sgela_util/prefs.dart';
 import 'package:sgela_sponsor_app/services/firestore_service_sponsor.dart';
 import 'package:sgela_sponsor_app/services/rapyd_payment_service.dart';
-import 'package:sgela_sponsor_app/util/prefs.dart';
+import 'package:sgela_sponsor_app/util/sponsor_prefs.dart';
 
 import '../util/dio_util.dart';
 import '../util/environment.dart';
@@ -30,11 +30,11 @@ class RepositoryService {
     this.firestoreService,
   );
 
-  final Prefs prefs;
+  final SponsorPrefs prefs;
   final RapydPaymentService paymentService;
 
   Future<Organization?> getSgelaOrganization() async {
-    String prefix = ChatbotEnvironment.getSkunkUrl();
+    String prefix = SponsorsEnvironment.getSkunkUrl();
     String url = '${prefix}organizations/getSgelaOrganization';
     var result = await dioUtil.sendGetRequest(url, {});
     ppx('$mm ... response from call: $result');
@@ -43,7 +43,7 @@ class RepositoryService {
   }
 
   Future<Organization?> registerOrganization(Organization organization) async {
-    String prefix = ChatbotEnvironment.getSkunkUrl();
+    String prefix = SponsorsEnvironment.getSkunkUrl();
     String url = '${prefix}organizations/addOrganization';
     ppx('$mm ...registerOrganization: calling: $url');
 
@@ -60,7 +60,7 @@ class RepositoryService {
     ppx('$mm ... uploadBrandingWithNoFiles ....');
 
     try {
-      var prefix = ChatbotEnvironment.getSkunkUrl();
+      var prefix = SponsorsEnvironment.getSkunkUrl();
       var url = '${prefix}organizations/uploadBrandingWithNoFiles';
       ppx('$mm ... uploadBrandingWithNoFiles calling: $url');
 
@@ -98,7 +98,7 @@ class RepositoryService {
     ppx('$mm Logo File: ${((await logoFile?.length())!/1024/1024).toStringAsFixed(2)} MB bytes');
     ppx('$mm Splash File: ${((await splashFile?.length())!/1024/1024).toStringAsFixed(2)} MB bytes');
     try {
-      var prefix = ChatbotEnvironment.getSkunkUrl();
+      var prefix = SponsorsEnvironment.getSkunkUrl();
       var url = '';
       if (logoFile != null) {
         url = '${prefix}organizations/uploadBrandingWithLogo';

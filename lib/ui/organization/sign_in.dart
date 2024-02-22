@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sgela_services/services/auth_service.dart';
+import 'package:sgela_shared_widgets/widgets/busy_indicator.dart';
 import 'package:sgela_sponsor_app/services/firestore_service_sponsor.dart';
-import 'package:sgela_sponsor_app/ui/busy_indicator.dart';
 import 'package:sgela_sponsor_app/ui/dashboard.dart';
 import 'package:sgela_sponsor_app/util/navigation_util.dart';
 

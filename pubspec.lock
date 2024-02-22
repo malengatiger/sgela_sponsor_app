@@ -1629,6 +1629,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.3"
+  purchases_flutter:
+    dependency: "direct main"
+    description:
+      name: purchases_flutter
+      sha256: f052ad084fa3befcd6831b9adc48098c5ea4e9c2fa8e02c5d5a119e594562fdc
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.21.0"
   qr:
     dependency: transitive
     description:
@@ -1684,6 +1692,13 @@ packages:
       relative: true
     source: path
     version: "1.0.0"
+  sgela_shared_widgets:
+    dependency: "direct main"
+    description:
+      path: "../sgela_shared_widgets"
+      relative: true
+    source: path
+    version: "0.0.1"
   share_plus:
     dependency: transitive
     description:

@@ -14,9 +14,14 @@ dependencies:
 
   sgela_services:
     path: ../sgela_services
+
+  sgela_shared_widgets:
+    path: ../sgela_shared_widgets
+
   shared_preferences: ^2.2.2
   firebase_core: ^2.25.4
   firebase_auth: ^4.17.5
+  purchases_flutter: ^6.21.0
 
 
 dev_dependencies:

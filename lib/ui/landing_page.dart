@@ -6,14 +6,14 @@ import 'package:get_it/get_it.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sgela_services/data/branding.dart';
 import 'package:sgela_services/data/organization.dart';
+import 'package:sgela_shared_widgets/widgets/org_logo_widget.dart';
 import 'package:sgela_sponsor_app/services/firestore_service_sponsor.dart';
 import 'package:sgela_sponsor_app/ui/dashboard.dart';
 import 'package:sgela_sponsor_app/ui/organization/registration_form.dart';
 import 'package:sgela_sponsor_app/ui/organization/sign_in.dart';
-import 'package:sgela_sponsor_app/ui/widgets/org_logo_widget.dart';
 import 'package:sgela_sponsor_app/util/environment.dart';
 import 'package:sgela_sponsor_app/util/navigation_util.dart';
-import 'package:sgela_sponsor_app/util/prefs.dart';
+import 'package:sgela_sponsor_app/util/sponsor_prefs.dart';
 import 'package:sgela_sponsor_app/util/registration_stream_handler.dart';
 
 import '../util/functions.dart';
@@ -94,8 +94,8 @@ class LandingPageState extends State<LandingPage>
 
   @override
   Widget build(BuildContext context) {
-    var logoUrl = ChatbotEnvironment.sgelaLogoUrl;
-    var splashUrl = ChatbotEnvironment.sgelaSplashUrl;
+    var logoUrl = SponsorsEnvironment.sgelaLogoUrl;
+    var splashUrl = SponsorsEnvironment.sgelaSplashUrl;
     if (_showDashboard) {
       return Dashboard(organization: organization!);
     }

@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:sgela_services/data/organization.dart';
 import 'package:sgela_sponsor_app/util/environment.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
-import 'package:sgela_sponsor_app/util/prefs.dart';
+import 'package:sgela_sponsor_app/util/sponsor_prefs.dart';
 
 
 class RapydServiceOld {
@@ -26,9 +26,9 @@ class RapydServiceOld {
   Organization? organization;
 
   _init() async {
-    _accessKey = ChatbotEnvironment.getRapydAccessKey();
-    _secretKey = ChatbotEnvironment.getRapydSecretKey();
-    _baseUrl = ChatbotEnvironment.getRapydUrl();
+    _accessKey = SponsorsEnvironment.getRapydAccessKey();
+    _secretKey = SponsorsEnvironment.getRapydSecretKey();
+    _baseUrl = SponsorsEnvironment.getRapydUrl();
     organization = prefs.getOrganization();
   }
 

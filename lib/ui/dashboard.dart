@@ -10,14 +10,16 @@ import 'package:sgela_services/data/org_user.dart';
 import 'package:sgela_services/data/organization.dart';
 import 'package:sgela_services/data/sponsor_product.dart';
 import 'package:sgela_services/sgela_util/dark_light_control.dart';
+import 'package:sgela_shared_widgets/util/widget_prefs.dart';
+import 'package:sgela_shared_widgets/widgets/color_gallery.dart';
+import 'package:sgela_shared_widgets/widgets/org_logo_widget.dart';
 import 'package:sgela_sponsor_app/ui/branding/branding_upload_one.dart';
 import 'package:sgela_sponsor_app/ui/organization/organisation_user_add.dart';
 import 'package:sgela_sponsor_app/ui/payments/sponsor_product_selector.dart';
-import 'package:sgela_sponsor_app/ui/widgets/color_gallery.dart';
-import 'package:sgela_sponsor_app/ui/widgets/org_logo_widget.dart';
+import 'package:sgela_sponsor_app/ui/widgets/sponsored_by.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
 import 'package:sgela_sponsor_app/util/navigation_util.dart';
-import 'package:sgela_sponsor_app/util/prefs.dart';
+import 'package:sgela_sponsor_app/util/sponsor_prefs.dart';
 import 'package:sgela_sponsor_app/util/registration_stream_handler.dart';
 
 import '../services/firestore_service_sponsor.dart';
@@ -37,6 +39,8 @@ class DashboardState extends State<Dashboard>
   static const mm = '🍔🍔🍔🍔 Dashboard 🍔🍔';
 
   SponsorPrefs prefs = GetIt.instance<SponsorPrefs>();
+  WidgetPrefs widgetPrefs = GetIt.instance<WidgetPrefs>();
+
   ColorWatcher colorWatcher = GetIt.instance<ColorWatcher>();
   FirestoreService firestoreService = GetIt.instance<FirestoreService>();
 
@@ -118,7 +122,7 @@ class DashboardState extends State<Dashboard>
   _navigateToColorPicker() {
     NavigationUtils.navigateToPage(
         context: context,
-        widget: ColorGallery(prefs: prefs, colorWatcher: colorWatcher));
+        widget: ColorGallery(prefs: widgetPrefs, colorWatcher: colorWatcher));
   }
 
   _navigateToAddPerson() async {
@@ -163,7 +167,7 @@ class DashboardState extends State<Dashboard>
         title: OrgLogoWidget(
           branding: branding,
           logoUrl: logoUrl,
-          height: 48,
+          height: 32,
         ),
         actions: [
           IconButton(
@@ -308,6 +312,8 @@ class DashboardState extends State<Dashboard>
                         ),
                         const SizedBox(
                           height: 8,
+                        ),
+                        const SponsoredBy(height: 32,
                         ),
                       ],
                     ),

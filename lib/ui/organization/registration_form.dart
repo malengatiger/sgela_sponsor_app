@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:sgela_shared_widgets/widgets/org_logo_widget.dart';
 import 'package:sgela_sponsor_app/ui/organization/registration_form2.dart';
-import 'package:sgela_sponsor_app/ui/widgets/org_logo_widget.dart';
 import 'package:sgela_sponsor_app/util/navigation_util.dart';
 import 'package:sgela_sponsor_app/util/registration_stream_handler.dart';
 

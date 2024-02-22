@@ -3,7 +3,7 @@ import 'package:sgela_services/sgela_util/prefs.dart';
 import 'package:sgela_sponsor_app/util/dio_util.dart';
 import 'package:sgela_sponsor_app/util/environment.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
-import 'package:sgela_sponsor_app/util/prefs.dart';
+import 'package:sgela_sponsor_app/util/sponsor_prefs.dart';
 import 'package:sgela_services/data/holder.dart';
 class RapydPaymentService {
   final DioUtil dioUtil;
@@ -11,9 +11,9 @@ class RapydPaymentService {
 
   RapydPaymentService(this.dioUtil, this.prefs);
 
-  final Prefs prefs;
+  final SponsorPrefs prefs;
 
-  var prefix = ChatbotEnvironment.getGeminiUrl();
+  var prefix = SponsorsEnvironment.getGeminiUrl();
 
   Future<RequiredFields> getPaymentMethodRequiredFields(
       String type) async {
@@ -59,7 +59,7 @@ class RapydPaymentService {
   Future<List<PaymentMethod>> getCountryPaymentMethods(
       String countryCode) async {
     ppx('$mm ... getCountryPaymentMethods ....');
-    var prefix = ChatbotEnvironment.getGeminiUrl();
+    var prefix = SponsorsEnvironment.getGeminiUrl();
     // var pms = prefs.getPaymentMethods();
     // if (pms.isNotEmpty) {
     //   pp('$mm ... getCountryPaymentMethods .... ${pms.length} found in cache');

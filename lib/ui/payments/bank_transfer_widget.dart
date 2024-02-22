@@ -5,7 +5,7 @@ import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sgela_services/data/country.dart';
 import 'package:sgela_services/data/holder.dart';
 import 'package:sgela_services/data/sponsor_product.dart';
-import 'package:sgela_sponsor_app/ui/busy_indicator.dart';
+import 'package:sgela_shared_widgets/widgets/busy_indicator.dart';
 import 'package:sgela_sponsor_app/ui/payments/payment_web_view.dart';
 import 'package:sgela_sponsor_app/ui/payments/sponsor_product_widget.dart';
 import 'package:sgela_sponsor_app/util/environment.dart';
@@ -13,7 +13,7 @@ import 'package:sgela_sponsor_app/util/environment.dart';
 import '../../services/rapyd_payment_service.dart';
 import '../../util/functions.dart';
 import '../../util/navigation_util.dart';
-import '../../util/prefs.dart';
+import '../../util/sponsor_prefs.dart';
 
 class BankTransferWidget extends StatefulWidget {
   const BankTransferWidget({super.key, required this.sponsorProduct});
@@ -104,19 +104,19 @@ class BankTransferWidgetState extends State<BankTransferWidget>
       var now = DateTime.now().millisecondsSinceEpoch ~/ 1000 + (60 * 20);
       var checkOutRequest = CheckoutRequest(
           amount.toInt(),
-          ChatbotEnvironment.getPaymentCompleteUrl(),
+          SponsorsEnvironment.getPaymentCompleteUrl(),
           country!.iso2!,
           paymentMethod!.currencies.first,
           null,
-          ChatbotEnvironment.getPaymentErrorUrl(),
+          SponsorsEnvironment.getPaymentErrorUrl(),
           ref,
           true,
           'en',
           null,
           [paymentMethod!.type!],
           now,
-          ChatbotEnvironment.getCheckoutCancelUrl(),
-          ChatbotEnvironment.getCheckoutCompleteUrl(),
+          SponsorsEnvironment.getCheckoutCancelUrl(),
+          SponsorsEnvironment.getCheckoutCompleteUrl(),
           []);
 
       ppx('$mm ... sending checkOut request: ${checkOutRequest.toJson()}');

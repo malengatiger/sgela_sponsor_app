@@ -11,7 +11,7 @@ import 'package:sgela_sponsor_app/util/environment.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
 
 import '../../services/firestore_service_sponsor.dart';
-import '../../util/prefs.dart';
+import '../../util/sponsor_prefs.dart';
 
 class BrandingImagesPicker extends StatefulWidget {
   final Function(File) onLogoPicked;
@@ -47,6 +47,7 @@ class BrandingImagesPickerState extends State<BrandingImagesPicker> {
   _getBranding() async {
     logoUrl = prefs.getLogoUrl();
     brandings = await firestoreService.getBranding(widget.organization.id!, false);
+    brandings.sort((a,b) => b.date!.compareTo(a.date!));
     setState(() {});
   }
 
@@ -115,7 +116,7 @@ class BrandingImagesPickerState extends State<BrandingImagesPicker> {
     }
 
     return CachedNetworkImage(
-      imageUrl: ChatbotEnvironment.sgelaLogoUrl,
+      imageUrl: SponsorsEnvironment.sgelaLogoUrl,
       fit: BoxFit.fill,
     );
   }
@@ -159,7 +160,7 @@ class BrandingImagesPickerState extends State<BrandingImagesPicker> {
     }
 
     return CachedNetworkImage(
-      imageUrl: ChatbotEnvironment.sgelaSplashUrl,
+      imageUrl: SponsorsEnvironment.sgelaSplashUrl,
       fit: BoxFit.cover,
     );
   }
@@ -185,7 +186,7 @@ class BrandingImagesPickerState extends State<BrandingImagesPicker> {
                         children: [
                           gapH16,
                           SizedBox(
-                            height: 64,
+                            height: 36,
                             child: _getExistingLogo()
                           ),
                           SizedBox(

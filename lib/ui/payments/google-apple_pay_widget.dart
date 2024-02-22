@@ -8,7 +8,7 @@ import 'package:sgela_services/data/sponsor_product.dart';
 import 'package:sgela_sponsor_app/services/firestore_service_sponsor.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
 
-import '../../util/prefs.dart';
+import '../../util/sponsor_prefs.dart';
 
 class ApplePayWidget extends StatefulWidget {
   const ApplePayWidget({super.key, required this.sponsorProduct});

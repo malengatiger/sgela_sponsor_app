@@ -5,12 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sgela_services/sgela_util/dark_light_control.dart';
 import 'package:sgela_services/sgela_util/prefs.dart';
+import 'package:sgela_shared_widgets/util/styles.dart';
 import 'package:sgela_sponsor_app/services/register_services.dart';
 import 'package:sgela_sponsor_app/ui/landing_page.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
-import 'package:sgela_sponsor_app/util/prefs.dart';
+import 'package:sgela_sponsor_app/util/sponsor_prefs.dart';
 
 import 'firebase_options.dart';
+
+//AppStore Issuer ID: 4dc844a3-50e1-467d-b0d7-3f4a2404d2be sec:kkTiger3Khaya1#
+//apple server notif : https://api.revenuecat.com/v1/incoming-webhooks/apple-server-to-server-notification/tAktvwoyrFCHxaFiRulKIIzJpxXskFgl
 
 const String mx = '🍎 🍎 🍎 main: ';
 ModeAndColor? modeAndColor;
@@ -51,6 +55,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DarkLightControl dlc = GetIt.instance<DarkLightControl>();
+    SponsorPrefs mPrefs = GetIt.instance<SponsorPrefs>();
     return StreamBuilder<ModeAndColor>(
       stream: dlc.darkLightStream,
       builder: (context, snapshot) {
@@ -64,7 +69,7 @@ class MyApp extends StatelessWidget {
           child: MaterialApp(
             title: 'SgelaSponsor',
             debugShowCheckedModeBanner: false,
-            theme: _getTheme(context),
+            theme: _getTheme(context, mPrefs),
             home: const LandingPage(),
           ),
         );
@@ -72,8 +77,7 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  ThemeData _getTheme(BuildContext context )  {
-    Prefs mPrefs = GetIt.instance<Prefs>();
+  ThemeData _getTheme(BuildContext context, SponsorPrefs mPrefs )  {
     var colorIndex = mPrefs.getColorIndex();
     var mode = mPrefs.getMode();
     if (mode == -1) {

@@ -7,7 +7,7 @@ import 'dart:ui';
 
 import 'package:sgela_services/sgela_util/dark_light_control.dart';
 import 'package:sgela_services/sgela_util/functions.dart' as srv;
-import 'package:sgela_sponsor_app/util/prefs.dart';
+import 'package:sgela_sponsor_app/util/sponsor_prefs.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -49,78 +49,6 @@ int generateUniqueKey() {
   return uniqueKey;
 }
 
-final List<Color> _colors = [
-  Colors.red[200]!,
-  Colors.green[200]!,
-  Colors.blue[200]!,
-  Colors.yellow[200]!,
-  Colors.pink[200]!,
-  Colors.teal[200]!,
-  Colors.indigo[200]!,
-  Colors.brown[200]!,
-  Colors.deepPurple[200]!,
-  Colors.amber[200]!,
-  Colors.lightGreen[200]!,
-  Colors.orange[200]!,
-  Colors.cyan[200]!,
-  Colors.red[300]!,
-  Colors.green[300]!,
-  Colors.blue[300]!,
-  Colors.yellow[300]!,
-  Colors.pink[300]!,
-  Colors.teal[300]!,
-  Colors.indigo[300]!,
-  Colors.brown[300]!,
-  Colors.deepPurple[300]!,
-  Colors.amber[300]!,
-  Colors.lightGreen[300]!,
-  Colors.orange[300]!,
-  Colors.cyan[300]!,
-  Colors.red[400]!,
-  Colors.green[400]!,
-  Colors.blue[400]!,
-  Colors.yellow[400]!,
-  Colors.pink[400]!,
-  Colors.teal[400]!,
-  Colors.indigo[400]!,
-  Colors.brown[400]!,
-  Colors.deepPurple[400]!,
-  Colors.amber[400]!,
-  Colors.lightGreen[400]!,
-  Colors.orange[400]!,
-  Colors.cyan[400]!,
-  Colors.grey[600]!,
-  Colors.red,
-  Colors.green,
-  Colors.blue,
-  Colors.yellow,
-  Colors.pink,
-  Colors.teal,
-  Colors.indigo,
-  Colors.brown,
-  Colors.deepPurple,
-  Colors.amber,
-  Colors.lightGreen,
-  Colors.orange,
-  Colors.cyan,
-  Colors.red[700]!,
-  Colors.green[700]!,
-  Colors.blue[700]!,
-  Colors.yellow[700]!,
-  Colors.pink[700]!,
-  Colors.teal[700]!,
-  Colors.indigo[700]!,
-  Colors.brown[700]!,
-  Colors.deepPurple[700]!,
-  Colors.amber[700]!,
-  Colors.lightGreen[700]!,
-  Colors.orange[700]!,
-  Colors.cyan[700]!,
-];
-
-List<Color> getColors() {
-  return _colors;
-}
 // bool isMarkdownFormat(String text) {
 //   RegExp markdownRegex = RegExp(
 //     r'^#|^\*|^\d+\.\s|^\[.*\]\(.*\)|^!\[.*\]\(.*\)|^>\s|^-\s|^\+\s|^=\s|^~\s|^`|^\|',

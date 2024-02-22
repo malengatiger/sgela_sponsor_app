@@ -6,6 +6,7 @@ import 'package:sgela_services/data/holder.dart';
 import 'package:sgela_services/data/org_user.dart';
 import 'package:sgela_services/data/organization.dart';
 import 'package:sgela_services/data/sponsor_product.dart';
+import 'package:sgela_services/sgela_util/functions.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -15,6 +16,30 @@ class SponsorPrefs {
   static const mm = '🍀🍀🍀🍀🍀🍀 Prefs 🍀🍀';
 
   SponsorPrefs(this.sharedPreferences);
+  //
+  saveBrandings(List<Branding> brandings) {
+    List<Map<String, dynamic>> brandingStrings =
+    brandings.map((pm) => pm.toJson()).toList();
+    List<String> brandingJsonStrings =
+    brandingStrings.map((pm) => json.encode(pm)).toList();
+    sharedPreferences.setStringList('brandings', brandingJsonStrings);
+    pp('$mm ... brandings saved OK: ${brandings.length}');
+  }
+
+  // List<Branding> getBrandings() {
+  //   List<String>? brandingJsonStrings =
+  //   sharedPreferences.getStringList('brandings');
+  //   if (brandingJsonStrings != null) {
+  //     List<Branding> brandings = brandingJsonStrings
+  //         .map((pmJson) => Branding.fromJson(json.decode(pmJson)))
+  //         .toList();
+  //     pp('$mm ... brandings retrieved: ${brandings.length}');
+  //
+  //     return brandings;
+  //   } else {
+  //     return [];
+  //   }
+  // }
 
   saveSponsorProducts(List<SponsorProduct> sponsorProducts) {
     List<Map<String, dynamic>> productStrings =

@@ -6,15 +6,13 @@ import 'package:get_it/get_it.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sgela_services/data/branding.dart';
 import 'package:sgela_services/data/organization.dart';
-import 'package:sgela_services/sgela_util/prefs.dart';
 import 'package:sgela_sponsor_app/services/firestore_service_sponsor.dart';
 import 'package:sgela_sponsor_app/ui/branding/branding_images_picker.dart';
 import 'package:sgela_sponsor_app/ui/branding/branding_upload_two.dart';
-import 'package:sgela_sponsor_app/ui/widgets/org_logo_widget.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
 import 'package:sgela_sponsor_app/util/navigation_util.dart';
+import 'package:sgela_shared_widgets/widgets/org_logo_widget.dart';
 
-import '../../util/prefs.dart';
 import '../../util/registration_stream_handler.dart';
 
 class BrandingUploadOne extends StatefulWidget {
@@ -143,8 +141,8 @@ class BrandingUploadOneState extends State<BrandingUploadOne>
       appBar: AppBar(
         title: OrgLogoWidget(
           branding: branding,
-          logoUrl: logoUrl,
-          height: 48,
+          // logoUrl: logoUrl,
+          height: 36,
         ),
       ),
       body: ScreenTypeLayout.builder(
