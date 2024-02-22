@@ -5,10 +5,10 @@ import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sgela_services/data/country.dart';
 import 'package:sgela_services/data/holder.dart';
 import 'package:sgela_services/data/sponsor_product.dart';
+import 'package:sgela_services/sgela_util/sponsor_prefs.dart';
 import 'package:sgela_sponsor_app/services/firestore_service_sponsor.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
 
-import '../../util/sponsor_prefs.dart';
 
 class ApplePayWidget extends StatefulWidget {
   const ApplePayWidget({super.key, required this.sponsorProduct});

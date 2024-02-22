@@ -3,7 +3,7 @@ import 'package:sgela_services/sgela_util/prefs.dart';
 import 'package:sgela_sponsor_app/util/dio_util.dart';
 import 'package:sgela_sponsor_app/util/environment.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
-import 'package:sgela_sponsor_app/util/sponsor_prefs.dart';
+import 'package:sgela_services/sgela_util/sponsor_prefs.dart';
 import 'package:sgela_services/data/holder.dart';
 class RapydPaymentService {
   final DioUtil dioUtil;

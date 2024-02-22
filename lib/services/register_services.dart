@@ -14,7 +14,7 @@ import 'package:sgela_shared_widgets/util/widget_prefs.dart';
 import 'package:sgela_sponsor_app/services/firestore_service_sponsor.dart';
 import 'package:sgela_sponsor_app/services/rapyd_payment_service.dart';
 import 'package:sgela_sponsor_app/services/repository.dart';
-import 'package:sgela_sponsor_app/util/sponsor_prefs.dart';
+import 'package:sgela_services/sgela_util/sponsor_prefs.dart';
 import 'package:sgela_sponsor_app/util/registration_stream_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

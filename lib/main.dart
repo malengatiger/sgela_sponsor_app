@@ -4,12 +4,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sgela_services/sgela_util/dark_light_control.dart';
-import 'package:sgela_services/sgela_util/prefs.dart';
+import 'package:sgela_services/sgela_util/sponsor_prefs.dart';
 import 'package:sgela_shared_widgets/util/styles.dart';
 import 'package:sgela_sponsor_app/services/register_services.dart';
 import 'package:sgela_sponsor_app/ui/landing_page.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
-import 'package:sgela_sponsor_app/util/sponsor_prefs.dart';
 
 import 'firebase_options.dart';
 

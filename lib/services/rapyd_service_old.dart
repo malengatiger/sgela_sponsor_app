@@ -6,9 +6,9 @@ import 'package:crypto/crypto.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:sgela_services/data/organization.dart';
+import 'package:sgela_services/sgela_util/sponsor_prefs.dart';
 import 'package:sgela_sponsor_app/util/environment.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
-import 'package:sgela_sponsor_app/util/sponsor_prefs.dart';
 
 
 class RapydServiceOld {

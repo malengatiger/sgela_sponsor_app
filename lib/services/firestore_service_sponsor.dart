@@ -10,10 +10,10 @@ import 'package:sgela_services/data/sponsor_product.dart';
 import 'package:sgela_services/data/sponsoree.dart';
 import 'package:sgela_services/data/subscription.dart';
 import 'package:get_it/get_it.dart';
+import 'package:sgela_services/sgela_util/sponsor_prefs.dart';
 
 import '../util/functions.dart';
 import '../util/location_util.dart';
-import '../util/sponsor_prefs.dart';
 
 class FirestoreService {
   final FirebaseFirestore firebaseFirestore;

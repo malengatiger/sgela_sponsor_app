@@ -4,10 +4,9 @@ import 'dart:io';
 
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
-import 'package:sgela_services/sgela_util/prefs.dart';
+import 'package:sgela_services/sgela_util/sponsor_prefs.dart';
 import 'package:sgela_sponsor_app/services/firestore_service_sponsor.dart';
 import 'package:sgela_sponsor_app/services/rapyd_payment_service.dart';
-import 'package:sgela_sponsor_app/util/sponsor_prefs.dart';
 
 import '../util/dio_util.dart';
 import '../util/environment.dart';

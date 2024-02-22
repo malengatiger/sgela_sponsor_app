@@ -7,11 +7,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sgela_services/data/branding.dart';
 import 'package:sgela_services/data/organization.dart';
+import 'package:sgela_services/sgela_util/sponsor_prefs.dart';
 import 'package:sgela_sponsor_app/util/environment.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
 
 import '../../services/firestore_service_sponsor.dart';
-import '../../util/sponsor_prefs.dart';
 
 class BrandingImagesPicker extends StatefulWidget {
   final Function(File) onLogoPicked;

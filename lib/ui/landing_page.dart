@@ -13,7 +13,7 @@ import 'package:sgela_sponsor_app/ui/organization/registration_form.dart';
 import 'package:sgela_sponsor_app/ui/organization/sign_in.dart';
 import 'package:sgela_sponsor_app/util/environment.dart';
 import 'package:sgela_sponsor_app/util/navigation_util.dart';
-import 'package:sgela_sponsor_app/util/sponsor_prefs.dart';
+import 'package:sgela_services/sgela_util/sponsor_prefs.dart';
 import 'package:sgela_sponsor_app/util/registration_stream_handler.dart';
 
 import '../util/functions.dart';

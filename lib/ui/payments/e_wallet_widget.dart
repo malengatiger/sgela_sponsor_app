@@ -3,11 +3,11 @@ import 'package:get_it/get_it.dart';
 import 'package:sgela_services/data/country.dart';
 import 'package:sgela_services/data/holder.dart';
 import 'package:sgela_services/data/sponsor_product.dart';
+import 'package:sgela_services/sgela_util/sponsor_prefs.dart';
 import 'package:sgela_sponsor_app/services/rapyd_payment_service.dart';
 import 'package:sgela_sponsor_app/ui/payments/payment_web_view.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
 import 'package:sgela_sponsor_app/util/navigation_util.dart';
-import 'package:sgela_sponsor_app/util/sponsor_prefs.dart';
 
 class EWalletWidget extends StatefulWidget {
   const EWalletWidget({super.key, required this.sponsorProduct});

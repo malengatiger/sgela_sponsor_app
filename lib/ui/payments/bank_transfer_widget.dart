@@ -5,6 +5,7 @@ import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sgela_services/data/country.dart';
 import 'package:sgela_services/data/holder.dart';
 import 'package:sgela_services/data/sponsor_product.dart';
+import 'package:sgela_services/sgela_util/sponsor_prefs.dart';
 import 'package:sgela_shared_widgets/widgets/busy_indicator.dart';
 import 'package:sgela_sponsor_app/ui/payments/payment_web_view.dart';
 import 'package:sgela_sponsor_app/ui/payments/sponsor_product_widget.dart';
@@ -13,7 +14,6 @@ import 'package:sgela_sponsor_app/util/environment.dart';
 import '../../services/rapyd_payment_service.dart';
 import '../../util/functions.dart';
 import '../../util/navigation_util.dart';
-import '../../util/sponsor_prefs.dart';
 
 class BankTransferWidget extends StatefulWidget {
   const BankTransferWidget({super.key, required this.sponsorProduct});

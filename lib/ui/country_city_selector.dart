@@ -5,6 +5,7 @@ import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sgela_services/data/city.dart';
 import 'package:sgela_services/data/country.dart';
 import 'package:sgela_services/sgela_util/dark_light_control.dart';
+import 'package:sgela_services/sgela_util/sponsor_prefs.dart';
 import 'package:sgela_shared_widgets/util/widget_prefs.dart';
 import 'package:sgela_shared_widgets/widgets/color_gallery.dart';
 import 'package:sgela_sponsor_app/services/firestore_service_sponsor.dart';
@@ -12,7 +13,6 @@ import 'package:sgela_sponsor_app/ui/city_list.dart';
 import 'package:sgela_sponsor_app/ui/country_list.dart';
 import 'package:sgela_sponsor_app/ui/widgets/row_content_view.dart';
 import 'package:sgela_sponsor_app/util/navigation_util.dart';
-import 'package:sgela_sponsor_app/util/sponsor_prefs.dart';
 
 import '../util/functions.dart';
 

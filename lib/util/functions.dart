@@ -7,7 +7,7 @@ import 'dart:ui';
 
 import 'package:sgela_services/sgela_util/dark_light_control.dart';
 import 'package:sgela_services/sgela_util/functions.dart' as srv;
-import 'package:sgela_sponsor_app/util/sponsor_prefs.dart';
+import 'package:sgela_services/sgela_util/sponsor_prefs.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

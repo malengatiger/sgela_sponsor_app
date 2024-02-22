@@ -3,12 +3,12 @@ import 'package:get_it/get_it.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sgela_services/data/organization.dart';
 import 'package:sgela_services/services/auth_service.dart';
+import 'package:sgela_services/sgela_util/sponsor_prefs.dart';
 import 'package:sgela_shared_widgets/widgets/busy_indicator.dart';
 import 'package:sgela_shared_widgets/widgets/org_logo_widget.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
 import 'package:sgela_services/data/org_user.dart';
 
-import '../../util/sponsor_prefs.dart';
 
 class OrganisationUserAdd extends StatefulWidget {
   const OrganisationUserAdd({super.key});

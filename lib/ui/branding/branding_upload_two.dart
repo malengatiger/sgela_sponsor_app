@@ -14,7 +14,7 @@ import 'package:sgela_shared_widgets/widgets/color_gallery.dart';
 
 import 'package:sgela_sponsor_app/services/repository.dart';
 import 'package:sgela_sponsor_app/util/navigation_util.dart';
-import 'package:sgela_sponsor_app/util/sponsor_prefs.dart';
+import 'package:sgela_services/sgela_util/sponsor_prefs.dart';
 import 'package:sgela_sponsor_app/util/registration_stream_handler.dart';
 
 import '../../services/firestore_service_sponsor.dart';
