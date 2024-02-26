@@ -53,12 +53,8 @@ U
 %ios/Runner/Base.lproj/Main.storyboard,a/9/a9447b23bf39469cf6b0c9d663f74e171b0f4660
 ]
 -ios/Runner/Base.lproj/LaunchScreen.storyboard,7/c/7c920cd7e0758a0a5ddf4e64539d6c3bc47de503
-\
-,linux/flutter/generated_plugin_registrant.cc,8/2/82aa08567025817252f7150da6951611f932fce3
 L
 linux/flutter/CMakeLists.txt,f/8/f871e65f12c98cc1c448b643b9882b86da7e0399
-U
-%linux/flutter/generated_plugins.cmake,e/a/ea61ff9ff38cb6431283c0e1c4f383234ad068aa
 [
 +linux/flutter/generated_plugin_registrant.h,d/9/d95a1fc8fea41fc6cc122196d542db7f4130fb92
 8
@@ -67,9 +63,6 @@ U
 	.metadata,5/a/5adbcffabbc7cc6a2701af40c04edc2b3ff65fcb
 =
 machinet.conf,c/0/c0c344344b585d80f52a1526d790d0bf0da5650b
-:
-
-.gitignore,a/5/a5cc2925ca8258af241be7e5b0381edf30266302
 D
 android/build.gradle,1/3/13f012f60e18f38225ce59137db2e07d5d70b29c
 B
@@ -86,8 +79,6 @@ D
 web/index.html,4/9/49767019a2fee22a613912508aa2789b74108680
 A
 web/manifest.json,0/3/035d93726e1f8a624dc6ebe37b7c38b7e6eb2f63
-E
-test/widget_test.dart,8/8/88fe0f60a6af31ca841a0d74d4ee9642f8d32eb2
 Y
 )android/app/src/debug/AndroidManifest.xml,e/9/e9b8a57f79617fe2b2612f997e0f60425ebc5097
 [
@@ -106,16 +97,10 @@ S
 0android/gradle/wrapper/gradle-wrapper.properties,0/8/0841580e5a5ec979b3fae0109915065e988679a9
 T
 $lib/ui/widgets/row_content_view.dart,1/3/13b96a2eedd7805013ffb895993bbb9654d29854
-L
-ios/Runner/AppDelegate.swift,8/4/84700e47abd691450c7da01b0aa772b1d41e4838
 M
 lib/util/navigation_util.dart,c/c/cc02feb81789b5ee764b010da81963a0bd9ba545
-X
-(android/app/src/main/AndroidManifest.xml,e/f/ef79bfd51db69a15dbf5807c05bb249bdccb0556
 P
  android/app/google-services.json,e/e/ee748fb75df5665a631a74614646f499f3cea78f
-I
-lib/firebase_options.dart,0/f/0f4c3391435ed7c33948e13687a0bd929288bdb6
 ?
 public/404.html,9/1/9165de4c08ed7f75a6e91e356e892f20aa817eb8
 A
@@ -134,10 +119,6 @@ F
 .env,3/c/3c84dcdc6bbe3d7817c49dcdc327b926fea1808a
 I
 lib/generated/assets.dart,5/b/5b815209f3ac1d4b94a4211dbfb903428d4ed1c2
-G
-lib/util/constants.dart,4/6/468a4a4de68b93a3e6b28d38bf0fab5be842b860
-T
-$assets/default_apple_pay_config.json,e/8/e818888432f66f6497b85749eeb44e6871f25209
 U
 %assets/default_google_pay_config.json,e/3/e3dc306f09a4e6026c063b2855f60f138edd3f42
 S

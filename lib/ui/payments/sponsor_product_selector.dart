@@ -15,9 +15,10 @@ import 'package:sgela_sponsor_app/ui/payments/e_wallet_widget.dart';
 import 'package:sgela_sponsor_app/ui/payments/google-apple_pay_widget.dart';
 import 'package:sgela_sponsor_app/ui/payments/pay_pal_widget.dart';
 import 'package:sgela_sponsor_app/ui/payments/payment_type_chooser.dart';
-import 'package:sgela_sponsor_app/util/Constants.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
 import 'package:sgela_sponsor_app/util/navigation_util.dart';
+
+import '../../util/Constants.dart';
 
 class SponsorProductSelector extends StatefulWidget {
   const SponsorProductSelector({super.key});
@@ -92,48 +93,48 @@ class SponsorProductSelectorState extends State<SponsorProductSelector>
     ppx('$mm ... _navigateToPaymentTypeWidget ...');
 
     switch (selectedPaymentType) {
-      case Constants.googlePay:
+      case PaymentConstants.googlePay:
         NavigationUtils.navigateToPage(
             context: context,
             widget: ApplePayWidget(
               sponsorProduct: sponsorProduct,
             ));
         break;
-      case Constants.applePay:
+      case PaymentConstants.applePay:
         NavigationUtils.navigateToPage(
             context: context,
             widget: ApplePayWidget(
               sponsorProduct: sponsorProduct,
             ));
         break;
-      case Constants.visa:
+      case PaymentConstants.visa:
         NavigationUtils.navigateToPage(
             context: context,
             widget: CreditCardWidget(
-              cardType: Constants.visa,
+              cardType: PaymentConstants.visa,
               sponsorProduct: sponsorProduct,
             ));
         break;
-      case Constants.masterCard:
+      case PaymentConstants.masterCard:
         NavigationUtils.navigateToPage(
             context: context,
             widget: CreditCardWidget(
-              cardType: Constants.masterCard,
+              cardType: PaymentConstants.masterCard,
               sponsorProduct: sponsorProduct,
             ));
         break;
-      case Constants.bankTransfer:
+      case PaymentConstants.bankTransfer:
         NavigationUtils.navigateToPage(
             context: context,
             widget: BankTransferWidget(
               sponsorProduct: sponsorProduct,
             ));
         break;
-      case Constants.payPal:
+      case PaymentConstants.payPal:
         NavigationUtils.navigateToPage(
             context: context, widget: const PayPalWidget());
         break;
-      case Constants.eWallet:
+      case PaymentConstants.eWallet:
         NavigationUtils.navigateToPage(
             context: context,
             widget: EWalletWidget(

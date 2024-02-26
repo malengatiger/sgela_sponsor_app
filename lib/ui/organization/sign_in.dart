@@ -53,10 +53,14 @@ class SignInState extends State<SignIn> with SingleTickerProviderStateMixin {
       _busy = true;
     });
     try {
-      var mUser = await authService.signIn(
+      var org = await authService.signInOrgUser(
           emailController.text, passwordController.text);
-      if (mUser != null) {
-        ppx('$mm user signed in OK, user : ${mUser.toJson()}');
+      if (org != null) {
+        ppx('$mm org admin user signed in OK, org : ${org.toJson()}');
+        await firestoreService.getBranding(org.id!, true);
+        await firestoreService.getUsers(org.id!, true);
+        await firestoreService.getOrgSponsorees(org.id!, true);
+
         if (mounted) {
           showToast(
               message: 'Signed in OK',
@@ -65,16 +69,10 @@ class SignInState extends State<SignIn> with SingleTickerProviderStateMixin {
               textStyle: myTextStyleMediumWithColor(context, Colors.white),
               context: context);
 
-          var org =
-              await firestoreService.getOrganization(mUser.organizationId!);
           if (mounted) {
-            if (org != null) {
-              Navigator.of(context).pop();
-              NavigationUtils.navigateToPage(
-                  context: context, widget: Dashboard(organization: org));
-            } else {
-              throw Exception('User sign in failed');
-            }
+            Navigator.of(context).pop();
+            NavigationUtils.navigateToPage(
+                context: context, widget: Dashboard(organization: org));
           }
         }
       }

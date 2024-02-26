@@ -47,11 +47,11 @@ class CreditCardWidgetState extends State<CreditCardWidget>
   void initState() {
     _controller = AnimationController(vsync: this);
     super.initState();
-    if (widget.cardType == Constants.visa) {
+    if (widget.cardType == PaymentConstants.visa) {
       cardName = 'Visa';
       assetPath = 'assets/visa1.png';
     }
-    if (widget.cardType == Constants.masterCard) {
+    if (widget.cardType == PaymentConstants.masterCard) {
       cardName = 'MasterCard';
       assetPath = 'assets/mastercard2.png';
     }
@@ -64,14 +64,14 @@ class CreditCardWidgetState extends State<CreditCardWidget>
     paymentMethods =
         await rapydPaymentService.getCountryPaymentMethods(country!.iso2!);
 
-    if (widget.cardType == Constants.visa) {
+    if (widget.cardType == PaymentConstants.visa) {
       for (var value in paymentMethods) {
         if (value.type!.contains('visa')) {
           paymentMethod = value;
         }
       }
     }
-    if (widget.cardType == Constants.masterCard) {
+    if (widget.cardType == PaymentConstants.masterCard) {
       for (var value in paymentMethods) {
         if (value.type!.contains('master')) {
           paymentMethod = value;

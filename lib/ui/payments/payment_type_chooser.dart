@@ -30,7 +30,7 @@ class PaymentTypeChooser extends StatelessWidget {
             child: ElevatedButton(
                 style: mStyle,
                 onPressed: () {
-                  onPaymentTypeSelected(Constants.visa);
+                  onPaymentTypeSelected(PaymentConstants.visa);
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
@@ -54,7 +54,7 @@ class PaymentTypeChooser extends StatelessWidget {
             child: ElevatedButton(
                 style: mStyle,
                 onPressed: () {
-                  onPaymentTypeSelected(Constants.masterCard);
+                  onPaymentTypeSelected(PaymentConstants.masterCard);
                 },
                 child:  Padding(
                   padding: const EdgeInsets.all(4.0),
@@ -78,7 +78,7 @@ class PaymentTypeChooser extends StatelessWidget {
             child: ElevatedButton(
                 style: mStyle,
                 onPressed: () {
-                  onPaymentTypeSelected(Constants.bankTransfer);
+                  onPaymentTypeSelected(PaymentConstants.bankTransfer);
                 },
                 child:  Padding(
                   padding: const EdgeInsets.all(4.0),

@@ -1,11 +1,18 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:provider/provider.dart';
+import 'package:purchases_flutter/models/customer_info_wrapper.dart';
+import 'package:purchases_flutter/models/entitlement_info_wrapper.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sgela_services/data/branding.dart';
 import 'package:sgela_services/data/organization.dart';
+import 'package:sgela_services/sgela_util/functions.dart';
 import 'package:sgela_shared_widgets/widgets/org_logo_widget.dart';
 import 'package:sgela_sponsor_app/services/firestore_service_sponsor.dart';
 import 'package:sgela_sponsor_app/ui/dashboard.dart';
@@ -28,7 +35,7 @@ class LandingPage extends StatefulWidget {
 class LandingPageState extends State<LandingPage>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  static const mm = ' 🍐🍐🍐🍐 LandingPage  🍐🍐';
+  static const mm = ' 🍐🍐🍐🍐LandingPage 🍐🍐';
   Organization? organization;
   SponsorPrefs prefs = GetIt.instance<SponsorPrefs>();
   List<Branding> brandings = [];
@@ -36,14 +43,19 @@ class LandingPageState extends State<LandingPage>
   RegistrationStreamHandler handler = GetIt.instance<RegistrationStreamHandler>();
   late StreamSubscription<bool> regSubscription;
 
+  bool entitlementIsActive = false;
+  CustomerInfo? mCustomerInfo;
+  EntitlementInfo? entitlement;
+
   @override
   void initState() {
     _controller = AnimationController(vsync: this);
+
     super.initState();
     _listen();
     _getOrganization();
+    // initPlatformState();
   }
-
   bool _showDashboard = false;
   _listen() {
     regSubscription = handler.registrationStream.listen((completed) {
@@ -73,7 +85,7 @@ class LandingPageState extends State<LandingPage>
   }
 
   _navigateToSignIn() async {
-    ppx('$mm _navigateToSignIn  ......');
+    ppx('\n\n\n$mm _navigateToSignIn  ......');
     NavigationUtils.navigateToPage(
         context: context, widget: const SignIn());
   }

@@ -14,6 +14,7 @@ doc/api/
 
 # dotenv environment variables file
 .env*
+android/key.properties
 
 # Avoid committing generated Javascript files:
 *.dart.js
@@ -26,3 +27,6 @@ doc/api/
 
 .flutter-plugins
 .flutter-plugins-dependencies
+/client_secret.json
+client_secret.json
+/lib/services/config.dart

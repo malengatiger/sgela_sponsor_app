@@ -1,4 +1,4 @@
-class Constants {
+class PaymentConstants {
   static const visa = 1;
   static const masterCard = 2;
   static const payPal = 3;

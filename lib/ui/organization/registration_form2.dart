@@ -103,7 +103,7 @@ class RegistrationFormFinalState extends State<RegistrationFormFinal>
         prefs.saveOrganization(orgResult);
         prefs.saveCountry(orgResult.country!);
         ppx('$mm ..... data saved in prefs! 🌀🌀🌀🌀 sign in ...');
-        await authService.signIn(user.email!, user.password!);
+        await authService.signInOrgUser(user.email!, user.password!);
         ppx('$mm ..... create rapyd customer 🌀🌀🌀🌀 .......');
 
         CustomerRequest customerRequest = CustomerRequest(

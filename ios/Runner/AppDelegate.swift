@@ -7,7 +7,6 @@ import Flutter
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-      
       UNUserNotificationCenter.current().delegate = self
 
       let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]

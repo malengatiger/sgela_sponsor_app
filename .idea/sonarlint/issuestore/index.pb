@@ -13,9 +13,6 @@ B
 ios/.gitignore,0/3/03aa80dc04aaede1dd5625b4da5cb4fbe07baaff
 @
 linux/.gitignore,3/5/3515c6986a07c48e71cbea39e9f71a36f473b3ac
-:
-
-.gitignore,a/5/a5cc2925ca8258af241be7e5b0381edf30266302
 9
 	.metadata,5/a/5adbcffabbc7cc6a2701af40c04edc2b3ff65fcb
 Y
@@ -46,12 +43,8 @@ D
 lib/util/emojis.dart,1/2/12c1e260c11e28603bb3be4fcb79fb7a8b4a68f9
 M
 ios/firebase_app_id_file.json,a/0/a0799973e0bf1bad4e739e1320488659cd5da822
-\
-,linux/flutter/generated_plugin_registrant.cc,8/2/82aa08567025817252f7150da6951611f932fce3
 [
 +linux/flutter/generated_plugin_registrant.h,d/9/d95a1fc8fea41fc6cc122196d542db7f4130fb92
-U
-%linux/flutter/generated_plugins.cmake,e/a/ea61ff9ff38cb6431283c0e1c4f383234ad068aa
 S
 #ios/Runner/GoogleService-Info.plist,0/b/0b789df27cb2d2dad956de47ce5af443d6a6cb25
 I
@@ -98,22 +91,14 @@ Z
 *android/app/src/main/res/values/styles.xml,6/8/681a41214f7344c6c8adc00743d2c199eb204fde
 `
 0android/app/src/main/res/values-night/styles.xml,4/e/4e6983532b567702817f41cb4202cebaa69c60f5
-E
-test/widget_test.dart,8/8/88fe0f60a6af31ca841a0d74d4ee9642f8d32eb2
 ‚
 Rios/Runner.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings,d/e/dec276cb6c82fdeae325108bd526a78dcab4ee15
 p
 @ios/Runner.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings,e/e/ee07b9792b3a42aff7f72cdd193871e00fdd9be4
 T
 $lib/ui/widgets/row_content_view.dart,1/3/13b96a2eedd7805013ffb895993bbb9654d29854
-X
-(android/app/src/main/AndroidManifest.xml,e/f/ef79bfd51db69a15dbf5807c05bb249bdccb0556
-L
-ios/Runner/AppDelegate.swift,8/4/84700e47abd691450c7da01b0aa772b1d41e4838
 M
 lib/util/navigation_util.dart,c/c/cc02feb81789b5ee764b010da81963a0bd9ba545
-I
-lib/firebase_options.dart,0/f/0f4c3391435ed7c33948e13687a0bd929288bdb6
 P
  android/app/google-services.json,e/e/ee748fb75df5665a631a74614646f499f3cea78f
 ;
@@ -134,10 +119,6 @@ A
 .env,3/c/3c84dcdc6bbe3d7817c49dcdc327b926fea1808a
 I
 lib/generated/assets.dart,5/b/5b815209f3ac1d4b94a4211dbfb903428d4ed1c2
-G
-lib/util/constants.dart,4/6/468a4a4de68b93a3e6b28d38bf0fab5be842b860
-T
-$assets/default_apple_pay_config.json,e/8/e818888432f66f6497b85749eeb44e6871f25209
 U
 %assets/default_google_pay_config.json,e/3/e3dc306f09a4e6026c063b2855f60f138edd3f42
 S

@@ -10,18 +10,16 @@ import 'package:sgela_services/data/org_user.dart';
 import 'package:sgela_services/data/organization.dart';
 import 'package:sgela_services/data/sponsor_product.dart';
 import 'package:sgela_services/sgela_util/dark_light_control.dart';
-
+import 'package:sgela_services/sgela_util/sponsor_prefs.dart';
 import 'package:sgela_shared_widgets/util/widget_prefs.dart';
 import 'package:sgela_shared_widgets/widgets/color_gallery.dart';
-import 'package:sgela_shared_widgets/widgets/sponsored_by.dart';
-
 import 'package:sgela_shared_widgets/widgets/org_logo_widget.dart';
+import 'package:sgela_shared_widgets/widgets/sponsored_by.dart';
 import 'package:sgela_sponsor_app/ui/branding/branding_upload_one.dart';
 import 'package:sgela_sponsor_app/ui/organization/organisation_user_add.dart';
-import 'package:sgela_sponsor_app/ui/payments/sponsor_product_selector.dart';
+import 'package:sgela_sponsor_app/ui/purchase_page.dart';
 import 'package:sgela_sponsor_app/util/functions.dart';
 import 'package:sgela_sponsor_app/util/navigation_util.dart';
-import 'package:sgela_services/sgela_util/sponsor_prefs.dart';
 import 'package:sgela_sponsor_app/util/registration_stream_handler.dart';
 
 import '../services/firestore_service_sponsor.dart';
@@ -58,9 +56,9 @@ class DashboardState extends State<Dashboard>
   OrgUser? user;
   bool _busy = false;
   String? logoUrl;
-  RegistrationStreamHandler handler = GetIt.instance<RegistrationStreamHandler>();
+  RegistrationStreamHandler handler =
+      GetIt.instance<RegistrationStreamHandler>();
   late StreamSubscription<bool> regSubscription;
-
 
   @override
   void initState() {
@@ -85,6 +83,7 @@ class DashboardState extends State<Dashboard>
       }
     });
   }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -99,13 +98,13 @@ class DashboardState extends State<Dashboard>
       logoUrl = prefs.getLogoUrl();
       organization = prefs.getOrganization();
       user = prefs.getUser();
-      sponsorProducts = await firestoreService.getSponsorProducts(false);
-      if ((user != null)) {
+      //sponsorProducts = await firestoreService.getSponsorProducts(false);
+      if ((organization != null)) {
         brandings =
-            await firestoreService.getBranding(user!.organizationId!, true);
-        users = await firestoreService.getUsers(user!.organizationId!, true);
+            await firestoreService.getBranding(organization!.id!, true);
+        users = await firestoreService.getUsers(organization!.id!, true);
       } else {
-        ppx('$mm user is NULL!! - FIND OUT WHY?');
+        ppx('$mm org is NULL!! - FIND OUT WHY?');
       }
     } catch (e) {
       ppx(e);
@@ -139,13 +138,12 @@ class DashboardState extends State<Dashboard>
         context: context,
         widget: BrandingUploadOne(
           organization: widget.organization,
-
         ));
   }
 
   _navigateToSponsorProductSelector() {
     NavigationUtils.navigateToPage(
-        context: context, widget: const SponsorProductSelector());
+        context: context, widget: const PurchasePage());
   }
 
   @override
@@ -315,7 +313,8 @@ class DashboardState extends State<Dashboard>
                         const SizedBox(
                           height: 8,
                         ),
-                        const SponsoredBy(height: 32,
+                        const SponsoredBy(
+                          height: 32,
                         ),
                       ],
                     ),
